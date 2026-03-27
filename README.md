@@ -5,7 +5,7 @@ A scalable, AI-integrated framework for product and UX design — from research 
 ## What's Inside
 
 ### `/skills` — Claude Skill Files
-Seven structured `.md` skill files, one per design discipline, organized by phase. Each contains workflows, templates, quality checklists, and guidance for integrating AI into that part of the design process.
+Eight structured `.md` skill files — seven organized by phase, plus a cross-cutting Figma Playbook. Each contains workflows, templates, quality checklists, and guidance for integrating AI into that part of the design process.
 
 | Phase | Skill File | What It Does |
 |-------|-----------|--------------|
@@ -16,6 +16,20 @@ Seven structured `.md` skill files, one per design discipline, organized by phas
 | 04 — Prototype | `prototyping.md` | Functional prototypes, UX copy systems, WCAG audits, design QA |
 | 05 — Validate | `usability-testing.md` | Test plans, task scenarios, findings synthesis, heuristic evaluations |
 | 06 — Deliver | `design-delivery.md` | Component specs, dev handoff packages, design decision records, release notes |
+| All Phases | `figma-playbook.md` | **Figma MCP integration** — execute design work directly in Figma from Claude |
+
+### Figma Playbook (MCP Integration)
+
+The `figma-playbook.md` is a companion skill that works alongside any phase skill. It maps every design deliverable to concrete Figma actions Claude can execute via the Figma MCP:
+
+- **Discover** → Research findings boards, persona cards, competitive matrices
+- **Define** → Journey maps, design briefs, requirements boards
+- **Ideate** → Concept cards, wireframe scaffolding, pattern references
+- **Prototype** → Component creation, screen layouts, design system tokens
+- **Validate** → Findings visualization, heuristic evaluation boards
+- **Deliver** → Spec annotations, component documentation, decision records
+
+Use it by reading the phase skill + the playbook together. The phase skill defines *what* to create; the playbook defines *how* to create it in Figma.
 
 ### `/artifacts` — Interactive React Components
 Two JSX artifacts that render as interactive tools:

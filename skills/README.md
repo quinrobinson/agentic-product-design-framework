@@ -35,6 +35,11 @@ A collection of Claude skills for every phase of the product design process. Eac
 |-------|------|-------------|-------------|
 | Design Delivery | `06-deliver/design-delivery.md` | High | Component specs, dev handoff, design decision records, release notes |
 
+### Cross-Phase
+| Skill | File | AI Leverage | Description |
+|-------|------|-------------|-------------|
+| Figma Playbook | `figma-playbook.md` | High | Execute design work directly in Figma via MCP — patterns for every phase |
+
 ## How to Use
 
 ### With Claude
