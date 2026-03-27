@@ -58,6 +58,11 @@ const PHASES = [
         outputs: ["Competitive Matrix", "Feature Benchmark", "Convention Map", "Innovation Opportunities"],
         checklist: ["All three competitor tiers represented", "Analysis based on actual product usage", "User sentiment included", "Conventions separated from opportunities", "Analysis is current"] },
     ],
+    figmaActions: [
+      { action: "Research Findings Board", desc: "Themed cards with key themes, frequency badges, and evidence quotes organized on the Discover page", example: "\"Create a research findings board on the Discover page with these 5 themes...\"" },
+      { action: "Persona Cards", desc: "Structured persona layouts with name, role, goals, frustrations, and key quote", example: "\"Build persona cards for our 3 research personas on the Discover page\"" },
+      { action: "Competitive Matrix", desc: "Color-coded comparison table with competitors as columns and evaluation dimensions as rows", example: "\"Create a competitive analysis matrix comparing these 4 competitors...\"" },
+    ],
   },
   {
     id: "define",
@@ -110,6 +115,11 @@ const PHASES = [
         workflow: ["Gather inputs (research, business context, persona, current state)", "Generate multiple framings (HMW, JTBD, User Story)", "Identify assumptions and validation methods", "Select and refine the strongest framing"],
         outputs: ["Problem Statement", "Journey Map", "Requirements Roadmap", "Design Brief"],
         checklist: ["Problem specific enough to guide but open enough for creativity", "Assumptions explicitly stated", "Journey map based on research, not assumptions", "Requirements prioritized with rationale", "Scope boundaries explicit"] },
+    ],
+    figmaActions: [
+      { action: "Journey Map", desc: "Stage columns with actions, thoughts, emotions (as colored dots), touchpoints, pain points, and opportunities", example: "\"Create a journey map for our primary persona on the Define page\"" },
+      { action: "Design Brief Card", desc: "Structured layout with problem statement, users, metrics, constraints, and scope", example: "\"Build a design brief on the Define page with this problem statement...\"" },
+      { action: "Requirements Board", desc: "Categorized requirements with MoSCoW tags and impact/effort indicators", example: "\"Create a prioritized requirements board with these features...\"" },
     ],
   },
   {
@@ -164,6 +174,11 @@ const PHASES = [
         outputs: ["Concept Cards", "UI Pattern Recommendations", "Design System Scaffold", "Wireframe Briefs"],
         checklist: ["At least 3 directions explored", "Each concept has strengths AND risks", "Pattern recs consider accessibility", "Design system tokens are opinionated", "Wireframes include edge cases and states"] },
     ],
+    figmaActions: [
+      { action: "Concept Cards", desc: "Row of 5 concept cards using the Five-Direction Method with strength/risk tags", example: "\"Create concept exploration cards for these 5 directions on the Ideate page\"" },
+      { action: "Wireframe Scaffolding", desc: "Frame structures at standard device widths (375, 768, 1280) with labeled content areas", example: "\"Scaffold wireframe frames for the dashboard and settings screens\"" },
+      { action: "Pattern Reference Board", desc: "Collected UI patterns with source, description, and applicability notes", example: "\"Build a pattern reference board with these navigation approaches\"" },
+    ],
   },
   {
     id: "prototype",
@@ -216,6 +231,11 @@ const PHASES = [
         workflow: ["Define prototype spec (purpose, fidelity, scope, states)", "Build structure → content → states → interactions", "Write UX copy systematically per screen", "Run accessibility audit against WCAG 2.1 AA", "Design QA checklist before handoff"],
         outputs: ["Functional Prototype", "UX Copy System", "Accessibility Audit Report", "Design QA Checklist"],
         checklist: ["Prototype uses realistic data", "All states accounted for", "Copy is specific and consistent in voice", "Accessibility audit has specific fixes", "Responsive behavior tested", "Micro-interactions enhance usability"] },
+    ],
+    figmaActions: [
+      { action: "Component Creation", desc: "Build components with variants (default, hover, active, disabled, focus, error) and auto-layout", example: "\"Create a Button component with primary/secondary/outline variants\"" },
+      { action: "Screen Layouts", desc: "Full screen designs at standard breakpoints with all states (default, loading, error, empty, success)", example: "\"Build the dashboard screen layout with default and empty states\"" },
+      { action: "Design System Variables", desc: "Create Figma variables for color, spacing, and radius tokens", example: "\"Set up design system variables for our client's brand tokens\"" },
     ],
   },
   {
@@ -270,6 +290,11 @@ const PHASES = [
         outputs: ["Test Plan", "Task Scenarios", "Session Notes", "Findings Report", "Heuristic Evaluation"],
         checklist: ["Task scenarios are realistic and non-leading", "Participant criteria specific enough to recruit right people", "Analysis uses severity × frequency, not opinion", "Every issue has an actionable recommendation", "Positive findings documented, not just problems"] },
     ],
+    figmaActions: [
+      { action: "Task Completion Matrix", desc: "Table showing pass/fail/assist per task per participant with completion rates", example: "\"Create a task completion matrix with these 5 tasks and 6 participants\"" },
+      { action: "Issue Cards", desc: "Severity-ranked cards with title, frequency, evidence quote, and recommendation", example: "\"Build issue cards for these 8 usability findings ranked by severity\"" },
+      { action: "Heuristic Evaluation Board", desc: "10-row board (one per Nielsen heuristic) with ratings, evidence, and fixes", example: "\"Create a heuristic evaluation board for the checkout flow\"" },
+    ],
   },
   {
     id: "deliver",
@@ -322,6 +347,11 @@ const PHASES = [
         workflow: ["Write component specs (props, states, responsive, a11y, content guidelines)", "Prepare developer handoff package with checklist", "Document design decisions as DDRs with rationale", "Write release notes (internal changelog + user-facing)"],
         outputs: ["Component Specs", "Handoff Checklist", "Design Decision Records", "Release Notes", "Design System Docs"],
         checklist: ["Specs complete enough for devs to build without questions", "All assets exported and organized", "Design decisions documented with rationale", "Handoff includes accessibility requirements", "Token names used instead of raw values"] },
+    ],
+    figmaActions: [
+      { action: "Spec Annotations", desc: "Annotation cards connected to design elements with token references (spacing, color, type, radius)", example: "\"Annotate the card component with spacing and color specs\"" },
+      { action: "Component Documentation", desc: "Doc frames with variants grid, props table, states row, usage guidelines, and a11y notes", example: "\"Create documentation frames for the Button and Input components\"" },
+      { action: "Design Decision Records", desc: "Structured DDR cards with status badge, options with pros/cons, rationale, and consequences", example: "\"Document the navigation decision as a DDR on the Deliver page\"" },
     ],
   },
 ];
@@ -431,6 +461,7 @@ export default function DesignProcessSystem() {
             {[
               { id: "prompts", label: "AI Prompts & Workflows", count: phase.prompts.length },
               { id: "skills", label: "Skill Docs", count: phase.skillDocs ? phase.skillDocs.length : 0 },
+              { id: "figma", label: "Figma Playbook", count: phase.figmaActions ? phase.figmaActions.length : 0 },
               { id: "templates", label: "Templates", count: phase.templates.length },
               { id: "tools", label: "Recommended Tools", count: phase.aiTools.length },
             ].map((tab) => (
@@ -580,6 +611,39 @@ export default function DesignProcessSystem() {
             </div>
           )}
 
+          {/* Figma Playbook Tab */}
+          {activeTab === "figma" && phase.figmaActions && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ background: "#FFF3E0", borderRadius: 12, padding: "14px 20px", borderLeft: "3px solid #E85D04", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: "#9A5400" }}>
+                  <strong>Figma MCP</strong> — Claude executes these actions directly in your Figma file. Describe what you need and which page to target.
+                </span>
+              </div>
+              {phase.figmaActions.map((fa, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 16, border: "1px solid #eee", overflow: "hidden" }}>
+                  <div style={{ padding: "20px 24px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 8, background: "#E85D04", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>F</span>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 16 }}>{fa.action}</div>
+                    </div>
+                    <div style={{ fontSize: 13, color: "#666", lineHeight: 1.5, marginBottom: 12 }}>{fa.desc}</div>
+                    <div style={{ background: "#1a1a1a", borderRadius: 8, padding: "12px 16px" }}>
+                      <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: "#E85D04", marginBottom: 6 }}>EXAMPLE PROMPT</div>
+                      <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: "#e0e0e0", lineHeight: 1.5 }}>{fa.example}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div style={{ background: "#FAFAF8", borderRadius: 12, padding: "14px 20px", border: "1px solid #eee" }}>
+                <span style={{ fontSize: 11, color: "#aaa", fontFamily: "'JetBrains Mono', monospace" }}>
+                  Full playbook → skills/figma-playbook.md
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* Templates Tab */}
           {activeTab === "templates" && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 12 }}>
@@ -673,6 +737,46 @@ export default function DesignProcessSystem() {
                   Taste, empathy, strategic thinking, stakeholder navigation, ethical consideration — these remain fundamentally human skills. AI generates options. You make decisions. The best designers will be those who wield AI as a power tool, not a replacement.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Figma Playbook */}
+          <div style={{ marginTop: 16, background: "#fff", borderRadius: 16, padding: 32, border: "1px solid #eee", borderTop: "3px solid #E85D04" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 2, color: "#E85D04", marginBottom: 8 }}>Figma Playbook — MCP Integration</div>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#111", marginBottom: 6 }}>Claude builds directly in Figma</div>
+                <p style={{ fontSize: 13, color: "#888", margin: 0, lineHeight: 1.5 }}>
+                  The Figma Playbook is a companion skill that works alongside every phase. Phase skills define <em>what</em> to create. The playbook defines <em>how</em> to execute it in Figma via MCP.
+                </p>
+              </div>
+              <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", background: "#FFF3E0", color: "#E85D04", padding: "6px 12px", borderRadius: 6, fontWeight: 500, whiteSpace: "nowrap" }}>
+                figma-playbook.md
+              </span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              {[
+                { phase: "Discover", color: "#22C55E", actions: ["Research findings boards", "Persona cards", "Competitive matrices"] },
+                { phase: "Define", color: "#8B5CF6", actions: ["Journey maps with emotion curves", "Design briefs", "Requirements boards"] },
+                { phase: "Ideate", color: "#F59E0B", actions: ["Concept cards (5 directions)", "Wireframe scaffolding", "Pattern reference boards"] },
+                { phase: "Prototype", color: "#3B82F6", actions: ["Components with variants", "Screen layouts (all states)", "Design system variables"] },
+                { phase: "Validate", color: "#EF4444", actions: ["Task completion matrices", "Severity-ranked issue cards", "Heuristic eval boards"] },
+                { phase: "Deliver", color: "#14B8A6", actions: ["Spec annotations + redlines", "Component doc frames", "Decision record cards"] },
+              ].map((p) => (
+                <div key={p.phase} style={{ padding: 16, borderRadius: 10, background: "#FAFAF8", border: "1px solid #eee", borderTop: `3px solid ${p.color}` }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: p.color, marginBottom: 10 }}>{p.phase}</div>
+                  {p.actions.map((a, i) => (
+                    <div key={i} style={{ fontSize: 12, color: "#666", marginBottom: 4, display: "flex", gap: 6 }}>
+                      <span style={{ color: p.color }}>→</span> {a}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 16, padding: "12px 16px", background: "#FFF3E0", borderRadius: 8, borderLeft: "3px solid #E85D04" }}>
+              <span style={{ fontSize: 12, color: "#9A5400" }}>
+                <strong>How to use:</strong> Tell Claude what to create and which Figma page to target. Claude reads the phase skill + playbook together and executes directly in your file.
+              </span>
             </div>
           </div>
         </div>
