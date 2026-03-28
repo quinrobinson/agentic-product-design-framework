@@ -116,7 +116,59 @@ const FONT_OPTIONS = [
   "'Fira Code', monospace",
 ];
 
-const SECTIONS = ["tokens", "typography", "components", "export"];
+const SECTIONS = ["tokens", "typography", "components", "audit", "export"];
+
+// ─── Audit Checklist Data ────────────────────────────────────────────────────
+
+const AUDIT_COLORS = {
+  google:    { bg: "#E8F0FE", text: "#1A56DB", border: "#BFDBFE" },
+  atlassian: { bg: "#E3FCEF", text: "#006644", border: "#ABF5D1" },
+  carbon:    { bg: "#F2F4F8", text: "#21272A", border: "#DDE1E6" },
+  apple:     { bg: "#FFF8E6", text: "#7D4E00", border: "#FFD580" },
+  figma:     { bg: "#F0EFFE", text: "#4C3FB1", border: "#C4B5FD" },
+  ai:        { bg: "#FEF0E7", text: "#7C2D12", border: "#FDC093" },
+  a11y:      { bg: "#ECFDF5", text: "#065F46", border: "#6EE7B7" },
+};
+
+const AUDIT_SECTIONS = [
+  { id: "foundations", label: "Foundations", icon: "◆", items: [
+    { label: "Design tokens defined", sub: "Color, spacing, radius, elevation, shadow — all expressed as named tokens, not hard-coded values.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","a11y"], prompt: "List all design tokens following Material Design 3 naming conventions, including color roles, elevation, and shape." },
+    { label: "Color system documented", sub: "Primary, secondary, neutral, semantic palettes with light and dark mode variants.", systems: ["google","atlassian","carbon","apple"], tags: ["a11y"], prompt: "Generate a complete color system using Material You dynamic color with primary, secondary, tertiary, and surface roles for both light and dark mode." },
+    { label: "Typography scale established", sub: "Type ramp covers display, headline, title, body, label — each with size, weight, line-height, and letter-spacing.", systems: ["google","atlassian","carbon","apple"], tags: ["figma"], prompt: "Create a typography scale covering all levels: display large/medium/small, headline, title, body, label." },
+    { label: "Spacing & layout grid defined", sub: "4px or 8px base grid. Column, margin, and gutter values for each breakpoint.", systems: ["google","atlassian","carbon","apple"], tags: ["figma"], prompt: "Set up a responsive layout grid: 4px base unit, 12-column desktop, 8-column tablet, 4-column mobile." },
+    { label: "Elevation & shadow system defined", sub: "Layering model — resting, raised, floating, overlay.", systems: ["google","atlassian","carbon"], tags: [], prompt: "Define elevation tokens for 5 levels: flat, raised, sticky, overlay, dialog." },
+    { label: "Motion & animation principles", sub: "Duration scales, easing curves, and principles for how elements enter, exit, and transition.", systems: ["google","atlassian","apple"], tags: ["figma"], prompt: "Document the animation system: define 4 duration tokens (fast 100ms, standard 200ms, complex 400ms, gentle 600ms) and map them to easing presets." },
+    { label: "Iconography system established", sub: "Icon set defined, usage rules for size (16/20/24px), weight, style, and icon-only vs. icon+label patterns.", systems: ["google","atlassian","carbon","apple"], tags: ["figma"], prompt: "Create an icon usage guide: show icon-only, icon+label, and leading/trailing icon patterns for 16, 20, and 24px sizes." },
+  ]},
+  { id: "core-components", label: "Core Components", icon: "■", items: [
+    { label: "Button hierarchy complete", sub: "Primary, secondary, tertiary, ghost, destructive, icon-only — all with hover, focus, disabled, and loading states.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","a11y"], prompt: "Build a button component with variants: type (primary/secondary/tertiary/destructive), size (sm/md/lg), state (default/hover/focus/disabled/loading)." },
+    { label: "Form inputs fully specified", sub: "Text field, textarea, select, checkbox, radio, toggle — with label, helper text, validation states.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","a11y"], prompt: "Create a complete form input set: text input, textarea, select — each with label, placeholder, helper text, and states: default, focus, error, success, disabled." },
+    { label: "Navigation patterns defined", sub: "Top nav, side nav, breadcrumbs, tabs, pagination. Responsive behavior and active/selected states documented.", systems: ["google","atlassian","carbon","apple"], tags: ["figma"], prompt: "Design a navigation system: top nav bar, collapsible side nav, breadcrumbs, and bottom tab bar for mobile." },
+    { label: "Data display components", sub: "Tables, lists, cards, data grids — with sorting, filtering, empty states, and pagination.", systems: ["atlassian","carbon","google"], tags: ["figma"], prompt: "Build a data table component with: sortable headers, row hover, row selection, empty state, and pagination controls." },
+    { label: "Overlay patterns covered", sub: "Modal, drawer, tooltip, popover, toast — with opening/closing behavior and focus trap documentation.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","a11y"], prompt: "Create components for: modal dialog, bottom sheet/drawer, tooltip (light/dark), and toast notification." },
+    { label: "Status & feedback components", sub: "Alerts, banners, inline messages, progress indicators, badges, empty states.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","a11y"], prompt: "Design a feedback set: alert banner (info/warning/success/error), progress bar, circular spinner, badge counter, and inline validation message." },
+  ]},
+  { id: "accessibility", label: "Accessibility", icon: "●", items: [
+    { label: "Color contrast meets WCAG AA", sub: "All text/background combos pass 4.5:1 (normal text) or 3:1 (large text).", systems: ["google","atlassian","carbon","apple"], tags: ["a11y"], prompt: "Audit all color combinations for WCAG AA contrast compliance. Flag any text/background pairs that fail 4.5:1." },
+    { label: "Focus states documented", sub: "Visible focus ring on every interactive element, meeting WCAG 2.4.11.", systems: ["google","atlassian","carbon","apple"], tags: ["a11y","figma"], prompt: "Add focus state variants to all interactive components: 2px offset focus ring using the system focus color token." },
+    { label: "Touch target minimums met", sub: "44×44px minimum touch target for mobile patterns.", systems: ["google","apple"], tags: ["a11y"], prompt: "Annotate all interactive elements for touch target size. Flag anything below 44×44px." },
+    { label: "Error messaging accessible", sub: "Errors not communicated by color alone. Icon + text label + aria-describedby annotations present.", systems: ["google","atlassian","carbon","apple"], tags: ["a11y","figma"], prompt: "Create error state annotations: error icon + red border + error message text below input. Add aria-describedby spec." },
+    { label: "Screen reader annotations", sub: "Component specs include aria roles, labels, and keyboard interaction patterns.", systems: ["atlassian","carbon"], tags: ["a11y"], prompt: "Generate accessibility annotations for this modal: include aria-modal, aria-labelledby, focus trap boundary, and keyboard pattern." },
+  ]},
+  { id: "documentation", label: "Documentation & Handoff", icon: "◉", items: [
+    { label: "Component usage guidelines", sub: "When to use, when not to use, do/don't examples.", systems: ["google","atlassian","carbon","apple"], tags: ["figma","ai"], prompt: "Write component usage guidelines: when to use, when not to use, and do/don't examples." },
+    { label: "Design tokens mapped to code", sub: "Token names in Figma match token names in code (CSS custom properties, JSON, Tailwind).", systems: ["google","atlassian","carbon"], tags: ["figma"], prompt: "Generate a design token export spec: map each token to its CSS custom property name following W3C Design Tokens format." },
+    { label: "Figma component anatomy annotated", sub: "Each component includes a spec frame showing measurements, spacing, and token references.", systems: ["google","atlassian","carbon"], tags: ["figma"], prompt: "Create a component anatomy frame: annotate padding, corner radius token, shadow level, and typography tokens." },
+    { label: "Variant & property matrix complete", sub: "All component variants exposed as Figma component properties with consistent naming.", systems: ["google","atlassian","carbon","apple"], tags: ["figma"], prompt: "Audit component properties: list all variants, boolean props, and instance-swap slots. Flag hidden layers that should be properties." },
+    { label: "Changelog maintained", sub: "Version history documents what changed, what was deprecated, and migration notes.", systems: ["atlassian","carbon"], tags: [], prompt: "Write a changelog entry: new components, deprecated patterns, token renames, and migration steps." },
+  ]},
+  { id: "ai-acceleration", label: "AI Acceleration", icon: "✦", items: [
+    { label: "AI prompt library per component", sub: "Each component has validated prompts for generating variants in Figma or code.", systems: ["google","atlassian","carbon","apple"], tags: ["ai","figma"], prompt: "Build a reusable prompt template for this component: generate Figma variants, write docs, or scaffold production code." },
+    { label: "Component generation tested", sub: "Core components validated against AI generation pipelines for token fidelity.", systems: ["google","atlassian","carbon"], tags: ["ai","figma"], prompt: "Using the design system as reference, generate a product card component in React with proper token usage." },
+    { label: "System prompt crafted", sub: "A project-level system prompt defines which design system, token naming, and component patterns AI should follow.", systems: ["google","atlassian","carbon","apple"], tags: ["ai"], prompt: "Write a system prompt that instructs AI to generate UI specs following the design system: include token references, component anatomy, and accessibility annotations." },
+    { label: "Design-to-dev handoff accelerated", sub: "AI-assisted redlines, token extraction, and code snippet generation validated for accuracy.", systems: ["atlassian","carbon","google"], tags: ["ai","figma"], prompt: "Given the component spec, generate a React component with TypeScript props, inline CSS tokens, and JSDoc prop documentation." },
+  ]},
+];
 
 function typeScale(base, ratio, step) {
   return Math.round(base * Math.pow(ratio, step) * 100) / 100;
@@ -140,6 +192,10 @@ export default function UniversalDesignSystem() {
   const [activeSection, setActiveSection] = useState("tokens");
   const [showPanel, setShowPanel] = useState(true);
   const [aiPromptCopied, setAiPromptCopied] = useState(false);
+  const [auditChecked, setAuditChecked] = useState({});
+  const [auditFilter, setAuditFilter] = useState("all");
+  const [expandedAuditPrompt, setExpandedAuditPrompt] = useState(null);
+  const [copiedAuditPrompt, setCopiedAuditPrompt] = useState(null);
 
   const update = useCallback((key, val) => {
     setTokens((prev) => ({ ...prev, [key]: val }));
@@ -268,6 +324,7 @@ Return ONLY the updated :root {} block with comments explaining each choice.`;
         { id: "tokens", label: "Design Tokens" },
         { id: "typography", label: "Type Scale" },
         { id: "components", label: "Components" },
+        { id: "audit", label: "System Audit" },
         { id: "export", label: "Export & AI" },
       ].map((s) => (
         <button
@@ -719,6 +776,126 @@ Return ONLY the updated :root {} block with comments explaining each choice.`;
                   ))}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* AUDIT SECTION */}
+          {activeSection === "audit" && (
+            <div>
+              {/* Intro */}
+              <div style={{ background: "#fff", borderRadius: tokens.radiusLg, padding: 24, border: "1px solid #eee", marginBottom: 16 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontSize: 10, fontFamily: tokens.fontMono, letterSpacing: 2, textTransform: "uppercase", color: "#999", marginBottom: 6 }}>Design System Audit</div>
+                    <div style={{ fontSize: 14, color: "#666" }}>Check your system against Material Design 3, Atlassian, IBM Carbon, and Apple HIG.</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 24, fontWeight: 700, color: tokens.primary }}>
+                      {Math.round((Object.values(auditChecked).filter(Boolean).length / AUDIT_SECTIONS.reduce((a, s) => a + s.items.length, 0)) * 100)}%
+                    </div>
+                    <div style={{ fontSize: 11, color: "#999" }}>
+                      {Object.values(auditChecked).filter(Boolean).length} / {AUDIT_SECTIONS.reduce((a, s) => a + s.items.length, 0)} items
+                    </div>
+                  </div>
+                </div>
+                {/* Progress bar */}
+                <div style={{ height: 6, background: "#eee", borderRadius: 3, overflow: "hidden" }}>
+                  <div style={{ height: "100%", background: tokens.primary, borderRadius: 3, transition: "width 0.3s", width: `${(Object.values(auditChecked).filter(Boolean).length / AUDIT_SECTIONS.reduce((a, s) => a + s.items.length, 0)) * 100}%` }} />
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+                {[
+                  { id: "all", label: "All items" },
+                  { id: "figma", label: "Figma" },
+                  { id: "a11y", label: "Accessibility" },
+                  { id: "ai", label: "AI Acceleration" },
+                ].map((f) => (
+                  <button key={f.id} onClick={() => setAuditFilter(f.id)} style={{
+                    background: auditFilter === f.id ? tokens.primary : "#f5f5f5",
+                    color: auditFilter === f.id ? "#fff" : "#666",
+                    border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 500, cursor: "pointer",
+                  }}>{f.label}</button>
+                ))}
+              </div>
+
+              {/* Sections */}
+              {AUDIT_SECTIONS.map((section) => {
+                const filteredItems = auditFilter === "all" ? section.items : section.items.filter((item) => item.tags.includes(auditFilter));
+                if (filteredItems.length === 0) return null;
+                const sectionComplete = filteredItems.filter((_, i) => auditChecked[`${section.id}-${i}`]).length;
+
+                return (
+                  <div key={section.id} style={{ background: "#fff", borderRadius: tokens.radiusLg, padding: 24, border: "1px solid #eee", marginBottom: 12 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 16 }}>{section.icon}</span>
+                        <span style={{ fontWeight: 700, fontSize: 15 }}>{section.label}</span>
+                      </div>
+                      <span style={{ fontSize: 11, fontFamily: tokens.fontMono, color: "#999" }}>
+                        {sectionComplete}/{filteredItems.length}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {filteredItems.map((item, i) => {
+                        const key = `${section.id}-${i}`;
+                        const checked = auditChecked[key] || false;
+                        const promptKey = `${section.id}-${i}`;
+                        return (
+                          <div key={i} style={{ borderRadius: 10, border: "1px solid #eee", overflow: "hidden", opacity: checked ? 0.6 : 1 }}>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "14px 16px", cursor: "pointer" }}
+                              onClick={() => setAuditChecked((prev) => ({ ...prev, [key]: !prev[key] }))}>
+                              <div style={{
+                                width: 20, height: 20, borderRadius: 6, border: checked ? "none" : "2px solid #ccc",
+                                background: checked ? tokens.primary : "transparent", flexShrink: 0, marginTop: 2,
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                color: "#fff", fontSize: 12, fontWeight: 700,
+                              }}>{checked ? "✓" : ""}</div>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 3, textDecoration: checked ? "line-through" : "none" }}>{item.label}</div>
+                                <div style={{ fontSize: 12, color: "#888", lineHeight: 1.4 }}>{item.sub}</div>
+                                <div style={{ display: "flex", gap: 4, marginTop: 6, flexWrap: "wrap" }}>
+                                  {item.systems.map((sys) => (
+                                    <span key={sys} style={{
+                                      fontSize: 9, padding: "2px 7px", borderRadius: 10, fontWeight: 500,
+                                      background: AUDIT_COLORS[sys]?.bg || "#f5f5f5",
+                                      color: AUDIT_COLORS[sys]?.text || "#555",
+                                    }}>{sys === "google" ? "Material" : sys === "apple" ? "HIG" : sys.charAt(0).toUpperCase() + sys.slice(1)}</span>
+                                  ))}
+                                  {item.tags.map((tag) => (
+                                    <span key={tag} style={{
+                                      fontSize: 9, padding: "2px 7px", borderRadius: 10, fontWeight: 500,
+                                      background: AUDIT_COLORS[tag]?.bg || "#f5f5f5",
+                                      color: AUDIT_COLORS[tag]?.text || "#555",
+                                    }}>{tag === "a11y" ? "A11y" : tag === "ai" ? "AI" : tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
+                                  ))}
+                                </div>
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); setExpandedAuditPrompt(expandedAuditPrompt === promptKey ? null : promptKey); }}
+                                style={{ background: "#f5f5f5", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", color: "#888", flexShrink: 0 }}>
+                                {expandedAuditPrompt === promptKey ? "Hide" : "Prompt"}
+                              </button>
+                            </div>
+                            {expandedAuditPrompt === promptKey && (
+                              <div style={{ padding: "0 16px 14px" }}>
+                                <pre style={{
+                                  fontFamily: tokens.fontMono, fontSize: 11, background: "#1a1a1a", color: "#e0e0e0",
+                                  padding: 14, borderRadius: 8, whiteSpace: "pre-wrap", lineHeight: 1.6, margin: "0 0 8px",
+                                }}>{item.prompt}</pre>
+                                <button onClick={() => { navigator.clipboard.writeText(item.prompt); setCopiedAuditPrompt(promptKey); setTimeout(() => setCopiedAuditPrompt(null), 2000); }}
+                                  style={{ background: copiedAuditPrompt === promptKey ? "#16A34A" : tokens.primary, color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 11, fontWeight: 500, cursor: "pointer" }}>
+                                  {copiedAuditPrompt === promptKey ? "✓ Copied" : "Copy prompt"}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
 
