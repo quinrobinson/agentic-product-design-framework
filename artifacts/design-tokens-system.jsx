@@ -383,6 +383,23 @@ Return ONLY the updated :root {} block with comments explaining each choice.`;
         </div>
       </div>
 
+      {/* Onboarding Guide Banner */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "16px 28px 0" }}>
+        <div style={{ background: "#fff", borderRadius: 12, padding: "14px 20px", border: "1px solid #eee", borderLeft: `4px solid ${tokens.primary}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 20 }}>📘</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "#333" }}>Onboarding Guide</div>
+              <div style={{ fontSize: 12, color: "#888" }}>New to the framework? Download the 18-slide team onboarding deck for Figma + Claude setup.</div>
+            </div>
+          </div>
+          <a href="https://github.com/quinrobinson/AI-x-UX-Product-Design-Framework/raw/main/artifacts/onboarding-deck.pptx"
+            style={{ background: tokens.primary, color: "#fff", padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, marginLeft: 16, fontFamily: tokens.fontBody }}>
+            Download PPTX
+          </a>
+        </div>
+      </div>
+
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 28px 48px", display: "grid", gridTemplateColumns: showPanel ? "280px 1fr" : "1fr", gap: 24 }}>
         {/* Control Panel */}
         {showPanel && (
