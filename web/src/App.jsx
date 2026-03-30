@@ -496,16 +496,16 @@ Based on my answers, respond with:
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
           {[
-            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true), ctaColor: "#22C55E" },
-            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process"), ctaColor: "#F59E0B" },
-            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true), ctaColor: "#14B8A6" },
-            { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go.", ctaLabel: "Design System Audit →", ctaAction: () => setActiveTool("checklist"), ctaColor: "#8B5CF6" },
+            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true) },
+            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
+            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true) },
+            { n: "04", label: "Start designing", desc: "Open any phase — research, concepts, wireframes, or specs. The framework meets you where you are.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
           ].map((step, i) => (
             <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
               <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
-              <button onClick={step.ctaAction} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: step.ctaColor, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>
+              <button onClick={step.ctaAction} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: DS.bodyLight, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace", opacity: 0.6 }}>
                 {step.ctaLabel}
               </button>
             </div>
