@@ -7,6 +7,7 @@ import AIBriefGenerator from "./AIBriefGenerator";
 import ClientDeckBuilder from "./ClientDeckBuilder";
 import FigmaSetupGuide from "./FigmaSetupGuide";
 import SkillsLibrary from "./SkillsLibrary";
+import DesignSystemBuilder from "./DesignSystemBuilder";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -80,6 +81,16 @@ const TOOLS = [
     description: "Tell Claude your goal, audience, and where you are in the project — it identifies the deck type, writes a slide-by-slide structure with speaker notes, talking points, and an opening hook tailored to your room.",
     tags: ["All phases", "AI accelerated", "Client-facing"],
     component: ClientDeckBuilder,
+  },
+  {
+    id: "design-system-builder",
+    number: "06",
+    phase: "03",
+    name: "Design System Builder",
+    subtitle: "Upload, build, or bootstrap a design system for Claude",
+    description: "Upload your client's design system ZIP, or build one from scratch using the Bootstrap Builder. Claude parses, normalizes, and exports a structured CLAUDE.md context block — giving any LLM full design system knowledge instantly. Design immediately in Figma via MCP with no guessing on tokens.",
+    tags: ["Ideate", "Deliver", "Figma MCP", "AI accelerated"],
+    component: DesignSystemBuilder,
   },
 ];
 
@@ -645,7 +656,7 @@ Based on my answers, respond with:
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>
-              AI-Powered Design Tools — 05
+              AI-Powered Design Tools — 06
             </div>
             <span style={{ fontSize: 12, color: DS.bodyDark, opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>No install — runs in the browser</span>
           </div>
