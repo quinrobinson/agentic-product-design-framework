@@ -3,6 +3,7 @@ import DesignProcessSystem from "./DesignProcessSystem";
 import UniversalDesignSystem from "./DesignTokensSystem";
 import DesignSystemChecklist from "./DesignSystemChecklist";
 import M3TokenReference from "./M3TokenReference";
+import AIBriefGenerator from "./AIBriefGenerator";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -38,34 +39,34 @@ const TOOLS = [
     component: DesignProcessSystem,
   },
   {
-    id: "tokens",
+    id: "brief",
     number: "02",
+    phase: "01",
+    name: "AI Brief Generator",
+    subtitle: "Turn project context into a ready-to-use design brief",
+    description: "Answer a few questions about your project — type, phase, team, goals, constraints — and Claude generates a structured brief with a phase roadmap, problem statement, success metrics, and a first prompt ready to paste.",
+    tags: ["Discover", "AI accelerated", "Every project"],
+    component: AIBriefGenerator,
+  },
+  {
+    id: "tokens",
+    number: "03",
     phase: "03",
-    name: "Design Tokens System",
-    subtitle: "Universal starter design system",
-    description: "Live token editor with presets, component previews, system audit against Material/Atlassian/Carbon/HIG, and CSS export.",
-    tags: ["Ideate", "Design system", "Live preview"],
+    name: "Brand Style Builder",
+    subtitle: "Build a client-ready visual identity in minutes",
+    description: "Live token editor with presets, component previews, and CSS export. Set brand colors, type, and spacing — then export a starter design system ready to hand off or drop into Figma.",
+    tags: ["Ideate", "Client deliverable", "Live preview"],
     component: UniversalDesignSystem,
   },
   {
     id: "checklist",
-    number: "03",
-    phase: "06",
-    name: "Design System Checklist",
-    subtitle: "Audit against 4 major design systems",
-    description: "Interactive audit checklist synthesized from Material Design 3, Atlassian, IBM Carbon, and Apple HIG — with Figma-ready prompts per item.",
-    tags: ["Deliver", "Audit", "Figma prompts"],
-    component: DesignSystemChecklist,
-  },
-  {
-    id: "m3",
     number: "04",
     phase: "06",
-    name: "M3 Token Reference",
-    subtitle: "Material Design 3 token documentation",
-    description: "Interactive token docs for Button, Card, Text Field, and Navigation Bar — color roles, elevation, shape, typography, and spacing.",
-    tags: ["Deliver", "M3 tokens", "Figma variables"],
-    component: M3TokenReference,
+    name: "Design System Audit",
+    subtitle: "Audit your system against 4 industry standards",
+    description: "Structured checklist synthesized from Material Design 3, Atlassian, IBM Carbon, and Apple HIG — with Figma-ready AI prompts per item. Best used at handoff.",
+    tags: ["Deliver", "Audit", "Figma prompts"],
+    component: DesignSystemChecklist,
   },
 ];
 
@@ -592,7 +593,7 @@ Based on my answers, respond with:
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>
-              Interactive Tools — 04
+              AI-Powered Design Tools — 04
             </div>
             <span style={{ fontSize: 12, color: DS.bodyDark, opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>No install — runs in the browser</span>
           </div>
