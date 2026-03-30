@@ -30,9 +30,10 @@ const TOOLS = [
     id: "process",
     number: "01",
     phase: "01",
+    primary: true,
     name: "Design Process System",
-    subtitle: "AI-integrated phase-by-phase framework",
-    description: "Six-phase design process with AI prompts, skill docs, Figma playbook actions, templates, and tool recommendations per phase.",
+    subtitle: "Start here — the core framework",
+    description: "Six-phase design process with AI prompts, skill docs, Figma playbook actions, templates, and tool recommendations. The entry point for every project.",
     tags: ["All phases", "AI prompts", "11 skills"],
     component: DesignProcessSystem,
   },
@@ -141,6 +142,80 @@ function ToolCard({ tool, onClick }) {
       <div style={{ display: "flex", alignItems: "center", gap: 8, color: p.color, fontSize: 13, fontWeight: 500, opacity: hovered ? 1 : 0.4, transition: "opacity 0.2s ease" }}>
         Open tool
         <span style={{ transform: hovered ? "translateX(4px)" : "none", transition: "transform 0.2s ease", display: "inline-block" }}>→</span>
+      </div>
+    </button>
+  );
+}
+
+function PrimaryToolCard({ tool, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const p = DS.phases[tool.phase];
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "block", width: "100%",
+        background: DS.white,
+        border: `1px solid ${hovered ? p.color + "88" : p.color + "44"}`,
+        borderRadius: 16, padding: "32px 36px", cursor: "pointer", textAlign: "left",
+        transition: "all 0.2s ease", outline: "none",
+        transform: hovered ? "translateY(-2px)" : "none",
+        boxShadow: hovered ? `0 16px 40px ${p.color}16` : `0 2px 8px ${p.color}0a`,
+        marginBottom: 12,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 40 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 5,
+              background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999,
+              padding: "4px 12px", fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              fontWeight: 500, color: p.color,
+            }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
+              {tool.phase} — {p.label}
+            </span>
+            <span style={{
+              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+              background: `${p.color}12`, border: `1px solid ${p.color}40`,
+              color: p.color, padding: "3px 10px", borderRadius: 999, fontWeight: 500,
+            }}>
+              Entry point
+            </span>
+          </div>
+          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, fontWeight: 400, color: "#0F172A", marginBottom: 10, lineHeight: 1.15 }}>
+            {tool.name}
+          </div>
+          <div style={{ fontSize: 14, color: DS.bodyDark, lineHeight: 1.7, marginBottom: 20, maxWidth: 480 }}>
+            {tool.description}
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {tool.tags.map(tag => (
+              <span key={tag} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, background: "transparent", color: p.color, fontWeight: 500, border: `1px solid ${p.color}55` }}>{tag}</span>
+            ))}
+          </div>
+          <div style={{ marginTop: 20, display: "flex", alignItems: "center", gap: 8, color: p.color, fontSize: 13, fontWeight: 500, opacity: hovered ? 1 : 0.4, transition: "opacity 0.2s ease" }}>
+            Open tool
+            <span style={{ transform: hovered ? "translateX(4px)" : "none", transition: "transform 0.2s ease", display: "inline-block" }}>→</span>
+          </div>
+        </div>
+        <div style={{ flexShrink: 0, width: 220, background: DS.light, borderRadius: 12, padding: "20px 22px", border: `1px solid ${DS.lightBorder}` }}>
+          <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 2, color: DS.bodyDark, marginBottom: 14 }}>How to use</div>
+          {[
+            { n: "1", text: "Select a design phase" },
+            { n: "2", text: "Copy an AI prompt" },
+            { n: "3", text: "Run it in Claude" },
+            { n: "4", text: "Build outputs in Figma" },
+          ].map(step => (
+            <div key={step.n} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
+              <span style={{ width: 20, height: 20, borderRadius: "50%", background: "transparent", border: `1px solid ${p.color}55`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: p.color, flexShrink: 0 }}>{step.n}</span>
+              <span style={{ fontSize: 12, color: DS.bodyDark, lineHeight: 1.5 }}>{step.text}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </button>
   );
@@ -374,24 +449,49 @@ Based on my answers, respond with:
         </div>
       </div>
 
+      {/* HOW IT WORKS — dark strip */}
+      <div style={{ borderTop: `1px solid ${DS.darkBorder}`, borderBottom: `1px solid ${DS.darkBorder}` }}>
+        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "26px 60px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
+          {[
+            { n: "01", label: "Pick a phase", desc: "Discover, Define, Ideate, Prototype, Validate, or Deliver" },
+            { n: "02", label: "Run an AI prompt", desc: "Copy-ready prompts with [BRACKET] placeholders for your project" },
+            { n: "03", label: "Build in Figma", desc: "Figma Playbook actions Claude executes directly in your file" },
+            { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records" },
+          ].map((step, i) => (
+            <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
+              <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* TOOLS — light */}
       <div style={{ background: DS.light }}>
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
-          <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark, marginBottom: 28 }}>
-            Interactive Tools — 04
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
+            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>
+              Interactive Tools — 04
+            </div>
+            <span style={{ fontSize: 12, color: DS.bodyDark, opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>No install — runs in the browser</span>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
-            {TOOLS.map(t => <ToolCard key={t.id} tool={t} onClick={() => setActiveTool(t.id)} />)}
+          <PrimaryToolCard tool={TOOLS.find(t => t.primary)} onClick={() => setActiveTool("process")} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+            {TOOLS.filter(t => !t.primary).map(t => <ToolCard key={t.id} tool={t} onClick={() => setActiveTool(t.id)} />)}
           </div>
         </div>
       </div>
 
       {/* SKILLS — light */}
-      <div style={{ background: DS.light }}>
+      <div style={{ background: DS.light, borderTop: `1px solid ${DS.lightBorder}` }}>
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>Claude Skills Library — 11 files</div>
-            <a href={`${REPO}/tree/main/skills`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: DS.bodyDark, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", opacity: 0.5 }}>View on GitHub ↗</a>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+            <div>
+              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark, marginBottom: 6 }}>Claude Skills Library — 11 files</div>
+              <div style={{ fontSize: 13, color: DS.bodyDark }}>Upload a skill file into any Claude conversation to activate phase-specific AI workflows.</div>
+            </div>
+            <a href={`${REPO}/tree/main/skills`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: DS.bodyDark, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", opacity: 0.5, whiteSpace: "nowrap", marginLeft: 32 }}>View on GitHub ↗</a>
           </div>
           <div style={{ background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
             {SKILLS.map((row, i) => {
