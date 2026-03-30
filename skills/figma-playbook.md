@@ -9,6 +9,40 @@ ai_leverage: high
 
 A comprehensive guide for Claude to execute design work directly in Figma via MCP. This playbook maps every phase of the design process to concrete Figma actions, patterns, and templates.
 
+## Prerequisites — Read this before anything else
+
+This skill requires **Claude Desktop** connected to the **Figma desktop app** via MCP. It will not work in claude.ai in a browser.
+
+### What you need running
+
+| Requirement | How to confirm |
+|---|---|
+| Claude Desktop (not claude.ai) | You're using the installed desktop app, not a browser |
+| Figma desktop app (not browser) | Figma is open as an installed app, not figma.com |
+| Figma MCP connected | Claude Desktop → Settings → Integrations → Figma shows **Connected** |
+| Both apps open simultaneously | Claude Desktop and Figma are both running right now |
+| Edit access to your Figma file | You can make changes to the file (not view-only) |
+
+### Quick connection test
+
+In Claude Desktop, type: **"What files do I have open in Figma?"**
+
+- ✅ Claude names your open file → you're ready to use this playbook
+- ❌ Claude says it can't see Figma → check the setup guide at the framework site or follow the steps below
+
+### Not set up yet?
+
+**Option A — Set up Claude Desktop + Figma MCP** (5–10 minutes):
+1. Download Claude Desktop from [claude.ai/download](https://claude.ai/download)
+2. Download Figma desktop from [figma.com/downloads](https://www.figma.com/downloads)
+3. Open Claude Desktop → Settings → Integrations → Connect Figma
+4. Open both apps and run the connection test above
+
+**Option B — Use claude.ai in the browser instead** (zero setup):
+Upload this skill file to a claude.ai conversation. Claude will generate the same structured content — research boards, wireframe specs, component descriptions — but you'll apply it manually in Figma rather than Claude executing it directly. The Figma Playbook becomes a guide for what to build rather than an automated executor.
+
+---
+
 ## How This Playbook Works
 
 This skill is a **companion** to the phase-specific skills. It doesn't replace them — it extends them with Figma execution capabilities. The workflow is:

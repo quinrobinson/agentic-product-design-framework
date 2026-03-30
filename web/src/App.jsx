@@ -5,6 +5,7 @@ import DesignSystemChecklist from "./DesignSystemChecklist";
 import M3TokenReference from "./M3TokenReference";
 import AIBriefGenerator from "./AIBriefGenerator";
 import ClientDeckBuilder from "./ClientDeckBuilder";
+import FigmaSetupGuide from "./FigmaSetupGuide";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -357,6 +358,7 @@ export default function App() {
   const [mounted, setMounted] = useState(false);
   const [kickoffOpen, setKickoffOpen] = useState(false);
   const [kickoffCopied, setKickoffCopied] = useState(false);
+  const [showSetup, setShowSetup] = useState(false);
   useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
 
   const KICKOFF_PROMPT = `You are a UX design assistant trained on the Agentic Product Design Framework —
@@ -394,6 +396,10 @@ Based on my answers, respond with:
 
   const tool = activeTool ? TOOLS.find(t => t.id === activeTool) : null;
   const ToolComponent = tool?.component;
+
+  if (showSetup) {
+    return <FigmaSetupGuide onBack={() => setShowSetup(false)} />;
+  }
 
   if (ToolComponent) {
     return (
@@ -486,13 +492,18 @@ Based on my answers, respond with:
           {[
             { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow" },
             { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run" },
-            { n: "03", label: "Build in Figma", desc: "Claude executes Figma Playbook actions directly in your file via MCP" },
+            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", cta: true },
             { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go" },
           ].map((step, i) => (
             <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
               <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
+              {step.cta && (
+                <button onClick={() => setShowSetup(true)} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: "#14B8A6", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>
+                  Setup guide →
+                </button>
+              )}
             </div>
           ))}
           </div>
@@ -602,6 +613,27 @@ Based on my answers, respond with:
       {/* TOOLS — light */}
       <div style={{ background: DS.light }}>
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
+
+          {/* Before you start callout */}
+          <div style={{ background: DS.dark, borderRadius: 12, padding: "16px 24px", marginBottom: 36, display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+              <span style={{ fontSize: 16 }}>⬡</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: DS.white }}>Before you start</span>
+            </div>
+            <div style={{ width: 1, height: 20, background: DS.darkBorder, flexShrink: 0 }} />
+            <div style={{ flex: 1, minWidth: 200, fontSize: 12, color: DS.bodyLight, lineHeight: 1.6 }}>
+              <span style={{ color: "#22C55E", fontWeight: 600 }}>Path A — Full power: </span>Claude Desktop + Figma desktop app (Claude executes directly in Figma).{'  '}
+              <span style={{ color: "#3B82F6", fontWeight: 600 }}>Path B — Zero setup: </span>claude.ai in any browser (apply Claude's output manually in Figma).
+            </div>
+            <button
+              onClick={() => setShowSetup(true)}
+              style={{ background: "transparent", border: `1px solid ${DS.darkBorder}`, borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 12, color: DS.white, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap", flexShrink: 0, transition: "border-color 0.15s" }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = DS.white}
+              onMouseLeave={e => e.currentTarget.style.borderColor = DS.darkBorder}
+            >
+              Setup guide →
+            </button>
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>
               AI-Powered Design Tools — 05
