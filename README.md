@@ -6,7 +6,7 @@ A scalable, AI-integrated framework for product and UX design — from research 
 
 The interactive tools are deployed as a website via GitHub Pages:
 
-**[quinrobinson.github.io/AI-x-UX-Product-Design-Framework](https://quinrobinson.github.io/AI-x-UX-Product-Design-Framework)**
+**[quinrobinson.github.io/Agentic-Product-Design-Framework](https://quinrobinson.github.io/Agentic-Product-Design-Framework)**
 
 No install needed — open in any browser and share the URL with your team.
 
