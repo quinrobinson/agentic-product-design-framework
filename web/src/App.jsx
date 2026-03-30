@@ -361,57 +361,32 @@ Based on my answers, respond with:
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* HERO — dark */}
-      <div style={{ padding: "80px 60px 64px", maxWidth: 1160, margin: "0 auto" }}>
+      <div style={{ padding: "80px 60px 0", maxWidth: 1160, margin: "0 auto" }}>
         <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 4, textTransform: "uppercase", color: DS.bodyLight, marginBottom: 28, opacity: 0.7 }}>
           AI × UX Product Design Framework
         </div>
 
-        {/* Headline + How it works */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 64, alignItems: "start", marginBottom: 56 }}>
-          <div>
-            <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 60, fontWeight: 400, margin: "0 0 24px", lineHeight: 1.05, color: DS.white, letterSpacing: "-0.5px" }}>
-              Design smarter.<br />
-              <em style={{ fontStyle: "italic", color: DS.bodyLight }}>Ship with confidence.</em>
-            </h1>
-            <p style={{ fontSize: 16, color: DS.bodyLight, lineHeight: 1.75, margin: "0 0 36px", maxWidth: 480 }}>
-              A structured system for integrating AI into every phase of product and UX design — from research through delivery.
-            </p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {[
-                { label: "Onboarding Deck", href: PPTX_URL, external: false },
-                { label: "Figma Template ↗", href: FIGMA_URL, external: true },
-                { label: "GitHub ↗", href: REPO, external: true },
-              ].map(btn => (
-                <a key={btn.label} href={btn.href}
-                  {...(btn.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  style={{ background: "transparent", color: DS.bodyLight, padding: "11px 22px", borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: "none", border: `1px solid ${DS.darkBorder}`, transition: "border-color 0.15s, color 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = DS.white; e.currentTarget.style.color = DS.white; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = DS.darkBorder; e.currentTarget.style.color = DS.bodyLight; }}
-                >{btn.label}</a>
-              ))}
-            </div>
-          </div>
-
-          {/* How it works — right column */}
-          <div style={{ paddingTop: 8 }}>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyLight, opacity: 0.5, marginBottom: 20 }}>How it works</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-              {[
-                { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow" },
-                { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run" },
-                { n: "03", label: "Build in Figma", desc: "Claude executes Figma Playbook actions directly in your file via MCP" },
-                { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go" },
-              ].map((step, i, arr) => (
-                <div key={step.n} style={{ display: "flex", gap: 16, paddingBottom: i < arr.length - 1 ? 20 : 0, marginBottom: i < arr.length - 1 ? 20 : 0, borderBottom: i < arr.length - 1 ? `1px solid ${DS.darkBorder}` : "none" }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.35, paddingTop: 2, flexShrink: 0, width: 20 }}>{step.n}</div>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 3 }}>{step.label}</div>
-                    <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Headline — full width */}
+        <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, fontWeight: 400, margin: "0 0 24px", lineHeight: 1.05, color: DS.white, letterSpacing: "-0.5px", maxWidth: 700 }}>
+          Design smarter.<br />
+          <em style={{ fontStyle: "italic", color: DS.bodyLight }}>Ship with confidence.</em>
+        </h1>
+        <p style={{ fontSize: 16, color: DS.bodyLight, lineHeight: 1.75, margin: "0 0 36px", maxWidth: 520 }}>
+          A structured system for integrating AI into every phase of product and UX design — from research through delivery.
+        </p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 64 }}>
+          {[
+            { label: "Onboarding Deck", href: PPTX_URL, external: false },
+            { label: "Figma Template ↗", href: FIGMA_URL, external: true },
+            { label: "GitHub ↗", href: REPO, external: true },
+          ].map(btn => (
+            <a key={btn.label} href={btn.href}
+              {...(btn.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              style={{ background: "transparent", color: DS.bodyLight, padding: "11px 22px", borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: "none", border: `1px solid ${DS.darkBorder}`, transition: "border-color 0.15s, color 0.15s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = DS.white; e.currentTarget.style.color = DS.white; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = DS.darkBorder; e.currentTarget.style.color = DS.bodyLight; }}
+            >{btn.label}</a>
+          ))}
         </div>
 
         {/* Phase strip — bottom border only, 0 radius */}
@@ -420,6 +395,24 @@ Based on my answers, respond with:
             <div key={key} style={{ borderBottom: `1px solid ${p.color}`, borderRight: i < arr.length - 1 ? `1px solid ${DS.darkBorder}` : "none", padding: "12px 16px 14px" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: p.color, marginBottom: 4, opacity: 0.5 }}>{key}</div>
               <div style={{ fontSize: 12, fontWeight: 600, color: p.color }}>{p.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* HOW IT WORKS — dark strip */}
+      <div style={{ borderTop: `1px solid ${DS.darkBorder}`, borderBottom: `1px solid ${DS.darkBorder}`, marginTop: 0 }}>
+        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "26px 60px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
+          {[
+            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow" },
+            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run" },
+            { n: "03", label: "Build in Figma", desc: "Claude executes Figma Playbook actions directly in your file via MCP" },
+            { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go" },
+          ].map((step, i) => (
+            <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
+              <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
             </div>
           ))}
         </div>
@@ -444,19 +437,16 @@ Based on my answers, respond with:
               padding: "20px 28px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div style={{ background: "#14B8A6", borderRadius: 6, padding: "3px 10px", flexShrink: 0 }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, color: "#0F172A", letterSpacing: 2, textTransform: "uppercase" }}>Start Here</span>
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 15, color: "#F8FAFC", lineHeight: 1.3 }}>Kickoff Prompt</div>
-                <div style={{ fontSize: 12, color: "#64748B", marginTop: 2 }}>New to the framework? Paste this into Claude before uploading any skill file.</div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15, color: "#F8FAFC", lineHeight: 1.3 }}>Kickoff Prompt</div>
+              <div style={{ fontSize: 12, color: "#64748B", marginTop: 3 }}>New to the framework? Paste this into Claude before uploading any skill file.</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0, marginLeft: 24 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 600, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", opacity: 0.8 }}>Start here</span>
+              <div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px solid #14B8A6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <span style={{ fontSize: 13, color: "#14B8A6", display: "inline-block", transform: kickoffOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", lineHeight: 1 }}>↓</span>
               </div>
             </div>
-            <span style={{
-              fontSize: 16, color: "#334155", display: "inline-block",
-              transform: kickoffOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s",
-            }}>↓</span>
           </button>
 
           {/* Expanded content */}
