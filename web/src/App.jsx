@@ -469,13 +469,10 @@ Based on my answers, respond with:
           ))}
         </div>
 
-        {/* Phase strip — bottom border only, no verticals */}
+        {/* Phase strip — colored lines only, no text */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)" }}>
           {Object.entries(DS.phases).map(([key, p]) => (
-            <div key={key} style={{ borderBottom: `1px solid ${p.color}`, padding: "12px 16px 14px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: p.color, marginBottom: 4, opacity: 0.5 }}>{key}</div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: p.color }}>{p.label}</div>
-            </div>
+            <div key={key} style={{ borderBottom: `2px solid ${p.color}`, padding: "8px 0" }} />
           ))}
         </div>
       </div>
