@@ -341,17 +341,19 @@ export default function AIBriefGenerator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
+          max_tokens: 4000,
           messages: [{ role: "user", content: buildPrompt(form) }],
         }),
       });
       const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
       const text = data.content?.map(b => b.text || "").join("") || "";
       const clean = text.replace(/```json|```/g, "").trim();
       const parsed = JSON.parse(clean);
       setBrief(parsed);
     } catch (e) {
-      setError("Something went wrong generating your brief. Please try again.");
+      console.error("Brief generation error:", e);
+      setError("Something went wrong: " + e.message);
     } finally {
       setLoading(false);
     }
