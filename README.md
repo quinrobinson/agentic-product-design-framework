@@ -10,13 +10,35 @@ The interactive tools are deployed as a website via GitHub Pages:
 
 No install needed — open in any browser and share the URL with your team.
 
-The site includes all four interactive tools on a landing page, a skills library browser linking directly to each skill file on GitHub, and links to the Figma template and onboarding deck. Any push to `main` automatically rebuilds and redeploys via GitHub Actions.
+---
 
-## Quick Start — Kickoff Prompt
+## How It Works
 
-**New to the framework? Don't know which phase to start in?**
+The framework is built around six phases — **Discover → Define → Ideate → Prototype → Validate → Deliver** — each backed by a structured skill file you upload to Claude.
 
-Copy and paste this block into a new Claude conversation. No skill file needed yet — Claude will orient itself to the framework, ask you four questions, and tell you exactly where to start and what to do first.
+1. **Pick your phase** — Start where your project is right now, or use the Kickoff Prompt below to get oriented
+2. **Upload a skill file** — Drop the relevant `.md` file into a Claude conversation to activate phase-specific workflows, templates, and quality checklists
+3. **Do the work** — Claude follows structured outputs; you review, direct, and decide
+4. **Carry context forward** — Each skill includes a Phase Handoff Block to pass structured outputs into the next phase without losing context
+
+The [live site](https://quinrobinson.github.io/Agentic-Product-Design-Framework) has interactive tools for exploring the system, previewing design tokens, and auditing design systems. The [Figma template](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE) gives you a dedicated workspace per project.
+
+---
+
+## Before You Start
+
+- **Claude access** — A claude.ai account (free tier works; Pro recommended for longer sessions)
+- **Figma** — Optional but recommended. For MCP integration (Claude working directly in Figma), you'll need Claude Desktop + the Figma desktop app
+- **The Figma template** — [Duplicate it here](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE) and fill in the Cover page with your project details
+- **Skill files** — Available in `/skills`. Upload whichever phase you're starting in — or use the Kickoff Prompt below if you're not sure
+
+---
+
+## Kickoff Prompt
+
+**Not sure where to start? Paste this into a new Claude conversation.**
+
+No skill file needed yet — Claude will orient itself to the framework, ask you four questions, and tell you exactly where to start and what to do first.
 
 ```
 You are a UX design assistant trained on the Agentic Product Design Framework —
@@ -60,6 +82,7 @@ Based on my answers, respond with:
 ## What's Inside
 
 ### `/skills` — Claude Skill Files
+
 Eleven structured `.md` skill files — nine organized by phase, plus a cross-cutting Figma Playbook and a Design Systems skill. Each contains workflows, templates, quality checklists, and guidance for integrating AI into that part of the design process.
 
 | Phase | Skill File | What It Does |
@@ -68,30 +91,17 @@ Eleven structured `.md` skill files — nine organized by phase, plus a cross-cu
 | 01 — Discover | `competitive-analysis.md` | Landscape mapping, feature benchmarks, UX pattern libraries |
 | 02 — Define | `problem-framing.md` | HMW/JTBD/user stories, journey maps, MoSCoW prioritization, design briefs |
 | 03 — Ideate | `concept-generation.md` | Five-Direction concepts, UI patterns, visual system directions, chart type selection |
-| 03 — Ideate | `visual-design-execution.md` | **NEW** — Style selection, color token architecture, typography, spacing, motion, icon standards |
+| 03 — Ideate | `visual-design-execution.md` | Style selection, color token architecture, typography, spacing, motion, icon standards |
 | 04 — Prototype | `prototyping.md` | Functional prototypes, touch targets, interaction timing, gesture safety, platform QA |
-| 04 — Prototype | `accessibility-audit.md` | **NEW** — WCAG 2.1 AA audit for web + iOS (VoiceOver) + Android (TalkBack) |
+| 04 — Prototype | `accessibility-audit.md` | WCAG 2.1 AA audit for web + iOS (VoiceOver) + Android (TalkBack) |
 | 05 — Validate | `usability-testing.md` | Test plans, task scenarios, findings synthesis, heuristic evaluations |
 | 06 — Deliver | `design-delivery.md` | Component specs, iOS/Android/Web platform handoff packages, DDRs, release notes |
-| 03 / 06 | `design-systems.md` | **Design system audit & token documentation** — M3 naming, cross-system comparison, Figma variable setup |
-| All Phases | `figma-playbook.md` | **Figma MCP integration** — execute design work directly in Figma from Claude |
-
-### Figma Playbook (MCP Integration)
-
-The `figma-playbook.md` is a companion skill that works alongside any phase skill. It maps every design deliverable to concrete Figma actions Claude can execute via the Figma MCP:
-
-- **Discover** → Research findings boards, persona cards, competitive matrices
-- **Define** → Journey maps, design briefs, requirements boards
-- **Ideate** → Concept cards, wireframe scaffolding, pattern references
-- **Prototype** → Component creation, screen layouts, design system tokens
-- **Validate** → Findings visualization, heuristic evaluation boards
-- **Deliver** → Spec annotations, component documentation, decision records
-
-Use it by reading the phase skill + the playbook together. The phase skill defines *what* to create; the playbook defines *how* to create it in Figma.
+| 03 / 06 | `design-systems.md` | Design system audit & token documentation — M3 naming, cross-system comparison, Figma variable setup |
+| All Phases | `figma-playbook.md` | Figma MCP integration — execute design work directly in Figma from Claude |
 
 ### `/artifacts` — Interactive React Components & Onboarding Deck
 
-Four JSX artifacts that render as interactive tools, plus a team onboarding presentation:
+Five JSX artifacts that render as interactive tools, plus a team onboarding presentation:
 
 - **`design-process-system.jsx`** — Clickable phase-by-phase system with AI prompts, skill docs, templates, and tool recommendations per phase
 - **`design-tokens-system.jsx`** — Universal starter design system with tunable tokens, live component previews, presets, and AI-powered customization export
@@ -100,12 +110,15 @@ Four JSX artifacts that render as interactive tools, plus a team onboarding pres
 - **`onboarding-deck.pptx`** — 18-slide team onboarding presentation covering the framework's value, structure, and step-by-step setup. Designed to match the Figma Cover aesthetic: dark/light slide balance, phase colors (01–06) used consistently throughout.
 
 ### Figma Template
+
 **[Agentic Design Process Template](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE)** — A 10-page Figma file you duplicate per project:
 - Cover with project metadata
 - Process Map overview
 - 6 phase workspace pages (Discover → Deliver) with structured sections
 - Design System token reference
 - AI Toolkit with copy-ready prompts and skill file references
+
+---
 
 ## The Design Process
 
@@ -115,20 +128,7 @@ Discover → Define → Ideate → Prototype → Validate → Deliver
    └──────────── Iterate as needed ←──────────────┘
 ```
 
-## How to Use
-
-### With Claude
-Upload any skill file to a Claude conversation, describe your project context, and Claude will follow the structured workflows and output templates.
-
-### As Reference
-Each skill contains markdown templates you can copy directly into your project documentation, quality checklists to verify work before advancing, and frameworks for structuring your thinking.
-
-### Per Project
-1. Duplicate the Figma template
-2. Fill in the Cover page with project details
-3. Work through each phase, referencing the skill files and AI Toolkit
-4. Customize the Design System page for your client
-5. Use the interactive artifacts for live previewing and exploration
+---
 
 ## AI Leverage Levels
 
