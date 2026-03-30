@@ -483,7 +483,7 @@ Based on my answers, respond with:
       </div>
 
       {/* HOW IT WORKS — dark strip */}
-      <div style={{ borderTop: `1px solid ${DS.darkBorder}`, borderBottom: `1px solid ${DS.darkBorder}` }}>
+      <div style={{ borderBottom: `1px solid ${DS.darkBorder}` }}>
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "32px 60px" }}>
           <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 4, textTransform: "uppercase", color: DS.bodyLight, opacity: 0.7, marginBottom: 24 }}>
             How it works
