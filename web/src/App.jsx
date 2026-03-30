@@ -149,7 +149,42 @@ function ToolCard({ tool, onClick }) {
 export default function App() {
   const [activeTool, setActiveTool] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [kickoffOpen, setKickoffOpen] = useState(false);
+  const [kickoffCopied, setKickoffCopied] = useState(false);
   useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
+
+  const KICKOFF_PROMPT = `You are a UX design assistant trained on the AI × UX Product Design Framework —
+a six-phase system (Discover → Define → Ideate → Prototype → Validate → Deliver)
+with structured skill files, Figma templates, and AI-ready prompts for each phase.
+
+The six phases and their skill files are:
+- Discover → user-research.md, competitive-analysis.md
+- Define → problem-framing.md
+- Ideate → concept-generation.md, visual-design-execution.md
+- Prototype → prototyping.md, accessibility-audit.md
+- Validate → usability-testing.md
+- Deliver → design-delivery.md
+- Cross-phase → design-systems.md, figma-playbook.md
+
+I'm starting a new design project and need help getting oriented.
+Please ask me the following four questions (all at once is fine):
+
+1. What type of project is this?
+   (e.g., new product, feature addition, redesign, internal tool, client work)
+
+2. What phase are you entering?
+   (Discover / Define / Ideate / Prototype / Validate / Deliver — or "not sure")
+
+3. What do you have so far?
+   (nothing yet / a brief / a brief + research / existing designs)
+
+4. Are you working solo or with a team?
+
+Based on my answers, respond with:
+- Recommended starting phase and a one-sentence reason why
+- The specific skill file to upload next (exact filename)
+- A suggested first deliverable — specific, not a category
+- One prompt I can use right now, before uploading anything, to get started`;
 
   const tool = activeTool ? TOOLS.find(t => t.id === activeTool) : null;
   const ToolComponent = tool?.component;
@@ -233,6 +268,109 @@ export default function App() {
               <div style={{ fontSize: 13, fontWeight: 600, color: p.color }}>{p.label}</div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* KICKOFF PROMPT — dark, between hero and tools */}
+      <div style={{ background: DS.dark, padding: "0 60px 64px", maxWidth: 1160, margin: "0 auto" }}>
+        <div
+          style={{
+            border: `1px solid ${kickoffOpen ? "#334155" : "#1E293B"}`,
+            borderRadius: 16,
+            overflow: "hidden",
+            background: "#0B1120",
+            transition: "border-color 0.2s",
+          }}
+        >
+          {/* Header row — always visible */}
+          <button
+            onClick={() => setKickoffOpen(!kickoffOpen)}
+            style={{
+              width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
+              padding: "20px 28px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ background: "#14B8A6", borderRadius: 6, padding: "3px 10px", flexShrink: 0 }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, color: "#0F172A", letterSpacing: 2, textTransform: "uppercase" }}>Start Here</span>
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: "#F8FAFC", lineHeight: 1.3 }}>Kickoff Prompt</div>
+                <div style={{ fontSize: 12, color: "#64748B", marginTop: 2 }}>New to the framework? Paste this into Claude before uploading any skill file.</div>
+              </div>
+            </div>
+            <span style={{
+              fontSize: 16, color: "#334155", display: "inline-block",
+              transform: kickoffOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s",
+            }}>↓</span>
+          </button>
+
+          {/* Expanded content */}
+          {kickoffOpen && (
+            <div style={{ borderTop: "1px solid #1E293B", padding: "28px 28px 32px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+
+                {/* Left: what Claude asks + responds with */}
+                <div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 18 }}>Four questions Claude will ask</div>
+                  {[
+                    { n: "01", q: "What type of project is this?", hint: "New product, feature, redesign, internal tool, client work" },
+                    { n: "02", q: "What phase are you entering?", hint: "Discover / Define / Ideate / Prototype / Validate / Deliver — or \"not sure\"" },
+                    { n: "03", q: "What do you have so far?", hint: "Nothing yet / a brief / brief + research / existing designs" },
+                    { n: "04", q: "Are you working solo or with a team?", hint: "" },
+                  ].map(({ n, q, hint }) => (
+                    <div key={n} style={{ marginBottom: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#334155", marginTop: 3, flexShrink: 0 }}>{n}</span>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: "#F8FAFC", lineHeight: 1.4 }}>{q}</div>
+                        {hint && <div style={{ fontSize: 11, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>{hint}</div>}
+                      </div>
+                    </div>
+                  ))}
+
+                  <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid #1E293B" }}>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Claude responds with</div>
+                    {[
+                      "Recommended starting phase + reason why",
+                      "The exact skill file to upload next",
+                      "A specific first deliverable",
+                      "One prompt you can use right now",
+                    ].map(r => (
+                      <div key={r} style={{ fontSize: 12, color: "#94A3B8", marginBottom: 8, display: "flex", gap: 8 }}>
+                        <span style={{ color: "#14B8A6", flexShrink: 0 }}>→</span>{r}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right: prompt code block + copy button */}
+                <div style={{ background: "#1E293B", borderRadius: 12, border: "1px solid #334155", padding: "20px 22px", display: "flex", flexDirection: "column" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Copy &amp; paste into Claude</div>
+                  <pre style={{
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#94A3B8",
+                    lineHeight: 1.75, whiteSpace: "pre-wrap", margin: 0, flex: 1,
+                    overflowY: "auto", maxHeight: 300,
+                  }}>{KICKOFF_PROMPT}</pre>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(KICKOFF_PROMPT);
+                      setKickoffCopied(true);
+                      setTimeout(() => setKickoffCopied(false), 2000);
+                    }}
+                    style={{
+                      marginTop: 16, background: kickoffCopied ? "#0D9488" : "#14B8A6",
+                      color: "#0F172A", border: "none", borderRadius: 8,
+                      padding: "10px 0", fontWeight: 700, fontSize: 12,
+                      cursor: "pointer", width: "100%", transition: "background 0.2s",
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  >
+                    {kickoffCopied ? "✓ Copied to clipboard" : "Copy Kickoff Prompt"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
