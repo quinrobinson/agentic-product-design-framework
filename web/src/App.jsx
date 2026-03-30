@@ -485,9 +485,9 @@ Based on my answers, respond with:
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
           {[
-            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true) },
-            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
-            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true) },
+            { n: "01", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true) },
+            { n: "02", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true) },
+            { n: "03", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
             { n: "04", label: "Start designing", desc: "Open any phase — research, concepts, wireframes, or specs. The framework meets you where you are.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
           ].map((step, i) => (
             <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
