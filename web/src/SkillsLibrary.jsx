@@ -56,20 +56,20 @@ const PHASE_FILTERS = [
 const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/skills";
 
 const ALL_SKILL_FILES = [
-  { path: "01-discover/user-research.md" },
-  { path: "01-discover/competitive-analysis.md" },
-  { path: "02-define/problem-framing.md" },
-  { path: "03-ideate/concept-generation.md" },
-  { path: "03-ideate/visual-design-execution.md" },
-  { path: "04-prototype/prototyping.md" },
-  { path: "04-prototype/accessibility-audit.md" },
-  { path: "05-validate/usability-testing.md" },
-  { path: "06-deliver/design-delivery.md" },
-  { path: "06-deliver/design-system-audit.md" },
-  { path: "design-systems.md" },
-  { path: "figma-playbook.md" },
-  { path: "phase-handoff.md" },
-  { path: "skill-chaining.md" },
+  { path: "01-discover/user-research.md",          zipPath: "user-research/SKILL.md" },
+  { path: "01-discover/competitive-analysis.md",   zipPath: "competitive-analysis/SKILL.md" },
+  { path: "02-define/problem-framing.md",           zipPath: "problem-framing/SKILL.md" },
+  { path: "03-ideate/concept-generation.md",        zipPath: "concept-generation/SKILL.md" },
+  { path: "03-ideate/visual-design-execution.md",   zipPath: "visual-design-execution/SKILL.md" },
+  { path: "04-prototype/prototyping.md",            zipPath: "prototyping/SKILL.md" },
+  { path: "04-prototype/accessibility-audit.md",    zipPath: "accessibility-audit/SKILL.md" },
+  { path: "05-validate/usability-testing.md",       zipPath: "usability-testing/SKILL.md" },
+  { path: "06-deliver/design-delivery.md",          zipPath: "design-delivery/SKILL.md" },
+  { path: "06-deliver/design-system-audit.md",      zipPath: "design-system-audit/SKILL.md" },
+  { path: "design-systems.md",                      zipPath: "design-systems/SKILL.md" },
+  { path: "figma-playbook.md",                      zipPath: "figma-playbook/SKILL.md" },
+  { path: "phase-handoff.md",                       zipPath: "phase-handoff/SKILL.md" },
+  { path: "skill-chaining.md",                      zipPath: "skill-chaining/SKILL.md" },
 ];
 
 export default function SkillsLibrary({ onBack }) {
@@ -84,11 +84,11 @@ export default function SkillsLibrary({ onBack }) {
       const folder = zip.folder("agentic-design-framework-skills");
 
       await Promise.all(
-        ALL_SKILL_FILES.map(async ({ path }) => {
+        ALL_SKILL_FILES.map(async ({ path, zipPath }) => {
           const res = await fetch(`${RAW}/${path}`);
           if (!res.ok) throw new Error(`Failed to fetch ${path}`);
           const text = await res.text();
-          folder.file(path, text);
+          folder.file(zipPath, text);
         })
       );
 
