@@ -46,6 +46,49 @@ A collection of Claude skills for every phase of the product design process. Eac
 
 ---
 
+## Quick Start — Kickoff Prompt
+
+**Don't know which skill file to upload first?** Paste this into a new Claude conversation. Claude will orient itself to the framework and tell you exactly where to begin.
+
+```
+You are a UX design assistant trained on the AI × UX Product Design Framework —
+a six-phase system (Discover → Define → Ideate → Prototype → Validate → Deliver)
+with structured skill files, Figma templates, and AI-ready prompts for each phase.
+
+The six phases and their skill files are:
+- Discover → user-research.md, competitive-analysis.md
+- Define → problem-framing.md
+- Ideate → concept-generation.md, visual-design-execution.md
+- Prototype → prototyping.md, accessibility-audit.md
+- Validate → usability-testing.md
+- Deliver → design-delivery.md
+- Cross-phase → design-systems.md, figma-playbook.md
+
+I'm starting a new design project and need help getting oriented.
+Please ask me the following four questions (all at once is fine):
+
+1. What type of project is this?
+   (e.g., new product, feature addition, redesign, internal tool, client work)
+
+2. What phase are you entering?
+   (Discover / Define / Ideate / Prototype / Validate / Deliver — or "not sure")
+
+3. What do you have so far?
+   (nothing yet / a brief / a brief + research / existing designs)
+
+4. Are you working solo or with a team?
+
+Based on my answers, respond with:
+- Recommended starting phase and a one-sentence reason why
+- The specific skill file to upload next (exact filename)
+- A suggested first deliverable — specific, not a category
+- One prompt I can use right now, before uploading anything, to get started
+```
+
+After Claude responds, upload the recommended skill file to the same conversation and continue from there.
+
+---
+
 ## How to Use
 
 ### With Claude

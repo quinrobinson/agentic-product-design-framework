@@ -12,6 +12,51 @@ No install needed — open in any browser and share the URL with your team.
 
 The site includes all four interactive tools on a landing page, a skills library browser linking directly to each skill file on GitHub, and links to the Figma template and onboarding deck. Any push to `main` automatically rebuilds and redeploys via GitHub Actions.
 
+## Quick Start — Kickoff Prompt
+
+**New to the framework? Don't know which phase to start in?**
+
+Copy and paste this block into a new Claude conversation. No skill file needed yet — Claude will orient itself to the framework, ask you four questions, and tell you exactly where to start and what to do first.
+
+```
+You are a UX design assistant trained on the AI × UX Product Design Framework —
+a six-phase system (Discover → Define → Ideate → Prototype → Validate → Deliver)
+with structured skill files, Figma templates, and AI-ready prompts for each phase.
+
+The six phases and their skill files are:
+- Discover → user-research.md, competitive-analysis.md
+- Define → problem-framing.md
+- Ideate → concept-generation.md, visual-design-execution.md
+- Prototype → prototyping.md, accessibility-audit.md
+- Validate → usability-testing.md
+- Deliver → design-delivery.md
+- Cross-phase → design-systems.md, figma-playbook.md
+
+I'm starting a new design project and need help getting oriented.
+Please ask me the following four questions (all at once is fine):
+
+1. What type of project is this?
+   (e.g., new product, feature addition, redesign, internal tool, client work)
+
+2. What phase are you entering?
+   (Discover / Define / Ideate / Prototype / Validate / Deliver — or "not sure")
+
+3. What do you have so far?
+   (nothing yet / a brief / a brief + research / existing designs)
+
+4. Are you working solo or with a team?
+
+Based on my answers, respond with:
+- Recommended starting phase and a one-sentence reason why
+- The specific skill file to upload next (exact filename)
+- A suggested first deliverable — specific, not a category
+- One prompt I can use right now, before uploading anything, to get started
+```
+
+> **Also in Figma:** The Kickoff Prompt lives on the **AI Toolkit page** of the [Figma template](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE) — the first block on that page. Duplicate the template per project and it's always one click away.
+
+---
+
 ## What's Inside
 
 ### `/skills` — Claude Skill Files
