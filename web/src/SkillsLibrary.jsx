@@ -1,0 +1,193 @@
+import { useState } from "react";
+
+const DS = {
+  dark: "#0F172A", darkCard: "#1E293B", darkBorder: "#334155",
+  white: "#FFFFFF", bodyLight: "#94A3B8", bodyDark: "#64748B",
+  light: "#F8FAFC", lightBorder: "#E2E8F0",
+  phases: {
+    "01": { color: "#22C55E", label: "Discover" },
+    "02": { color: "#8B5CF6", label: "Define" },
+    "03": { color: "#F59E0B", label: "Ideate" },
+    "04": { color: "#3B82F6", label: "Prototype" },
+    "05": { color: "#EF4444", label: "Validate" },
+    "06": { color: "#14B8A6", label: "Deliver" },
+  },
+};
+
+const REPO = "https://github.com/quinrobinson/AI-x-UX-Product-Design-Framework";
+
+const SKILL_META = {
+  "user-research.md": { phase: "01", leverage: "high", desc: "Turns raw interview transcripts, surveys, and analytics into a structured research brief — themes, pain points, unmet needs, and recommendations your team can act on." },
+  "competitive-analysis.md": { phase: "01", leverage: "high", desc: "Maps your competitive landscape across direct, indirect, and aspirational competitors — UX patterns, strengths, gaps, and differentiation opportunities in one structured output." },
+  "problem-framing.md": { phase: "02", leverage: "medium", desc: "Converts fuzzy research into a sharp problem statement using HMW, JTBD, and user story framings — with assumptions surfaced and a prioritized requirements roadmap." },
+  "concept-generation.md": { phase: "03", leverage: "high", desc: "Generates five concept directions from conventional to moonshot, with chart type recommendations, UI pattern suggestions, and visual system scaffolding ready to paste into the Brand Style Builder." },
+  "visual-design-execution.md": { phase: "03", leverage: "high", desc: "Selects a visual style, builds a semantic color token architecture with light/dark pairing, defines type scale and spacing, and specifies motion timing and icon standards." },
+  "prototyping.md": { phase: "04", leverage: "high", desc: "Builds functional React or HTML prototypes with correct touch targets, interaction timing, gesture safety, UX copy, and a pre-delivery QA checklist across iOS, Android, and web." },
+  "accessibility-audit.md": { phase: "04", leverage: "high", desc: "Runs a systematic WCAG 2.1 AA audit — color contrast, keyboard navigation, focus management, screen reader behavior, and touch targets — with severity-ranked issues and specific fixes." },
+  "usability-testing.md": { phase: "05", leverage: "high", desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations." },
+  "design-delivery.md": { phase: "06", leverage: "high", desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right." },
+  "design-systems.md": { phase: null, leverage: "high", desc: "Audits any product against Material Design 3, Atlassian, IBM Carbon, and Apple HIG — then documents tokens using M3 naming conventions and sets up Figma variable collections." },
+  "figma-playbook.md": { phase: null, leverage: "high", desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file." },
+  "phase-handoff.md": { phase: null, leverage: "high", desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing." },
+  "skill-chaining.md": { phase: null, leverage: "high", desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
+};
+
+const SKILLS = [
+  { phase: "01", dir: "01-discover", files: ["user-research.md", "competitive-analysis.md"] },
+  { phase: "02", dir: "02-define", files: ["problem-framing.md"] },
+  { phase: "03", dir: "03-ideate", files: ["concept-generation.md", "visual-design-execution.md"] },
+  { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md"] },
+  { phase: "05", dir: "05-validate", files: ["usability-testing.md"] },
+  { phase: "06", dir: "06-deliver", files: ["design-delivery.md"] },
+  { phase: null, dir: "", files: ["design-systems.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md"] },
+];
+
+const PHASE_FILTERS = [
+  { id: "all", label: "All skills" },
+  { id: "01", label: "Discover" },
+  { id: "02", label: "Define" },
+  { id: "03", label: "Ideate" },
+  { id: "04", label: "Prototype" },
+  { id: "05", label: "Validate" },
+  { id: "06", label: "Deliver" },
+  { id: "cross", label: "Cross-phase" },
+];
+
+export default function SkillsLibrary({ onBack }) {
+  const [activeFilter, setActiveFilter] = useState("all");
+
+  const filteredSkills = SKILLS.filter(row => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "cross") return row.phase === null;
+    return row.phase === activeFilter;
+  });
+
+  const totalFiles = SKILLS.reduce((sum, row) => sum + row.files.length, 0);
+
+  return (
+    <div style={{ minHeight: "100vh", background: DS.light, fontFamily: "'DM Sans', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+      {/* Top bar */}
+      <div style={{ background: DS.dark, borderBottom: `1px solid ${DS.darkBorder}`, padding: "0 40px", display: "flex", alignItems: "center", gap: 16, height: 56, position: "sticky", top: 0, zIndex: 100 }}>
+        <button onClick={onBack} style={{ background: DS.darkCard, border: `1px solid ${DS.darkBorder}`, borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, color: DS.bodyLight, fontFamily: "'JetBrains Mono', monospace" }}>← Back</button>
+        <div style={{ width: 1, height: 20, background: DS.darkBorder }} />
+        <span style={{ fontSize: 14, fontWeight: 600, color: DS.white }}>Claude Skills Library</span>
+        <span style={{ fontSize: 11, color: DS.bodyDark, fontFamily: "'JetBrains Mono', monospace" }}>{totalFiles} files</span>
+        <div style={{ marginLeft: "auto" }}>
+          <a href={`${REPO}/tree/main/skills`} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 11, color: DS.bodyLight, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", opacity: 0.5 }}>
+            View on GitHub ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <div style={{ background: DS.dark, padding: "48px 60px 52px", borderBottom: `1px solid ${DS.darkBorder}` }}>
+        <div style={{ maxWidth: 1160, margin: "0 auto" }}>
+          <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 4, textTransform: "uppercase", color: DS.bodyLight, opacity: 0.6, marginBottom: 16 }}>
+            Agentic Product Design Framework
+          </div>
+          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 44, fontWeight: 400, color: DS.white, margin: "0 0 14px", lineHeight: 1.05 }}>
+            Claude Skills Library
+          </h1>
+          <p style={{ fontSize: 14, color: DS.bodyLight, lineHeight: 1.75, margin: "0 0 32px", maxWidth: 560 }}>
+            {totalFiles} structured skill files — one per design capability. Upload any file to a Claude conversation to activate that phase's workflow, templates, and quality checks.
+          </p>
+
+          {/* How to use */}
+          <div style={{ background: "#0B1120", border: "1px solid #1E293B", borderRadius: 12, padding: "16px 22px", display: "flex", alignItems: "flex-start", gap: 16, maxWidth: 680 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 7, background: "#1E293B", border: "1px solid #334155", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 12, color: DS.bodyLight }}>↑</div>
+            <div style={{ fontSize: 13, color: DS.bodyLight, lineHeight: 1.65 }}>
+              <span style={{ color: DS.white, fontWeight: 600 }}>How to use: </span>
+              Open any skill file on GitHub → copy the raw content → paste into a new Claude conversation as your first message. Claude will follow the structured workflow for that phase.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter + table */}
+      <div style={{ maxWidth: 1160, margin: "0 auto", padding: "40px 60px 80px" }}>
+
+        {/* Phase filter */}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
+          {PHASE_FILTERS.map(f => {
+            const p = DS.phases[f.id];
+            const isActive = activeFilter === f.id;
+            const color = p ? p.color : f.id === "cross" ? "#64748B" : "#0F172A";
+            return (
+              <button
+                key={f.id}
+                onClick={() => setActiveFilter(f.id)}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  padding: "7px 14px", borderRadius: 999, cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 500,
+                  border: isActive ? `1.5px solid ${color}` : `1px solid ${DS.lightBorder}`,
+                  background: isActive ? `${color}10` : DS.white,
+                  color: isActive ? color : DS.bodyDark,
+                  transition: "all 0.15s", outline: "none",
+                }}
+              >
+                {p && <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, display: "block" }} />}
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Skills table */}
+        <div style={{ background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+          {filteredSkills.map((row, i) => {
+            const p = row.phase ? DS.phases[row.phase] : null;
+            const isLast = i === filteredSkills.length - 1;
+            return (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: isLast ? "none" : `1px solid ${DS.lightBorder}` }}>
+                {/* Phase label col */}
+                <div style={{ padding: "24px 20px", borderRight: `1px solid ${DS.lightBorder}`, display: "flex", alignItems: "flex-start", background: "#FAFAF8" }}>
+                  {p ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999, padding: "3px 10px", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 500, color: p.color, whiteSpace: "nowrap" }}>
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
+                      {row.phase} — {p.label}
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.4, letterSpacing: 1 }}>Cross-phase</span>
+                  )}
+                </div>
+
+                {/* Files col */}
+                <div style={{ padding: "20px 28px" }}>
+                  {row.files.map((file, fi) => {
+                    const meta = SKILL_META[file];
+                    const fileColor = p ? p.color : DS.bodyDark;
+                    return (
+                      <div key={file} style={{ marginBottom: fi < row.files.length - 1 ? 22 : 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
+                          <a
+                            href={`${REPO}/tree/main/skills/${row.dir ? row.dir + "/" : ""}${file}`}
+                            target="_blank" rel="noopener noreferrer"
+                            style={{ fontSize: 11, padding: "3px 11px", borderRadius: 7, background: "transparent", color: fileColor, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", border: `1px solid ${fileColor}44`, whiteSpace: "nowrap", fontWeight: 500 }}
+                          >
+                            {file}
+                          </a>
+                          {meta?.leverage && (
+                            <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.35 }}>
+                              {meta.leverage === "high" ? "AI accelerated" : "AI assisted"}
+                            </span>
+                          )}
+                        </div>
+                        {meta?.desc && (
+                          <p style={{ fontSize: 12, color: DS.bodyDark, lineHeight: 1.7, margin: 0, maxWidth: 700 }}>{meta.desc}</p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -6,6 +6,7 @@ import M3TokenReference from "./M3TokenReference";
 import AIBriefGenerator from "./AIBriefGenerator";
 import ClientDeckBuilder from "./ClientDeckBuilder";
 import FigmaSetupGuide from "./FigmaSetupGuide";
+import SkillsLibrary from "./SkillsLibrary";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -359,6 +360,7 @@ export default function App() {
   const [kickoffOpen, setKickoffOpen] = useState(false);
   const [kickoffCopied, setKickoffCopied] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
+  const [showSkills, setShowSkills] = useState(false);
   useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
 
   const KICKOFF_PROMPT = `You are a UX design assistant trained on the Agentic Product Design Framework —
@@ -399,6 +401,10 @@ Based on my answers, respond with:
 
   if (showSetup) {
     return <FigmaSetupGuide onBack={() => setShowSetup(false)} />;
+  }
+
+  if (showSkills) {
+    return <SkillsLibrary onBack={() => setShowSkills(false)} />;
   }
 
   if (ToolComponent) {
@@ -490,20 +496,18 @@ Based on my answers, respond with:
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
           {[
-            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow" },
-            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run" },
-            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", cta: true },
-            { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go" },
+            { n: "01", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true), ctaColor: "#22C55E" },
+            { n: "02", label: "Pick a phase prompt", desc: "Copy-ready prompts with [BRACKET] placeholders — replace and run.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process"), ctaColor: "#F59E0B" },
+            { n: "03", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true), ctaColor: "#14B8A6" },
+            { n: "04", label: "Ship with specs", desc: "Component specs, handoff docs, and decision records — ready to go.", ctaLabel: "Design System Audit →", ctaAction: () => setActiveTool("checklist"), ctaColor: "#8B5CF6" },
           ].map((step, i) => (
             <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
               <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
-              {step.cta && (
-                <button onClick={() => setShowSetup(true)} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: "#14B8A6", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>
-                  Setup guide →
-                </button>
-              )}
+              <button onClick={step.ctaAction} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: step.ctaColor, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>
+                {step.ctaLabel}
+              </button>
             </div>
           ))}
           </div>
@@ -656,88 +660,15 @@ Based on my answers, respond with:
         </div>
       </div>
 
-      {/* SKILLS — light */}
-      <div style={{ background: DS.light, borderTop: `1px solid ${DS.lightBorder}` }}>
-        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
-
-          {/* Section header */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-            <div>
-              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark, marginBottom: 8 }}>Claude Skills Library — 13 files</div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#0F172A", marginBottom: 6 }}>Structured AI workflows for every design phase</div>
-              <div style={{ fontSize: 13, color: DS.bodyDark, lineHeight: 1.65, maxWidth: 540 }}>Each file loads a phase-specific workflow into Claude — structured prompts, templates, and quality checks. Upload it at the start of a conversation and Claude follows the process.</div>
-            </div>
-            <a href={`${REPO}/tree/main/skills`} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 12, color: DS.bodyDark, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", opacity: 0.5, whiteSpace: "nowrap", marginLeft: 40 }}>
-              View on GitHub ↗
-            </a>
-          </div>
-
-          {/* How to use callout */}
-          <div style={{ background: DS.dark, borderRadius: 12, padding: "15px 22px", marginBottom: 24, display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 26, height: 26, borderRadius: 8, background: "#1E293B", border: "1px solid #334155", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13 }}>↑</div>
-            <div style={{ fontSize: 13, color: DS.bodyLight, lineHeight: 1.55 }}>
-              <span style={{ color: DS.white, fontWeight: 600 }}>How to use: </span>
-              Open any skill file on GitHub → copy the raw content → paste into a new Claude conversation as your first message. Works in Claude.ai and Claude Desktop.
-            </div>
-          </div>
-
-          {/* Skills table */}
-          <div style={{ background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
-            {SKILLS.map((row, i) => {
-              const p = row.phase ? DS.phases[row.phase] : null;
-              return (
-                <div key={i} style={{ display: "grid", gridTemplateColumns: "180px 1fr", borderBottom: i < SKILLS.length - 1 ? `1px solid ${DS.lightBorder}` : "none" }}>
-                  {/* Phase label */}
-                  <div style={{ padding: "20px", borderRight: `1px solid ${DS.lightBorder}`, display: "flex", alignItems: "flex-start", paddingTop: 24, background: "#FAFAF8" }}>
-                    {p ? (
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999, padding: "2px 8px", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 500, color: p.color, whiteSpace: "nowrap" }}>
-                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-                        {row.phase} — {p.label}
-                      </span>
-                    ) : (
-                      <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.5 }}>Cross-phase</span>
-                    )}
-                  </div>
-                  {/* Files + descriptions */}
-                  <div style={{ padding: "20px 24px" }}>
-                    {row.files.map((file, fi) => {
-                      const meta = SKILL_META[file];
-                      return (
-                        <div key={file} style={{ marginBottom: fi < row.files.length - 1 ? 18 : 0 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-                            <a href={`${REPO}/tree/main/skills/${row.dir ? row.dir + "/" : ""}${file}`}
-                              target="_blank" rel="noopener noreferrer"
-                              style={{ fontSize: 11, padding: "3px 10px", borderRadius: 7, background: "transparent", color: p ? p.color : DS.bodyDark, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", border: `1px solid ${p ? p.color + "55" : DS.lightBorder}`, whiteSpace: "nowrap" }}>
-                              {file}
-                            </a>
-                            {meta?.leverage && (
-                              <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.4 }}>
-                                {meta.leverage === "high" ? "High AI leverage" : meta.leverage === "medium" ? "Medium AI leverage" : "Low AI leverage"}
-                              </span>
-                            )}
-                          </div>
-                          {meta?.desc && (
-                            <div style={{ fontSize: 12, color: DS.bodyDark, lineHeight: 1.65, maxWidth: 680 }}>{meta.desc}</div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ background: DS.dark }}>
       <div style={{ borderTop: `1px solid ${DS.darkBorder}`, maxWidth: 1160, margin: "0 auto", padding: "28px 60px 56px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
         <div style={{ fontSize: 11, color: DS.bodyLight, fontFamily: "'JetBrains Mono', monospace", opacity: 0.4 }}>Agentic Product Design Framework</div>
         <div style={{ display: "flex", gap: 24 }}>
-          {[["GitHub", REPO], ["Figma Template", FIGMA_URL], ["Onboarding Deck", PPTX_URL]].map(([label, href]) => (
-            <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: DS.bodyLight, textDecoration: "none", opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>{label}</a>
+          {[["Skills Library", null, () => setShowSkills(true)], ["GitHub", REPO, null], ["Figma Template", FIGMA_URL, null], ["Onboarding Deck", PPTX_URL, null]].map(([label, href, onClick]) => (
+            href
+              ? <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: DS.bodyLight, textDecoration: "none", opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>{label}</a>
+              : <button key={label} onClick={onClick} style={{ fontSize: 12, color: DS.bodyLight, background: "none", border: "none", cursor: "pointer", opacity: 0.5, fontFamily: "'JetBrains Mono', monospace", padding: 0 }}>{label}</button>
           ))}
         </div>
       </div>
