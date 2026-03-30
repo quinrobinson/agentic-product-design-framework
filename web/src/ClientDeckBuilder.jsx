@@ -365,7 +365,7 @@ export default function ClientDeckBuilder() {
       <div style={{ background: DS.dark, borderBottom: `1px solid ${DS.darkBorder}`, padding: "16px 40px", display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: accentColor, display: "block" }} />
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: accentColor, letterSpacing: 2, textTransform: "uppercase" }}>Deliver phase</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: accentColor, letterSpacing: 2, textTransform: "uppercase" }}>All phases</span>
         </div>
         <div style={{ width: 1, height: 16, background: DS.darkBorder }} />
         <span style={{ fontSize: 14, fontWeight: 600, color: DS.white }}>Client Deck Builder</span>

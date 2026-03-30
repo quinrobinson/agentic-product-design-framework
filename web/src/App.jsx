@@ -72,11 +72,11 @@ const TOOLS = [
   {
     id: "deck",
     number: "05",
-    phase: "06",
+    phase: null,
     name: "Client Deck Builder",
     subtitle: "Build the right presentation for any stage of the project",
     description: "Tell Claude your goal, audience, and where you are in the project — it identifies the deck type, writes a slide-by-slide structure with speaker notes, talking points, and an opening hook tailored to your room.",
-    tags: ["Deliver", "AI accelerated", "Client-facing"],
+    tags: ["All phases", "AI accelerated", "Client-facing"],
     component: ClientDeckBuilder,
   },
 ];
@@ -169,7 +169,8 @@ function PhaseChip({ phaseKey, small }) {
 
 function ToolCard({ tool, onClick }) {
   const [hovered, setHovered] = useState(false);
-  const p = DS.phases[tool.phase];
+  const p = DS.phases[tool.phase] || { color: "#64748B", label: "All phases" };
+  const phaseLabel = tool.phase ? `${tool.phase} — ${p.label}` : "All phases";
   return (
     <button
       onClick={onClick}
@@ -186,7 +187,6 @@ function ToolCard({ tool, onClick }) {
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
-        {/* Light-mode phase chip — colored border + text, no dark bg */}
         <span style={{
           display: "inline-flex", alignItems: "center", gap: 5,
           background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999,
@@ -194,9 +194,9 @@ function ToolCard({ tool, onClick }) {
           fontWeight: 500, color: p.color, whiteSpace: "nowrap",
         }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-          {tool.phase} — {p.label}
+          {phaseLabel}
         </span>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: DS.bodyDark, opacity: 0.5 }}>{tool.number} / 04</span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: DS.bodyDark, opacity: 0.5 }}>{tool.number} / 05</span>
       </div>
       <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 400, color: "#0F172A", marginBottom: 8, lineHeight: 1.2 }}>{tool.name}</div>
       <div style={{ fontSize: 12, color: p.color, fontFamily: "'JetBrains Mono', monospace", marginBottom: 14 }}>{tool.subtitle}</div>
