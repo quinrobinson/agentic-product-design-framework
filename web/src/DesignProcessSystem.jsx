@@ -502,7 +502,7 @@ const AI_LEVERAGE = {
   low: { label: "Low — your judgment", color: "#8C1A1A", bg: "#FDE8E8" },
 };
 
-export default function DesignProcessSystem({ initialPhase }) {
+export default function DesignProcessSystem({ initialPhase, onOpenBrief }) {
   const [activePhase, setActivePhase] = useState(initialPhase || null);
   const [activeTab, setActiveTab] = useState("prompts");
   const [expandedPrompt, setExpandedPrompt] = useState(null);
@@ -531,6 +531,40 @@ export default function DesignProcessSystem({ initialPhase }) {
         <p style={{ fontSize: 16, color: "#666", maxWidth: 600, lineHeight: 1.6, margin: 0 }}>
           A scalable framework for integrating AI into every phase of product design — from research through delivery. Built to grow with your practice.
         </p>
+
+        {/* Brief Generator callout */}
+        {onOpenBrief && (
+          <div style={{
+            marginTop: 28,
+            background: "#0F172A", borderRadius: 12, padding: "18px 22px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            gap: 20, flexWrap: "wrap",
+          }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+                background: "#3B82F620", border: "1px solid #3B82F644",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 16,
+              }}>✦</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#F8FAFC", marginBottom: 3 }}>Not sure which phase to start in?</div>
+                <div style={{ fontSize: 12, color: "#94A3B8", lineHeight: 1.55, maxWidth: 480 }}>
+                  Answer 3 quick questions and get a Claude-ready prompt that identifies your starting point and tells you exactly which skill file to upload first.
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={onOpenBrief}
+              style={{
+                background: "#3B82F6", color: "#fff", border: "none",
+                borderRadius: 8, padding: "10px 20px", fontSize: 13, fontWeight: 600,
+                cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
+                whiteSpace: "nowrap", flexShrink: 0,
+              }}
+            >Build your prompt →</button>
+          </div>
+        )}
       </div>
 
       {/* Process Map */}
