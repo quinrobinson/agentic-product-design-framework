@@ -8,6 +8,7 @@ description: >
   Use at the end of a project cycle when preparing for engineering handoff, design system
   release, or cross-team documentation. Not a discovery or ideation tool — run this when
   the system is built and needs to be validated before shipping.
+claude_surface: chat
 ai_leverage: high
 figma_page: 07 — Design System
 when_to_use: >
@@ -21,6 +22,18 @@ Validate your design system is complete, accessible, and documented before it sh
 Run this checklist when you are preparing for engineering handoff or a design system release.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for running the design system audit.
+
+Upload `design-system-audit.md` with your component documentation, Figma screenshots,
+or token files. Claude audits against Material Design 3, Atlassian, IBM Carbon, and
+Apple HIG conversationally, producing a severity-ranked gap report.
+
+> **Add Claude Code** if you want to push token fixes or updated spec files to
+> your design system repo after the audit is complete.
 
 ## How to Use This Skill
 

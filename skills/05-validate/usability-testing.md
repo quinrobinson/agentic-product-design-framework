@@ -2,12 +2,24 @@
 name: usability-testing
 phase: 05 — Validate
 description: Plan, run, and analyze usability tests and heuristic evaluations. Use this skill when the user needs to create test plans, write task scenarios, analyze test results, conduct heuristic reviews, or synthesize usability findings into actionable recommendations. Also triggers for A/B test planning, success metrics definition, severity ranking of issues, or when the user mentions user testing, validation, or evaluation of designs.
+claude_surface: chat
 ai_leverage: high
 ---
 
 # Usability Testing & Validation
 
 Test designs with real people and evaluate against established heuristics to find and fix problems before launch.
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for this entire workflow.
+
+Upload `usability-testing.md` with your prototype link or session notes. Claude writes
+test plans, task scenarios, and findings reports conversationally. No installation needed.
+
+> **Add Claude Cowork** if you want Claude to observe a live prototype session on your
+> screen alongside you — watching a participant navigate and flagging issues in real time.
 
 ## When to Use
 
@@ -88,6 +100,7 @@ Tasks should feel natural, not like instructions. They should set a scenario, no
 ### Task Template
 
 ```
+
 ## Task [N]: [Short name for your notes]
 
 ### Scenario
@@ -281,6 +294,7 @@ Rating: ...
 Evidence: [Is help available when needed?]
 
 ## Overall Score: [X/10 heuristics rated Adequate or Strong]
+
 ## Top 3 Priority Fixes:
 1. [Fix]
 2. [Fix]
@@ -304,6 +318,7 @@ Evidence: [Is help available when needed?]
 At the close of Usability Testing, generate this block and paste it as the **opening message** when starting Design Delivery (06 — Deliver).
 
 ```
+
 ## Handoff: Validate → Deliver
 ### From: Usability Testing
 ### Project: [PROJECT NAME]

@@ -8,6 +8,7 @@ description: >
   naming conventions, and generate Figma-ready component specs and variable
   collections. Use when establishing a new design system, auditing an existing
   one, or accelerating component documentation with AI.
+claude_surface: chat-or-code
 ai_leverage: high
 figma_page: "07 — Design System"
 artifacts:
@@ -25,6 +26,22 @@ reference_systems:
 ---
 
 # Design System Audit & Token Documentation
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for token naming decisions, cross-system comparison,
+component documentation, and variable collection strategy.
+
+**Use Claude Code** for generating `tokens.css` / `tokens.json` files to disk, pushing
+token exports to your repo, or setting up Figma variable collections via the Figma MCP.
+
+| Task | Surface |
+|------|---------|
+| Token naming and audit | Claude Chat |
+| Cross-system comparison (M3, Carbon, HIG) | Claude Chat |
+| Generate token export files | Claude Code |
+| Set up Figma variables via MCP | Claude Code + Figma MCP |
 
 ## Overview
 

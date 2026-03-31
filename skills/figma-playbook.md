@@ -2,6 +2,7 @@
 name: figma-playbook
 phase: all
 description: Execute design work directly in Figma using the Figma MCP. Use this skill whenever the user wants Claude to create, update, or organize content in a Figma file as part of the design process. Triggers include requests to build frames, lay out research findings, create wireframes, scaffold components, update design tokens, annotate specs, or structure any design phase deliverable in Figma. Also use when the user references their Figma project template or asks Claude to "put this in Figma," "update the file," "create a board," or any variation of working directly in Figma. This skill should be read alongside the relevant phase skill (e.g., user-research.md + figma-playbook.md together).
+claude_surface: code
 ai_leverage: high
 ---
 

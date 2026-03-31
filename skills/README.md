@@ -5,44 +5,47 @@ A collection of Claude skills for every phase of the product design process. Eac
 ## Skills by Phase
 
 ### 01 — Discover
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| User Research | `01-discover/user-research.md` | High | Synthesize raw research into structured insights, plan studies, create interview guides |
-| Competitive Analysis | `01-discover/competitive-analysis.md` | High | Map competitive landscapes, benchmark features, identify differentiation opportunities |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| User Research | `01-discover/user-research.md` | Chat | Synthesize raw research into structured insights, plan studies, create interview guides |
+| Competitive Analysis | `01-discover/competitive-analysis.md` | Chat | Map competitive landscapes, benchmark features, identify differentiation opportunities |
 
 ### 02 — Define
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Problem Framing | `02-define/problem-framing.md` | Medium | Frame problems with HMW/JTBD/user stories, journey mapping, requirements prioritization |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| Problem Framing | `02-define/problem-framing.md` | Chat | Frame problems with HMW/JTBD/user stories, journey mapping, requirements prioritization |
 
 ### 03 — Ideate
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Concept Generation | `03-ideate/concept-generation.md` | High | Five-Direction concepts, UI patterns, visual system directions, chart type selection |
-| Visual Design Execution | `03-ideate/visual-design-execution.md` | High | **NEW** — Style selection, semantic color tokens, typography, spacing, motion, icon standards |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| Concept Generation | `03-ideate/concept-generation.md` | Chat | Five-Direction concepts, UI patterns, visual system directions, chart type selection |
+| Visual Design Execution | `03-ideate/visual-design-execution.md` | Chat | Style selection, semantic color tokens, typography, spacing, motion, icon standards |
 
 ### 04 — Prototype
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Prototyping | `04-prototype/prototyping.md` | High | Functional prototypes, touch targets, interaction timing, gesture safety, platform QA |
-| Accessibility Audit | `04-prototype/accessibility-audit.md` | High | **NEW** — WCAG 2.1 AA audit: web, iOS VoiceOver, Android TalkBack, touch, forms |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| Prototyping | `04-prototype/prototyping.md` | Chat + Code | Functional prototypes, touch targets, interaction timing, gesture safety, platform QA |
+| Accessibility Audit | `04-prototype/accessibility-audit.md` | Chat | WCAG 2.1 AA audit: web, iOS VoiceOver, Android TalkBack, touch, forms |
 
 ### 05 — Validate
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Usability Testing | `05-validate/usability-testing.md` | High | Plan tests, write scenarios, analyze results, heuristic evaluations |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| Usability Testing | `05-validate/usability-testing.md` | Chat | Plan tests, write scenarios, analyze results, heuristic evaluations |
 
 ### 06 — Deliver
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Design Delivery | `06-deliver/design-delivery.md` | High | Component specs, iOS/Android/Web handoff packages, DDRs, release notes |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| Design Delivery | `06-deliver/design-delivery.md` | Chat + Code | Component specs, iOS/Android/Web handoff packages, DDRs, release notes |
+| Design System Audit | `06-deliver/design-system-audit.md` | Chat | Pre-handoff design system validation against M3, Atlassian, Carbon, and Apple HIG |
 
 ### Cross-Phase
-| Skill | File | AI Leverage | Description |
-|-------|------|-------------|-------------|
-| Design Systems | `design-systems.md` | High | Design system audit & M3 token documentation — cross-system comparison, Figma variable setup |
-| Figma Playbook | `figma-playbook.md` | High | Execute design work directly in Figma via MCP — patterns for every phase |
-| Phase Handoff | `phase-handoff.md` | High | **NEW** — Skill chaining guide: generate close-of-phase summaries that become opening context for the next phase |
+| Skill | File | Surface | Description |
+|-------|------|---------|-------------|
+| **Which Claude?** | `which-claude.md` | — | **START HERE** — Routes every task to the right Claude surface: Chat, Cowork, or Code |
+| Design Systems | `design-systems.md` | Chat + Code | Design system audit & M3 token documentation — cross-system comparison, Figma variable setup |
+| Figma Playbook | `figma-playbook.md` | Code + Figma MCP | Execute design work directly in Figma via MCP — patterns for every phase |
+| Phase Handoff | `phase-handoff.md` | Chat | Skill chaining guide: generate close-of-phase summaries that become opening context for the next phase |
+| Skill Chaining | `skill-chaining.md` | Chat | Chains all six phases into one continuous AI-assisted workflow using handoff blocks |
 
 ---
 

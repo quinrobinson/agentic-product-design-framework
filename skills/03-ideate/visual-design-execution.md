@@ -10,6 +10,7 @@ description: >
   enough," when visual consistency needs fixing, or when building any page, component, or screen
   across React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, or HTML/CSS. Always use
   alongside concept-generation and design-systems for full ideation-to-delivery coverage.
+claude_surface: chat
 ai_leverage: high
 ---
 
@@ -19,6 +20,19 @@ Translate a product brief into a cohesive visual system — style, color, typogr
 motion, and icons — then apply it consistently across every screen and component.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for color system decisions, typography pairing, spacing
+scale definition, and motion guidance.
+
+Upload `visual-design-execution.md` with your concept direction brief. Claude generates
+token names, hex values, type scales, and usage rules as structured text you can paste
+directly into Figma or a tokens file.
+
+> **Add Claude Code** if you want to write token output to a `tokens.css` or `tokens.json`
+> file, or push the token set to your design system repo.
 
 ## Step 1 — Select the Visual Style
 
@@ -68,6 +82,7 @@ Match style to the product's domain, audience, and brand personality.
 Always define color as semantic tokens — never raw hex in components:
 
 ```
+
 ## Color Tokens
 
 ### Brand
@@ -290,6 +305,7 @@ Use a 4pt base unit. All values are multiples of 4.
 At the close of Visual Design Execution, generate this block. Combine it with the Concept Generation handoff, or use standalone when the visual system is defined separately before prototyping.
 
 ```
+
 ## Handoff: Visual Design → Prototype
 ### From: Visual Design Execution
 ### Project: [PROJECT NAME]

@@ -9,6 +9,7 @@ description: >
   says "we're moving to the next phase," "start Define," "continue from where we left off," or
   pastes a handoff block as their first message. This skill solves context loss between
   conversations — the #1 failure mode in AI-assisted design workflows.
+claude_surface: chat
 ai_leverage: high
 ---
 
@@ -18,6 +19,17 @@ Turn six separate AI conversations into one continuous design thread. Each phase
 by generating a structured summary that becomes the opening context for the next phase.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for all Phase Handoff Block generation and usage.
+
+Handoff blocks are generated and pasted within Claude Chat conversations. No terminal
+or Figma MCP is required for the handoff system itself.
+
+> The handoff block is surface-agnostic — it can be pasted into any Claude surface
+> to re-establish context at the start of a new session.
 
 ## The Problem This Solves
 
@@ -118,6 +130,7 @@ When two skills run in the same phase (e.g., User Research + Competitive Analysi
 combine their handoff blocks into one opening message for Define:
 
 ```
+
 ## Combined Handoff: Discover → Define
 
 ### From: User Research

@@ -9,6 +9,7 @@ description: >
   any request mentioning accessibility, a11y, WCAG, VoiceOver, TalkBack, screen readers, keyboard
   traps, focus rings, or color blindness. Use in tandem with the prototyping skill during build
   and with usability-testing during validate. Always run before design-delivery handoff.
+claude_surface: chat
 ai_leverage: high
 ---
 
@@ -19,11 +20,25 @@ for web and platform-specific standards for iOS (Apple HIG / VoiceOver) and Andr
 
 ---
 
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for running WCAG audits, reviewing component specs,
+and generating severity-ranked issue reports.
+
+Upload `accessibility-audit.md` and paste your component markup, design tokens, or
+Figma spec screenshots. Claude audits for contrast, keyboard navigation, ARIA usage,
+and touch targets conversationally.
+
+> **Add Claude Code** if you want to run automated contrast ratio checks against a
+> live tokens file or push audit findings to a GitHub issue.
+
 ## Audit Scope
 
 Determine scope before starting:
 
 ```
+
 ## Audit Scope
 
 - Platform: [ ] Web  [ ] iOS  [ ] Android  [ ] Cross-platform
@@ -366,6 +381,7 @@ Standard: WCAG 2.1 [A / AA]
 At the close of an Accessibility Audit, generate this block. It feeds into both Usability Testing (to flag known a11y gaps to test) and Design Delivery (to include in the handoff package).
 
 ```
+
 ## Handoff: Accessibility Audit → Validate / Deliver
 ### From: Accessibility Audit
 ### Project: [PROJECT NAME] — [COMPONENT / SCREEN / FLOW]

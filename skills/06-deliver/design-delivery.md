@@ -9,6 +9,7 @@ description: >
   notes or changelogs, or producing design system documentation. Also triggers for any mention
   of shipping, handoff, specs, annotations, tokens in code, developer questions, or ensuring
   what was designed actually gets built correctly.
+claude_surface: chat-or-code
 ai_leverage: high
 ---
 
@@ -17,6 +18,22 @@ ai_leverage: high
 Ship designs with precision and documentation that ensures what gets built matches what was designed.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for writing component specs, platform handoff packages,
+design decision records, and release notes.
+
+**Use Claude Code** for pushing finished spec files to GitHub, generating token exports,
+or annotating Figma frames directly via the Figma MCP.
+
+| Task | Surface |
+|------|---------|
+| Write component specs and DDRs | Claude Chat |
+| Generate iOS/Android/Web handoff packages | Claude Chat |
+| Push specs and docs to GitHub | Claude Code |
+| Annotate Figma frames with spec overlays | Claude Code + Figma MCP |
 
 ## Component Specification
 
@@ -271,6 +288,7 @@ Document significant design decisions so the team understands *why*, not just *w
 # DDR-[NNN]: [Decision Title]
 
 ## Status: Accepted / Superseded by DDR-[NNN] / Deprecated
+
 ## Date: [YYYY-MM-DD]
 
 ## Context
@@ -390,6 +408,7 @@ Rules: lead with benefit (not feature), use the user's language, one line per it
 Design Delivery is the terminal phase. At close of delivery, generate this block as a **project retrospective and re-entry point** — used to brief Claude on any future iteration, v2 planning, or handoff to a new designer.
 
 ```
+
 ## Handoff: Deliver → [Next Iteration / v2 / Archive]
 ### From: Design Delivery
 ### Project: [PROJECT NAME]

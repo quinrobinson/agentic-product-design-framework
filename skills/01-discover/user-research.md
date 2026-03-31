@@ -2,12 +2,24 @@
 name: user-research
 phase: 01 — Discover
 description: Synthesize raw user research data into structured, actionable insights. Use this skill when working with interview transcripts, survey responses, analytics data, support tickets, or any raw qualitative/quantitative user data. Triggers include requests to analyze research, find patterns in user feedback, create research briefs, code transcripts, or extract themes from any form of user data. Also use when the user wants to plan research — creating interview guides, screeners, or research plans.
+claude_surface: chat
 ai_leverage: high
 ---
 
 # User Research Synthesis
 
 Transform raw research data into structured insights that drive design decisions.
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for this entire workflow.
+
+Upload `user-research.md` to a new conversation, paste or attach your raw research data,
+and work through the synthesis steps conversationally. No terminal or Figma MCP needed.
+
+> **Add Claude Code** only if you want to pull research files from a local directory
+> or push a research brief directly to a GitHub repo.
 
 ## When to Use
 
@@ -152,6 +164,7 @@ Before delivering research outputs, verify:
 At the close of User Research, generate this block and paste it as the **opening message** when starting Problem Framing (02 — Define).
 
 ```
+
 ## Handoff: Discover → Define
 ### From: User Research
 ### Project: [PROJECT NAME]

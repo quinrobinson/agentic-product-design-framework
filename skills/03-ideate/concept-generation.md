@@ -10,6 +10,7 @@ description: >
   research, visual direction exploration, or any time the user needs ideas for how to solve a
   design problem visually or structurally. For detailed visual execution, pair with the
   visual-design-execution skill.
+claude_surface: chat
 ai_leverage: high
 ---
 
@@ -18,6 +19,18 @@ ai_leverage: high
 Generate a broad range of design solutions, then converge on the strongest direction.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for ideation, direction selection, and pattern recommendations.
+
+Upload `concept-generation.md` with your Define Phase Handoff Block. Claude will generate
+structured concept directions, UI pattern recommendations, and visual system options as text.
+No Figma MCP or terminal needed for ideation itself.
+
+> **Add Claude Code + Figma MCP** (with `figma-playbook.md`) if you want Claude to place
+> concept cards, wireframe scaffolding, or direction boards directly into your Figma file.
 
 ## Concept Exploration
 
@@ -335,6 +348,7 @@ How does the user arrive? [Navigation path / trigger]
 At the close of Concept Generation, generate this block and paste it as the **opening message** when starting Prototyping (04 — Prototype).
 
 ```
+
 ## Handoff: Ideate → Prototype
 ### From: Concept Generation
 ### Project: [PROJECT NAME]

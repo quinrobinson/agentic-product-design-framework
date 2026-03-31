@@ -2,12 +2,21 @@
 name: skill-chaining
 phase: all
 description: Connect design phases so outputs become inputs. Use this skill to generate Phase Handoff Blocks at the close of each phase — structured summaries Claude fills in that become the opening context for the next phase. Eliminates context loss between conversations and turns six separate sessions into one continuous AI-assisted workflow.
+claude_surface: chat
 ai_leverage: high
 ---
 
 # Skill Chaining — Phase Handoff System
 
 Without explicit handoffs, each phase is a fresh start. A designer finishing Discover has to mentally re-brief Claude when moving to Define. This skill fixes that — turning six modular phases into one composable workflow.
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for all skill-chaining workflows.
+
+Skill chaining is a conversational pattern — generating handoff blocks, pasting them
+into new sessions, and continuing the thread. No installation or MCP required.
 
 ## How It Works
 

@@ -2,12 +2,24 @@
 name: competitive-analysis
 phase: 01 — Discover
 description: Analyze competitor products, identify UX patterns, gaps, and opportunities in a product category. Use this skill when the user wants to map a competitive landscape, compare features across products, evaluate competitor UX strengths and weaknesses, or identify differentiation opportunities. Also triggers for market analysis, feature benchmarking, or when the user mentions competitors, alternatives, or market positioning.
+claude_surface: chat
 ai_leverage: high
 ---
 
 # Competitive Analysis
 
 Map the competitive landscape to understand conventions, identify gaps, and find opportunities for differentiation.
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for this entire workflow.
+
+Upload `competitive-analysis.md`, describe the product category, and attach any screenshots
+or competitor URLs you want analyzed. No setup beyond a claude.ai account.
+
+> **Add Claude Code** only if you want to write the output to a local file or push
+> a competitive brief to your repo.
 
 ## When to Use
 
@@ -158,6 +170,7 @@ When researching competitors with web search:
 At the close of Competitive Analysis, generate this block. It can be combined with the User Research handoff or used standalone when starting Problem Framing.
 
 ```
+
 ## Handoff: Discover → Define
 ### From: Competitive Analysis
 ### Project: [PROJECT NAME]

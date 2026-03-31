@@ -9,6 +9,7 @@ description: >
   for design QA, responsive design specs, translating wireframes into testable prototypes, or
   when any question arises about how a component should move, respond, or behave. Always use
   alongside visual-design-execution for visual system rules and accessibility-audit for a11y checks.
+claude_surface: chat-or-code
 ai_leverage: high
 ---
 
@@ -17,6 +18,22 @@ ai_leverage: high
 Transform concepts into testable, accessible, production-quality prototypes.
 
 ---
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for interaction spec writing, UX copy generation, touch
+target review, and QA checklists.
+
+**Use Claude Code** for generating React or HTML component files to disk, running a local
+dev server, or building prototype components directly in Figma via the Figma MCP.
+
+| Task | Surface |
+|------|---------|
+| Write interaction specs and UX copy | Claude Chat |
+| Review touch targets and gesture safety | Claude Chat |
+| Generate React component files | Claude Code |
+| Build Figma prototype frames via MCP | Claude Code + Figma MCP |
 
 ## Prototype Specification
 
@@ -133,6 +150,7 @@ Platform: [ ] Web  [ ] iOS  [ ] Android  [ ] Cross-platform
 Document each interaction:
 
 ```
+
 ## Interaction: [Name]
 
 ### Trigger
@@ -295,6 +313,7 @@ Quick checks during prototyping:
 At the close of Prototyping, generate this block and paste it as the **opening message** when starting Usability Testing (05 — Validate).
 
 ```
+
 ## Handoff: Prototype → Validate
 ### From: Prototyping
 ### Project: [PROJECT NAME]

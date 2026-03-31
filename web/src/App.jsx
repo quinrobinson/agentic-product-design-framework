@@ -74,58 +74,72 @@ const TOOLS = [
 const SKILL_META = {
   "user-research.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Turns raw interview transcripts, surveys, and analytics into a structured research brief — themes, pain points, unmet needs, and recommendations your team can act on.",
   },
   "competitive-analysis.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Maps your competitive landscape across direct, indirect, and aspirational competitors — UX patterns, strengths, gaps, and differentiation opportunities in one structured output.",
   },
   "problem-framing.md": {
     leverage: "medium",
+    surface: "chat",
     desc: "Converts fuzzy research into a sharp problem statement using HMW, JTBD, and user story framings — with assumptions surfaced and a prioritized requirements roadmap.",
   },
   "concept-generation.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Generates five concept directions from conventional to moonshot, with chart type recommendations, UI pattern suggestions, and visual system scaffolding ready to paste into the Design Tokens tool.",
   },
   "visual-design-execution.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Selects a visual style, builds a semantic color token architecture with light/dark pairing, defines type scale and spacing, and specifies motion timing and icon standards.",
   },
   "prototyping.md": {
     leverage: "high",
+    surface: "chat + code",
     desc: "Builds functional React or HTML prototypes with correct touch targets, interaction timing, gesture safety, UX copy, and a pre-delivery QA checklist across iOS, Android, and web.",
   },
   "accessibility-audit.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Runs a systematic WCAG 2.1 AA audit — color contrast, keyboard navigation, focus management, screen reader behavior, and touch targets — with severity-ranked issues and specific fixes.",
   },
   "usability-testing.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations.",
   },
   "design-delivery.md": {
     leverage: "high",
+    surface: "chat + code",
     desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right.",
   },
   "design-system-audit.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Validates your design system before handoff — covers foundations, components, patterns, accessibility, documentation, and AI acceleration against Material Design 3, Atlassian, Carbon, and Apple HIG. Run this at Deliver phase.",
   },
   "design-systems.md": {
     leverage: "high",
+    surface: "chat + code",
     desc: "Audits any product against Material Design 3, Atlassian, IBM Carbon, and Apple HIG — then documents tokens using M3 naming conventions and sets up Figma variable collections.",
   },
   "figma-playbook.md": {
     leverage: "high",
+    surface: "code + figma mcp",
     desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file.",
   },
   "phase-handoff.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing.",
   },
   "skill-chaining.md": {
     leverage: "high",
+    surface: "chat",
     desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery.",
   },
 };

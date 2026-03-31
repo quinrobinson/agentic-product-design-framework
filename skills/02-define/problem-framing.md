@@ -2,12 +2,25 @@
 name: problem-framing
 phase: 02 — Define
 description: Frame design problems clearly using HMW statements, JTBD, and user stories. Use this skill when transitioning from research to design, when the user needs to articulate a problem statement, define scope, create a design brief, or when they're struggling to focus a project direction. Also triggers for journey mapping, requirements definition, and prioritization frameworks like MoSCoW or Impact/Effort matrices.
+claude_surface: chat
 ai_leverage: medium
 ---
 
 # Problem Framing & Definition
 
 Transform research insights into clear problem definitions that guide design decisions.
+
+
+## Claude Surface
+
+**Use Claude Chat** (`claude.ai`) for this entire workflow.
+
+Upload `problem-framing.md` alongside the Discover Phase Handoff Block from your previous
+session. Claude will work through HMW statements, journey mapping, and design briefs
+conversationally. No installation or Figma MCP required.
+
+> **Add Claude Code** if you want to push the resulting design brief to Figma boards
+> (pair with `figma-playbook.md` in a Claude Code session).
 
 ## When to Use
 
@@ -74,7 +87,9 @@ Choose the framing that best balances:
 # Journey Map: [Persona] — [Scenario]
 
 ## Persona: [Name, role, key context]
+
 ## Goal: [What they're trying to accomplish]
+
 ## Scenario: [Specific situation being mapped]
 
 | Stage       | [Stage 1]   | [Stage 2]   | [Stage 3]   | [Stage 4]   |
@@ -202,6 +217,7 @@ Could-haves and larger bets for later.
 At the close of Problem Framing, generate this block and paste it as the **opening message** when starting Concept Generation (03 — Ideate).
 
 ```
+
 ## Handoff: Define → Ideate
 ### From: Problem Framing
 ### Project: [PROJECT NAME]
