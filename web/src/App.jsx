@@ -1257,7 +1257,7 @@ export default function App() {
               id: "phase",
               label: "Start with a Phase",
               color: "#22C55E",
-              desc: "I know where I am in the project — take me to the tools and guides for that phase.",
+              desc: "I know where I am in the project — show me tools and guides for that phase.",
               cta: "Choose a phase →",
             },
             {
@@ -1281,13 +1281,14 @@ export default function App() {
                 key={item.id}
                 onClick={() => setActivePath(activePath === item.id ? null : item.id)}
                 style={{
-                  background: isActive ? T.surface : T.surface,
+                  background: T.surface,
                   border: "none",
                   padding: "20px 20px 18px", textAlign: "left",
                   cursor: "pointer", transition: "background 0.15s",
                   borderRight: i < 2 ? `1px solid ${T.border}` : "none",
                   borderBottom: isActive ? `2px solid ${item.color}` : "2px solid transparent",
                   outline: "none",
+                  display: "flex", flexDirection: "column",
                 }}
                 onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = T.card; }}
                 onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = T.surface; }}
@@ -1305,7 +1306,7 @@ export default function App() {
                     transition: "color 0.15s",
                   }}>{item.label}</span>
                 </div>
-                <p style={{ fontSize: 12, color: isActive ? T.muted : T.dim, lineHeight: 1.6, marginBottom: 14, transition: "color 0.15s" }}>
+                <p style={{ fontSize: 12, color: isActive ? T.muted : T.dim, lineHeight: 1.6, margin: 0, flex: 1, transition: "color 0.15s" }}>
                   {item.desc}
                 </p>
                 <span style={{
@@ -1313,6 +1314,7 @@ export default function App() {
                   letterSpacing: "0.07em", textTransform: "uppercase",
                   color: isActive ? item.color : T.dim,
                   transition: "color 0.15s",
+                  marginTop: 14, display: "block",
                 }}>{item.cta}</span>
               </button>
             );
