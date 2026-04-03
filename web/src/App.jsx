@@ -8,720 +8,901 @@ import DesignSystemBuilder from "./DesignSystemBuilder";
 import ResearchSynthesizer from "./ResearchSynthesizer";
 import ServiceBlueprintGenerator from "./ServiceBlueprintGenerator";
 
-// ── Design System Tokens (from Onboarding Deck) ────────────────────────────
-const DS = {
-  dark: "#0F172A",
-  darkCard: "#1E293B",
-  darkBorder: "#334155",
+// ── Tokens ──────────────────────────────────────────────────────────────────
+const T = {
+  bg: "#0F0F0F",
+  surface: "#161616",
+  card: "#1A1A1A",
+  border: "#242424",
+  borderHover: "#383838",
+  text: "#F2F2F2",
+  muted: "#888888",
+  dim: "#444444",
   white: "#FFFFFF",
-  bodyLight: "#94A3B8",
-  bodyDark: "#64748B",
-  light: "#F8FAFC",
-  lightCard: "#FFFFFF",
-  lightBorder: "#E2E8F0",
   phases: {
-    "01": { color: "#22C55E", bg: "#052E16", label: "Discover" },
-    "02": { color: "#8B5CF6", bg: "#2E1065", label: "Define" },
-    "03": { color: "#F59E0B", bg: "#2D1A00", label: "Ideate" },
-    "04": { color: "#3B82F6", bg: "#0C1A40", label: "Prototype" },
-    "05": { color: "#EF4444", bg: "#2D0A0A", label: "Validate" },
-    "06": { color: "#14B8A6", bg: "#042F2E", label: "Deliver" },
+    "01": { color: "#22C55E", label: "Discover" },
+    "02": { color: "#8B5CF6", label: "Define" },
+    "03": { color: "#F59E0B", label: "Ideate" },
+    "04": { color: "#3B82F6", label: "Prototype" },
+    "05": { color: "#EF4444", label: "Validate" },
+    "06": { color: "#14B8A6", label: "Deliver" },
   },
 };
-
-const TOOLS = [
-  {
-    id: "process",
-    number: "01",
-    phase: "01",
-    primary: true,
-    name: "Design Process System",
-    subtitle: "Start here — the core framework",
-    description: "Six-phase design process with AI prompts, skill docs, Figma playbook actions, templates, and tool recommendations. The entry point for every project.",
-    tags: ["All phases", "AI prompts", "11 skills"],
-    component: DesignProcessSystem,
-  },
-  {
-    id: "brief",
-    number: "02",
-    phase: "01",
-    name: "AI Brief Generator",
-    subtitle: "Turn project context into a ready-to-use design brief",
-    description: "Answer a few questions about your project — type, phase, team, goals, constraints — and Claude generates a structured brief with a phase roadmap, problem statement, success metrics, and a first prompt ready to paste.",
-    tags: ["Discover", "AI accelerated", "Every project"],
-    component: AIBriefGenerator,
-  },
-  {
-    id: "deck",
-    number: "03",
-    phase: null,
-    name: "Client Deck Builder",
-    subtitle: "Build the right presentation for any stage of the project",
-    description: "Tell Claude your goal, audience, and where you are in the project — it identifies the deck type, writes a slide-by-slide structure with speaker notes, talking points, and an opening hook tailored to your room.",
-    tags: ["All phases", "AI accelerated", "Client-facing"],
-    component: ClientDeckBuilder,
-  },
-  {
-    id: "design-system-builder",
-    number: "04",
-    phase: "03",
-    name: "Design System Builder",
-    subtitle: "Upload, build, or bootstrap a design system for Claude",
-    description: "Upload your client's design system ZIP, or build one from scratch using the Bootstrap Builder. Claude parses, normalizes, and exports a structured CLAUDE.md context block — giving any LLM full design system knowledge instantly. Design immediately in Figma via MCP with no guessing on tokens.",
-    tags: ["Ideate", "Deliver", "Figma MCP", "AI accelerated"],
-    component: DesignSystemBuilder,
-  },
-  {
-    id: "research-synthesizer",
-    number: "05",
-    phase: "01",
-    name: "Research Synthesizer",
-    subtitle: "Turn raw interviews into a structured Research Brief",
-    description: "A guided 6-step pipeline that processes transcripts one session at a time — generating summaries, proposing and applying codes, synthesizing themes and insight statements, and producing a shareable Research Brief with a Phase Handoff Block for Define.",
-    tags: ["Discover", "AI accelerated", "Qualitative research"],
-    component: ResearchSynthesizer,
-  },
-  {
-    id: "service-blueprint",
-    number: "06",
-    phase: "01",
-    name: "Service Blueprint Generator",
-    subtitle: "Map the full experience — current state, future state, or both",
-    description: "A guided 5-step tool that generates current-state and future-state service blueprints across five swim lanes — user actions, frontstage, backstage, support processes, and evidence. Produces a structured Discover → Define handoff block at the end.",
-    tags: ["Discover", "AI accelerated", "Service design"],
-    component: ServiceBlueprintGenerator,
-  },
-];
-
-const SKILL_META = {
-  "user-research.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Turns raw interview transcripts, surveys, and analytics into a structured research brief — themes, pain points, unmet needs, and recommendations your team can act on.",
-  },
-  "competitive-analysis.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Maps your competitive landscape across direct, indirect, and aspirational competitors — UX patterns, strengths, gaps, and differentiation opportunities in one structured output.",
-  },
-  "problem-framing.md": {
-    leverage: "medium",
-    surface: "chat",
-    desc: "Converts fuzzy research into a sharp problem statement using HMW, JTBD, and user story framings — with assumptions surfaced and a prioritized requirements roadmap.",
-  },
-  "concept-generation.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Generates five concept directions from conventional to moonshot, with chart type recommendations, UI pattern suggestions, and visual system scaffolding ready to paste into the Design Tokens tool.",
-  },
-  "visual-design-execution.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Selects a visual style, builds a semantic color token architecture with light/dark pairing, defines type scale and spacing, and specifies motion timing and icon standards.",
-  },
-  "prototyping.md": {
-    leverage: "high",
-    surface: "chat + code",
-    desc: "Builds functional React or HTML prototypes with correct touch targets, interaction timing, gesture safety, UX copy, and a pre-delivery QA checklist across iOS, Android, and web.",
-  },
-  "accessibility-audit.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Runs a systematic WCAG 2.1 AA audit — color contrast, keyboard navigation, focus management, screen reader behavior, and touch targets — with severity-ranked issues and specific fixes.",
-  },
-  "usability-testing.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations.",
-  },
-  "design-delivery.md": {
-    leverage: "high",
-    surface: "chat + code",
-    desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right.",
-  },
-  "design-system-audit.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Validates your design system before handoff — covers foundations, components, patterns, accessibility, documentation, and AI acceleration against Material Design 3, Atlassian, Carbon, and Apple HIG. Run this at Deliver phase.",
-  },
-  "design-systems.md": {
-    leverage: "high",
-    surface: "chat + code",
-    desc: "Audits any product against Material Design 3, Atlassian, IBM Carbon, and Apple HIG — then documents tokens using M3 naming conventions and sets up Figma variable collections.",
-  },
-  "figma-playbook.md": {
-    leverage: "high",
-    surface: "code + figma mcp",
-    desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file.",
-  },
-  "phase-handoff.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing.",
-  },
-  "skill-chaining.md": {
-    leverage: "high",
-    surface: "chat",
-    desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery.",
-  },
-};
-
-const SKILLS = [
-  { phase: "01", dir: "01-discover", files: ["user-research.md", "competitive-analysis.md"] },
-  { phase: "02", dir: "02-define", files: ["problem-framing.md"] },
-  { phase: "03", dir: "03-ideate", files: ["concept-generation.md", "visual-design-execution.md"] },
-  { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md"] },
-  { phase: "05", dir: "05-validate", files: ["usability-testing.md"] },
-  { phase: "06", dir: "06-deliver", files: ["design-delivery.md", "design-system-audit.md"] },
-  { phase: null, dir: "", files: ["design-systems.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md"] },
-];
 
 const REPO = "https://github.com/quinrobinson/Agentic-Product-Design-Framework";
 const FIGMA_URL = "https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE";
 const PPTX_URL = `${REPO}/raw/main/artifacts/onboarding-deck.pptx`;
+const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/skills";
 
-function PhaseChip({ phaseKey, small }) {
-  const p = DS.phases[phaseKey];
-  if (!p) return null;
+// ── Tool registry ────────────────────────────────────────────────────────────
+const TOOLS = [
+  { id: "process",            number: "01", phase: "01", name: "Design Process System",      subtitle: "Full six-phase framework with AI prompts and skill docs",                         component: DesignProcessSystem },
+  { id: "brief",              number: "02", phase: "01", name: "AI Brief Generator",          subtitle: "Turn project context into a structured design brief",                             component: AIBriefGenerator },
+  { id: "deck",               number: "03", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder },
+  { id: "design-system",      number: "04", phase: "03", name: "Design System Builder",       subtitle: "Upload, build, or bootstrap a design system for Claude",                         component: DesignSystemBuilder },
+  { id: "research-synthesizer",number:"05", phase: "01", name: "Research Synthesizer",        subtitle: "Turn raw interviews into a structured Research Brief",                           component: ResearchSynthesizer },
+  { id: "service-blueprint",  number: "06", phase: "01", name: "Service Blueprint Generator", subtitle: "Map current and future state experiences across five swim lanes",                component: ServiceBlueprintGenerator },
+];
+
+// ── Skill registry ───────────────────────────────────────────────────────────
+const SKILL_FILES = [
+  { file: "research-planning.md",      phase: "01", leverage: "high", surface: "chat",           desc: "Turns a project brief or business goal into a complete research plan and discussion guide." },
+  { file: "research-synthesis.md",     phase: "01", leverage: "high", surface: "chat",           desc: "Transforms raw transcripts and notes into structured themes, insights, and ranked pain points." },
+  { file: "competitive-analysis.md",   phase: "01", leverage: "high", surface: "chat",           desc: "Maps your competitive landscape — UX conventions, gaps, patterns worth borrowing, and differentiation opportunities." },
+  { file: "service-blueprint.md",      phase: "01", leverage: "high", surface: "chat",           desc: "Generates current-state and future-state service blueprints from research data across five swim lanes." },
+  { file: "insight-framing.md",        phase: "01", leverage: "high", surface: "chat",           desc: "Sharpens research insights into prioritized HMW statements ready to open the Define phase." },
+  { file: "problem-framing.md",        phase: "02", leverage: "medium", surface: "chat",         desc: "Converts fuzzy research into a sharp problem statement using HMW, JTBD, and user story framings." },
+  { file: "concept-generation.md",     phase: "03", leverage: "high", surface: "chat",           desc: "Generates five concept directions from conventional to moonshot with UI pattern recommendations." },
+  { file: "visual-design-execution.md",phase: "03", leverage: "high", surface: "chat",           desc: "Selects a visual style, builds a color token architecture, defines type scale and spacing." },
+  { file: "prototyping.md",            phase: "04", leverage: "high", surface: "chat + code",    desc: "Builds functional React or HTML prototypes with correct touch targets, timing, and a QA checklist." },
+  { file: "accessibility-audit.md",    phase: "04", leverage: "high", surface: "chat",           desc: "Runs a WCAG 2.1 AA audit — contrast, keyboard nav, focus management, screen reader behavior." },
+  { file: "usability-testing.md",      phase: "05", leverage: "high", surface: "chat",           desc: "Plans tests, writes task scenarios, and synthesizes session notes into a severity-ranked report." },
+  { file: "design-delivery.md",        phase: "06", leverage: "high", surface: "chat + code",    desc: "Produces component specs, platform handoff packages, design decision records, and release notes." },
+  { file: "design-systems.md",         phase: null, leverage: "high", surface: "chat + code",    desc: "Audits any product against Material Design 3, Atlassian, Carbon, and Apple HIG." },
+  { file: "figma-playbook.md",         phase: null, leverage: "high", surface: "code + figma mcp",desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." },
+  { file: "phase-handoff.md",          phase: null, leverage: "high", surface: "chat",           desc: "Generates a structured handoff block at the close of each phase — full context for the next." },
+];
+
+// ── Prompts registry ─────────────────────────────────────────────────────────
+const PROMPTS = [
+  {
+    id: "plan-research",
+    name: "Plan Your Research",
+    phase: "01",
+    skill: "research-planning.md",
+    when: "Start of any discovery effort — when you have a project brief but haven't yet defined how to learn about users.",
+    text: `I'm starting discovery for a new project and need a complete research plan.
+
+Project context:
+- What we're designing: [product / feature / service]
+- Who the likely users are: [role, context, or segment]
+- Business decision this research will inform: [what the team needs to decide]
+- Constraints: [timeline, budget, access to participants, existing knowledge]
+
+Using the research-planning skill, generate:
+1. A method recommendation with justification
+2. A complete research plan (objectives, participants, screener, timeline)
+3. Success criteria for when the research is done
+
+Be specific — avoid generic advice.`,
+  },
+  {
+    id: "interview-guide",
+    name: "Build an Interview Guide",
+    phase: "01",
+    skill: "research-planning.md",
+    when: "When you know who you're interviewing and what you need to learn, and need a discussion guide ready to run.",
+    text: `I need a discussion guide for user interviews.
+
+Interview context:
+- Who I'm interviewing: [role, experience level, context]
+- What I'm trying to learn: [primary research question]
+- Session length: [45 / 60 / 90 min]
+- Known pain points or topics to explore: [anything already known]
+
+Using the research-planning skill, generate:
+1. A full discussion guide with warm-up, context setting, core exploration,
+   specific scenarios, and wrap-up sections
+2. 3–5 follow-up probes for each core question
+3. An observer notes template
+
+Questions must be open-ended and ask about past behavior — no hypotheticals.`,
+  },
+  {
+    id: "synthesize-notes",
+    name: "Synthesize Interview Notes",
+    phase: "01",
+    skill: "research-synthesis.md",
+    when: "After completing interviews — when you need to turn raw notes into structured themes and insights without spending days on manual analysis.",
+    text: `I've completed [N] user interviews and need to synthesize the findings.
+
+Research question: [what you set out to learn]
+Method: [semi-structured interviews / contextual inquiry / etc.]
+
+Session notes:
+[PASTE RAW NOTES OR TRANSCRIPT SUMMARIES HERE — one session at a time]
+
+Using the research-synthesis skill, process this session and generate:
+1. A structured session summary with pain points, workarounds, and direct quotes
+2. Thematic tags (3–5) for cross-session comparison
+
+Important: quote directly from the notes — do not paraphrase quotes.
+Flag anything that contradicts our research assumptions.
+
+After I confirm this summary, I'll paste the next session.`,
+  },
+  {
+    id: "competitive-landscape",
+    name: "Map the Competitive Landscape",
+    phase: "01",
+    skill: "competitive-analysis.md",
+    when: "At the start of discovery — to understand what already exists before designing something new.",
+    text: `I need to map the competitive landscape for [product / feature / category].
+
+Context:
+- What we're designing: [description]
+- Known competitors: [list what you know — direct and indirect]
+- Design question: [UX conventions, feature gaps, positioning, or all three?]
+
+Using the competitive-analysis skill:
+1. Expand the competitive set — suggest 3–5 competitors I may have missed,
+   including at least one indirect and one aspirational reference
+2. Identify dominant UX conventions users will expect
+3. Surface gaps no competitor solves well — backed by user evidence
+4. Recommend 1–2 clear differentiation opportunities
+
+Use web search to pull real user sentiment from G2, app stores, or Reddit
+for at least 3 of the competitors. Reference actual products and real complaints.`,
+  },
+  {
+    id: "hmw-statements",
+    name: "Generate HMW Statements",
+    phase: "01",
+    skill: "insight-framing.md",
+    when: "After research synthesis — to bridge findings into focused design opportunities ready for Define.",
+    text: `I've completed discovery research and need to generate prioritized
+How Might We statements.
+
+Research context:
+- Primary user: [persona / segment]
+- Top insight: [User X does Y because Z, which means W]
+- Top pain points (ranked): [list 3–5]
+- Systemic gaps (if service blueprint done): [list any backstage disconnects]
+- Competitive gaps (if analysis done): [list any market opportunities]
+
+Using the insight-framing skill:
+1. Sharpen my insight statements — flag any that are observations, not insights
+2. Generate 5 HMW statements per insight, varying the angle:
+   root cause / constraint reframe / emotional dimension / systemic / ambitious
+3. Cluster overlapping statements into 3–5 themes
+4. Score and rank the top 5 using: user impact, business value,
+   design leverage, feasibility
+5. Generate the primary problem statement in HMW, JTBD, and design brief formats
+
+Every HMW must trace to a research finding, not an assumption.`,
+  },
+];
+
+// ── Deliverables map ─────────────────────────────────────────────────────────
+const DELIVERABLES = [
+  { name: "Research Brief",       type: "tool",   ref: "research-synthesizer",  label: "Research Synthesizer"        },
+  { name: "Service Blueprint",    type: "tool",   ref: "service-blueprint",     label: "Blueprint Generator"         },
+  { name: "Research Plan",        type: "prompt", ref: "plan-research",         label: "Plan Your Research"          },
+  { name: "Interview Guide",      type: "prompt", ref: "interview-guide",       label: "Build an Interview Guide"    },
+  { name: "Competitive Analysis", type: "prompt", ref: "competitive-landscape", label: "Map the Competitive Landscape"},
+  { name: "HMW Statements",       type: "prompt", ref: "hmw-statements",        label: "Generate HMW Statements"     },
+  { name: "Design Brief",         type: "tool",   ref: "brief",                 label: "AI Brief Generator"          },
+  { name: "Client Deck",          type: "tool",   ref: "deck",                  label: "Client Deck Builder"         },
+  { name: "Component Specs",      type: "skill",  ref: "design-delivery.md",    label: "design-delivery.md"          },
+  { name: "Design System",        type: "tool",   ref: "design-system",         label: "Design System Builder"       },
+  { name: "Concept Directions",   type: "skill",  ref: "concept-generation.md", label: "concept-generation.md"       },
+  { name: "Usability Test Plan",  type: "skill",  ref: "usability-testing.md",  label: "usability-testing.md"        },
+];
+
+// ── Phase data ────────────────────────────────────────────────────────────────
+const PHASES = [
+  { id: "01", label: "Discover", desc: "Understand users, map the landscape, frame the problem",   skills: 5, tools: 2, prompts: 5 },
+  { id: "02", label: "Define",   desc: "Synthesize findings into a focused problem statement",      skills: 1, tools: 1, prompts: 0 },
+  { id: "03", label: "Ideate",   desc: "Generate concepts, explore visual directions",              skills: 2, tools: 1, prompts: 0 },
+  { id: "04", label: "Prototype",desc: "Build working prototypes and run accessibility audits",     skills: 2, tools: 0, prompts: 0 },
+  { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             skills: 1, tools: 0, prompts: 0 },
+  { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       skills: 2, tools: 0, prompts: 0 },
+];
+
+// ── Shared UI ─────────────────────────────────────────────────────────────────
+function Mono({ children, color, size = 11 }) {
+  return (
+    <span style={{
+      fontFamily: "'JetBrains Mono', monospace",
+      fontSize: size, letterSpacing: "0.07em",
+      textTransform: "uppercase", color: color || T.muted,
+    }}>{children}</span>
+  );
+}
+
+function PhaseTag({ phaseId, small }) {
+  const p = T.phases[phaseId];
+  if (!p) return <Mono color={T.dim}>{small ? "Cross-phase" : "All phases"}</Mono>;
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 5,
-      background: p.bg, border: `1px solid ${p.color}30`, borderRadius: 999,
-      padding: small ? "2px 8px" : "4px 12px",
       fontSize: small ? 10 : 11, fontFamily: "'JetBrains Mono', monospace",
-      fontWeight: 500, color: p.color, whiteSpace: "nowrap",
+      letterSpacing: "0.06em", textTransform: "uppercase",
+      color: p.color,
     }}>
-      <span style={{ width: small ? 5 : 6, height: small ? 5 : 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-      {phaseKey} — {p.label}
+      <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
+      {phaseId} — {p.label}
     </span>
   );
 }
 
-function ToolCard({ tool, onClick }) {
+function CopyBtn({ text, label = "Copy Prompt" }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1800); }}
+      style={{
+        padding: "8px 16px", borderRadius: 6,
+        fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+        letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
+        cursor: "pointer", border: `1.5px solid ${T.border}`,
+        background: "transparent", color: copied ? "#22C55E" : T.muted,
+        borderColor: copied ? "#22C55E" : T.border,
+        transition: "all 0.15s",
+      }}
+    >{copied ? "✓ Copied" : label}</button>
+  );
+}
+
+function SkillBadge({ surface }) {
+  const colors = {
+    "chat": { bg: "rgba(34,197,94,0.1)", border: "rgba(34,197,94,0.25)", color: "#22C55E", label: "Chat" },
+    "chat + code": { bg: "rgba(59,130,246,0.1)", border: "rgba(59,130,246,0.25)", color: "#3B82F6", label: "Chat + Code" },
+    "code + figma mcp": { bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)", color: "#F59E0B", label: "Figma MCP" },
+  };
+  const s = colors[surface] || colors["chat"];
+  return (
+    <span style={{
+      fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+      letterSpacing: "0.08em", textTransform: "uppercase",
+      padding: "2px 7px", borderRadius: 3,
+      background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+    }}>{s.label}</span>
+  );
+}
+
+// ── Home pill ─────────────────────────────────────────────────────────────────
+function HomePill({ onClick }) {
   const [hovered, setHovered] = useState(false);
-  const p = DS.phases[tool.phase] || { color: "#64748B", label: "All phases" };
-  const phaseLabel = tool.phase ? `${tool.phase} — ${p.label}` : "All phases";
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: "block", width: "100%",
-        background: DS.white,
-        border: `1px solid ${hovered ? p.color + "88" : DS.lightBorder}`,
-        borderRadius: 16, padding: "28px", cursor: "pointer", textAlign: "left",
-        transition: "all 0.2s ease", outline: "none",
-        transform: hovered ? "translateY(-3px)" : "none",
-        boxShadow: hovered ? `0 12px 32px ${p.color}14` : "0 1px 4px rgba(0,0,0,0.05)",
+        display: "inline-flex", alignItems: "center", gap: 7,
+        padding: "6px 14px", borderRadius: 20,
+        fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+        letterSpacing: "0.06em", textTransform: "uppercase",
+        background: "transparent",
+        border: `1px solid ${hovered ? T.borderHover : T.border}`,
+        color: hovered ? T.text : T.muted,
+        cursor: "pointer", transition: "all 0.15s",
+        marginBottom: 32,
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 5,
-          background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999,
-          padding: "4px 12px", fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-          fontWeight: 500, color: p.color, whiteSpace: "nowrap",
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-          {phaseLabel}
-        </span>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: DS.bodyDark, opacity: 0.5 }}>{tool.number} / 05</span>
-      </div>
-      <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 400, color: "#0F172A", marginBottom: 8, lineHeight: 1.2 }}>{tool.name}</div>
-      <div style={{ fontSize: 12, color: p.color, fontFamily: "'JetBrains Mono', monospace", marginBottom: 14 }}>{tool.subtitle}</div>
-      <div style={{ fontSize: 13, color: DS.bodyDark, lineHeight: 1.65, marginBottom: 20 }}>{tool.description}</div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
-        {tool.tags.map(tag => (
-          <span key={tag} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, background: "transparent", color: p.color, fontWeight: 500, border: `1px solid ${p.color}55` }}>{tag}</span>
-        ))}
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, color: p.color, fontSize: 13, fontWeight: 500, opacity: hovered ? 1 : 0.4, transition: "opacity 0.2s ease" }}>
-        Open tool
-        <span style={{ transform: hovered ? "translateX(4px)" : "none", transition: "transform 0.2s ease", display: "inline-block" }}>→</span>
-      </div>
+      ← Framework Home
     </button>
   );
 }
 
-function PrimaryToolCard({ tool, onClick, onPhaseClick }) {
+// ── Path card ─────────────────────────────────────────────────────────────────
+function PathCard({ title, desc, active, onClick }) {
   const [hovered, setHovered] = useState(false);
-  const [hoveredPhase, setHoveredPhase] = useState(null);
-  const p = DS.phases[tool.phase];
-
-  const PHASE_KEY_TO_ID = { "01": "discover", "02": "define", "03": "ideate", "04": "prototype", "05": "validate", "06": "deliver" };
-
-  const PHASE_CONTENTS = [
-    { key: "01", prompts: 3, skills: 2 },
-    { key: "02", prompts: 3, skills: 1 },
-    { key: "03", prompts: 5, skills: 3 },
-    { key: "04", prompts: 3, skills: 2 },
-    { key: "05", prompts: 3, skills: 1 },
-    { key: "06", prompts: 3, skills: 1 },
-  ];
-
+  const isActive = active;
   return (
-    <div
-      style={{
-        width: "100%",
-        background: DS.white,
-        border: `1px solid ${hovered ? p.color + "88" : p.color + "44"}`,
-        borderRadius: 16, padding: "32px 36px", textAlign: "left",
-        transition: "all 0.2s ease",
-        boxShadow: hovered ? `0 16px 40px ${p.color}16` : `0 2px 8px ${p.color}0a`,
-        marginBottom: 12, boxSizing: "border-box",
-      }}
+    <button
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      style={{
+        flex: 1, padding: "24px 22px", borderRadius: 10,
+        textAlign: "left", cursor: "pointer",
+        background: isActive ? T.surface : "transparent",
+        border: `1.5px solid ${isActive ? "#22C55E" : hovered ? T.borderHover : T.border}`,
+        transition: "all 0.15s", outline: "none",
+      }}
     >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 40 }}>
-        {/* Left — title, desc, tags, CTA */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-            <span style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999,
-              padding: "4px 12px", fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-              fontWeight: 500, color: p.color,
-            }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-              {tool.phase} — {p.label}
-            </span>
-            <span style={{
-              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
-              background: `${p.color}12`, border: `1px solid ${p.color}40`,
-              color: p.color, padding: "3px 10px", borderRadius: 999, fontWeight: 500,
-            }}>
-              Entry point
-            </span>
-          </div>
-          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, fontWeight: 400, color: "#0F172A", marginBottom: 10, lineHeight: 1.15 }}>
-            {tool.name}
-          </div>
-          <div style={{ fontSize: 14, color: DS.bodyDark, lineHeight: 1.7, marginBottom: 20, maxWidth: 480 }}>
-            {tool.description}
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {tool.tags.map(tag => (
-              <span key={tag} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, background: "transparent", color: p.color, fontWeight: 500, border: `1px solid ${p.color}55` }}>{tag}</span>
-            ))}
-          </div>
-          <button
-            onClick={onClick}
-            style={{
-              marginTop: 20, display: "inline-flex", alignItems: "center", gap: 8,
-              background: "transparent", border: "none", padding: 0, cursor: "pointer",
-              color: p.color, fontSize: 13, fontWeight: 500,
-              opacity: hovered ? 1 : 0.4, transition: "opacity 0.2s ease",
-            }}
-          >
-            Open tool
-            <span style={{ transform: hovered ? "translateX(4px)" : "none", transition: "transform 0.2s ease", display: "inline-block" }}>→</span>
-          </button>
-        </div>
-
-        {/* Right — phase navigator */}
-        <div style={{ flexShrink: 0, width: 320, background: DS.light, borderRadius: 12, border: `1px solid ${DS.lightBorder}`, overflow: "hidden" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
-            <colgroup>
-              <col style={{ width: "auto" }} />
-              <col style={{ width: 72 }} />
-              <col style={{ width: 56 }} />
-              <col style={{ width: 28 }} />
-            </colgroup>
-            <thead>
-              <tr style={{ borderBottom: `1px solid ${DS.lightBorder}` }}>
-                <th style={{ padding: "11px 18px 10px", textAlign: "left", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 2, color: DS.bodyDark, opacity: 0.6, fontWeight: 500 }}>Phase</th>
-                <th style={{ padding: "11px 0 10px", textAlign: "right", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 1, color: DS.bodyDark, opacity: 0.4, fontWeight: 500 }}>Prompts</th>
-                <th style={{ padding: "11px 0 10px", textAlign: "right", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 1, color: DS.bodyDark, opacity: 0.4, fontWeight: 500 }}>Skills</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {PHASE_CONTENTS.map((ph, i) => {
-                const phaseData = DS.phases[ph.key];
-                const isHovered = hoveredPhase === ph.key;
-                return (
-                  <tr
-                    key={ph.key}
-                    onClick={(e) => { e.stopPropagation(); onPhaseClick(ph.key); }}
-                    onMouseEnter={() => setHoveredPhase(ph.key)}
-                    onMouseLeave={() => setHoveredPhase(null)}
-                    style={{
-                      background: isHovered ? `${phaseData.color}08` : "transparent",
-                      borderBottom: i < PHASE_CONTENTS.length - 1 ? `1px solid ${DS.lightBorder}` : "none",
-                      cursor: "pointer", transition: "background 0.15s",
-                    }}
-                  >
-                    <td style={{ padding: "10px 18px", verticalAlign: "middle" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: phaseData.color, flexShrink: 0, display: "inline-block", opacity: isHovered ? 1 : 0.55 }} />
-                        <span style={{ fontSize: 12, fontWeight: 500, color: isHovered ? phaseData.color : "#0F172A", transition: "color 0.15s", whiteSpace: "nowrap" }}>
-                          {phaseData.label}
-                        </span>
-                      </div>
-                    </td>
-                    <td style={{ textAlign: "right", verticalAlign: "middle", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.5 }}>
-                      {ph.prompts}
-                    </td>
-                    <td style={{ textAlign: "right", verticalAlign: "middle", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.5 }}>
-                      {ph.skills}
-                    </td>
-                    <td style={{ textAlign: "right", verticalAlign: "middle", paddingRight: 14, fontSize: 11, color: phaseData.color, opacity: isHovered ? 1 : 0, transition: "opacity 0.15s" }}>
-                      →
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+      <div style={{
+        fontSize: 14, fontWeight: 600,
+        fontFamily: "'DM Serif Display', serif",
+        color: isActive ? T.text : hovered ? T.text : T.muted,
+        marginBottom: 6, transition: "color 0.15s",
+      }}>{title}</div>
+      <div style={{ fontSize: 12, color: T.dim, lineHeight: 1.55 }}>{desc}</div>
+    </button>
   );
 }
 
-export default function App() {
-  const [activeTool, setActiveTool] = useState(null);
-  const [activePhase, setActivePhase] = useState(null);
-  const [mounted, setMounted] = useState(false);
-  const [kickoffOpen, setKickoffOpen] = useState(false);
-  const [kickoffCopied, setKickoffCopied] = useState(false);
-  const [showSetup, setShowSetup] = useState(false);
-  const [showSkills, setShowSkills] = useState(false);
-  useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
+// ── Setup block ───────────────────────────────────────────────────────────────
+function SetupBlock({ onOpenFigmaGuide }) {
+  const [open, setOpen] = useState(false);
+  const [done, setDone] = useState(() => {
+    try { return localStorage.getItem("apdf-setup-done") === "true"; } catch { return false; }
+  });
+  const [copied, setCopied] = useState(false);
 
-  const KICKOFF_PROMPT = `You are a UX design assistant trained on the Agentic Product Design Framework —
-a six-phase system (Discover → Define → Ideate → Prototype → Validate → Deliver)
-with structured skill files, Figma templates, and AI-ready prompts for each phase.
+  const cloneCmd = `git clone ${REPO}.git`;
 
-The six phases and their skill files are:
-- Discover → user-research.md, competitive-analysis.md
-- Define → problem-framing.md
-- Ideate → concept-generation.md, visual-design-execution.md
-- Prototype → prototyping.md, accessibility-audit.md
-- Validate → usability-testing.md
-- Deliver → design-delivery.md
-- Cross-phase → design-systems.md, figma-playbook.md
-
-I'm starting a new design project and need help getting oriented.
-Please ask me the following four questions (all at once is fine):
-
-1. What type of project is this?
-   (e.g., new product, feature addition, redesign, internal tool, client work)
-
-2. What phase are you entering?
-   (Discover / Define / Ideate / Prototype / Validate / Deliver — or "not sure")
-
-3. What do you have so far?
-   (nothing yet / a brief / a brief + research / existing designs)
-
-4. Are you working solo or with a team?
-
-Based on my answers, respond with:
-- Recommended starting phase and a one-sentence reason why
-- The specific skill file to upload next (exact filename)
-- A suggested first deliverable — specific, not a category
-- One prompt I can use right now, before uploading anything, to get started`;
-
-  const tool = activeTool ? TOOLS.find(t => t.id === activeTool) : null;
-  const ToolComponent = tool?.component;
-
-  if (showSetup) {
-    return <FigmaSetupGuide onBack={() => setShowSetup(false)} />;
-  }
-
-  if (showSkills) {
-    return <SkillsLibrary onBack={() => setShowSkills(false)} />;
-  }
-
-  if (ToolComponent) {
-    return (
-      <div style={{ fontFamily: "system-ui, sans-serif", minHeight: "100vh", background: DS.dark }}>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-        <div style={{
-          position: "sticky", top: 0, zIndex: 100,
-          background: `${DS.dark}ee`, backdropFilter: "blur(16px)",
-          borderBottom: `1px solid ${DS.darkBorder}`,
-          padding: "0 32px", display: "flex", alignItems: "center", gap: 16, height: 56,
-        }}>
-          <button onClick={() => setActiveTool(null)} style={{
-            background: DS.darkCard, border: `1px solid ${DS.darkBorder}`, borderRadius: 8,
-            padding: "6px 14px", cursor: "pointer", fontSize: 12, color: DS.bodyLight,
-            fontFamily: "'JetBrains Mono', monospace",
-          }}>← Back</button>
-          <div style={{ width: 1, height: 20, background: DS.darkBorder }} />
-          <PhaseChip phaseKey={tool.phase} small />
-          <span style={{ fontSize: 14, fontWeight: 600, color: DS.white, fontFamily: "'DM Sans', sans-serif" }}>{tool.name}</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-            {TOOLS.filter(t => t.id !== activeTool).map(t => (
-              <button key={t.id} onClick={() => setActiveTool(t.id)} style={{
-                background: "none", border: `1px solid ${DS.darkBorder}`, borderRadius: 8,
-                padding: "5px 12px", cursor: "pointer", fontSize: 11, color: DS.bodyLight,
-                fontFamily: "'JetBrains Mono', monospace",
-              }}>{t.number} {t.name.split(" ")[0]}</button>
-            ))}
-          </div>
-        </div>
-        <ToolComponent initialPhase={activeTool === "process" ? activePhase : null} onOpenBrief={activeTool === "process" ? () => setActiveTool("brief") : undefined} />
-      </div>
-    );
+  function toggleDone() {
+    const next = !done;
+    setDone(next);
+    try { localStorage.setItem("apdf-setup-done", String(next)); } catch {}
   }
 
   return (
     <div style={{
-      fontFamily: "'DM Sans', sans-serif", background: DS.dark,
-      minHeight: "100vh", color: DS.white,
-      opacity: mounted ? 1 : 0, transition: "opacity 0.4s ease",
+      border: `1px solid ${T.border}`, borderRadius: 10,
+      overflow: "hidden", marginBottom: 40,
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-      {/* HERO — dark */}
-      <div style={{ padding: "80px 60px 0", maxWidth: 1160, margin: "0 auto" }}>
-        <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 4, textTransform: "uppercase", color: DS.bodyLight, marginBottom: 28, opacity: 0.7 }}>
-          Agentic Product Design Framework
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: "100%", display: "flex", alignItems: "center",
+          justifyContent: "space-between", padding: "14px 20px",
+          background: "transparent", border: "none", cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {done
+            ? <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", color: "#22C55E" }}>✓ Setup complete</span>
+            : <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", color: T.muted }}>First time? Complete setup before starting</span>
+          }
         </div>
+        <span style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace", transition: "transform 0.2s", display: "inline-block", transform: open ? "rotate(180deg)" : "none" }}>▾</span>
+      </button>
 
-        {/* Headline — full width */}
-        <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, fontWeight: 400, margin: "0 0 24px", lineHeight: 1.05, color: DS.white, letterSpacing: "-0.5px", maxWidth: 700 }}>
-          Design smarter.<br />
-          <em style={{ fontStyle: "italic", color: DS.bodyLight }}>Ship with confidence.</em>
-        </h1>
-        <p style={{ fontSize: 16, color: DS.bodyLight, lineHeight: 1.75, margin: "0 0 36px", maxWidth: 520 }}>
-          A structured system for integrating AI into every phase of product and UX design — from research through delivery.
-        </p>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 64 }}>
-          {[
-            { label: "Onboarding Deck", href: PPTX_URL, external: false },
-            { label: "Figma Template ↗", href: FIGMA_URL, external: true },
-            { label: "GitHub ↗", href: REPO, external: true },
-          ].map(btn => (
-            <a key={btn.label} href={btn.href}
-              {...(btn.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              style={{ background: "transparent", color: DS.bodyLight, padding: "11px 22px", borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: "none", border: `1px solid ${DS.darkBorder}`, transition: "border-color 0.15s, color 0.15s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = DS.white; e.currentTarget.style.color = DS.white; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = DS.darkBorder; e.currentTarget.style.color = DS.bodyLight; }}
-            >{btn.label}</a>
-          ))}
-        </div>
+      {open && (
+        <div style={{ borderTop: `1px solid ${T.border}`, padding: "20px 20px 24px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-        {/* Phase strip — colored lines only, no text */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)" }}>
-          {Object.entries(DS.phases).map(([key, p]) => (
-            <div key={key} style={{ borderBottom: `2px solid ${p.color}`, padding: "8px 0" }} />
-          ))}
-        </div>
-      </div>
-
-      {/* HOW IT WORKS — dark strip */}
-      <div style={{ borderBottom: `1px solid ${DS.darkBorder}` }}>
-        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "32px 60px" }}>
-          <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 4, textTransform: "uppercase", color: DS.bodyLight, opacity: 0.7, marginBottom: 24 }}>
-            How it works
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
-          {[
-            { n: "01", label: "Connect Figma", desc: "Claude Desktop + Figma MCP for direct execution, or claude.ai for manual workflow.", ctaLabel: "Setup guide →", ctaAction: () => setShowSetup(true) },
-            { n: "02", label: "Upload a skill file", desc: "Paste any .md skill file into Claude to activate that phase's workflow.", ctaLabel: "Browse skills →", ctaAction: () => setShowSkills(true) },
-            { n: "03", label: "Find your starting point", desc: "Not sure which phase to enter? The prompt builder asks 3 questions and gives you a Claude-ready brief.", ctaLabel: "Build your prompt →", ctaAction: () => setActiveTool("brief") },
-            { n: "04", label: "Start designing", desc: "Open any phase — research, concepts, wireframes, or specs. The framework meets you where you are.", ctaLabel: "Open Design Process →", ctaAction: () => setActiveTool("process") },
-          ].map((step, i) => (
-            <div key={step.n} style={{ paddingLeft: i === 0 ? 0 : 28, paddingRight: i === 3 ? 0 : 28, borderRight: i < 3 ? `1px solid ${DS.darkBorder}` : "none" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: DS.bodyLight, opacity: 0.4, marginBottom: 6 }}>{step.n}</div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: DS.white, marginBottom: 4 }}>{step.label}</div>
-              <div style={{ fontSize: 12, color: DS.bodyLight, lineHeight: 1.55 }}>{step.desc}</div>
-              <button onClick={step.ctaAction} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 11, color: DS.bodyLight, fontWeight: 600, fontFamily: "'JetBrains Mono', monospace", opacity: 0.6 }}>
-                {step.ctaLabel}
-              </button>
-            </div>
-          ))}
-          </div>
-        </div>
-      </div>
-
-      {/* BEFORE YOU START + KICKOFF PROMPT — dark */}
-      <div style={{ background: DS.dark, padding: "64px 60px 64px", maxWidth: 1160, margin: "0 auto" }}>
-
-        {/* Before You Start */}
-        <div style={{ border: "1px solid #1E293B", borderRadius: 16, overflow: "hidden", background: "#0B1120", marginBottom: 12 }}>
-          <button
-            onClick={() => setShowSetup(true)}
-            style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 28px", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
-          >
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 15, color: "#F8FAFC", lineHeight: 1.3 }}>Before You Start</div>
-              <div style={{ fontSize: 12, color: "#64748B", marginTop: 3 }}>Set up Claude and Figma to work together — two paths depending on what you need.</div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0, marginLeft: 24 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, color: "#22C55E", letterSpacing: 1 }}>Path A</span>
-                <span style={{ fontSize: 10, color: "#334155" }}>·</span>
-                <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, color: "#3B82F6", letterSpacing: 1 }}>Path B</span>
-              </div>
-              <div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px solid #3B82F6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ fontSize: 13, color: "#3B82F6", lineHeight: 1 }}>→</span>
-              </div>
-            </div>
-          </button>
-        </div>
-
-        {/* Kickoff Prompt */}
-        <div
-          style={{
-            border: `1px solid ${kickoffOpen ? "#334155" : "#1E293B"}`,
-            borderRadius: 16,
-            overflow: "hidden",
-            background: "#0B1120",
-            transition: "border-color 0.2s",
-          }}
-        >
-          {/* Header row — always visible */}
-          <button
-            onClick={() => setKickoffOpen(!kickoffOpen)}
-            style={{
-              width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "20px 28px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            }}
-          >
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 15, color: "#F8FAFC", lineHeight: 1.3 }}>Kickoff Prompt</div>
-              <div style={{ fontSize: 12, color: "#64748B", marginTop: 3 }}>New to the framework? Paste this into Claude before uploading any skill file.</div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0, marginLeft: 24 }}>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 600, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", opacity: 0.8 }}>Start here</span>
-              <div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px solid #14B8A6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ fontSize: 13, color: "#14B8A6", display: "inline-block", transform: kickoffOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", lineHeight: 1 }}>↓</span>
-              </div>
-            </div>
-          </button>
-
-          {/* Expanded content */}
-          {kickoffOpen && (
-            <div style={{ borderTop: "1px solid #1E293B", padding: "28px 28px 32px" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
-
-                {/* Left: what Claude asks + responds with */}
-                <div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 18 }}>Four questions Claude will ask</div>
-                  {[
-                    { n: "01", q: "What type of project is this?", hint: "New product, feature, redesign, internal tool, client work" },
-                    { n: "02", q: "What phase are you entering?", hint: "Discover / Define / Ideate / Prototype / Validate / Deliver — or \"not sure\"" },
-                    { n: "03", q: "What do you have so far?", hint: "Nothing yet / a brief / brief + research / existing designs" },
-                    { n: "04", q: "Are you working solo or with a team?", hint: "" },
-                  ].map(({ n, q, hint }) => (
-                    <div key={n} style={{ marginBottom: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#334155", marginTop: 3, flexShrink: 0 }}>{n}</span>
-                      <div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "#F8FAFC", lineHeight: 1.4 }}>{q}</div>
-                        {hint && <div style={{ fontSize: 11, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>{hint}</div>}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid #1E293B" }}>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Claude responds with</div>
-                    {[
-                      "Recommended starting phase + reason why",
-                      "The exact skill file to upload next",
-                      "A specific first deliverable",
-                      "One prompt you can use right now",
-                    ].map(r => (
-                      <div key={r} style={{ fontSize: 12, color: "#94A3B8", marginBottom: 8, display: "flex", gap: 8 }}>
-                        <span style={{ color: "#14B8A6", flexShrink: 0 }}>→</span>{r}
-                      </div>
-                    ))}
+            {[
+              {
+                n: "①", label: "Set up Claude",
+                desc: "You need Claude Pro or a Teams account to use claude.ai with projects. For Figma MCP, you also need Claude Desktop.",
+                action: <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: T.muted, letterSpacing: "0.06em", textDecoration: "none" }}>claude.ai →</a>
+              },
+              {
+                n: "②", label: "Connect Figma MCP (optional)",
+                desc: "Enables Claude to execute design work directly in Figma. Requires Claude Desktop + Figma desktop app.",
+                action: <button onClick={onOpenFigmaGuide} style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: T.muted, letterSpacing: "0.06em", background: "none", border: "none", cursor: "pointer", padding: 0, textTransform: "uppercase" }}>Setup guide →</button>
+              },
+              {
+                n: "③", label: "Pull skill files from the repo",
+                desc: "Clone the repo to get all skill files locally — paste them into Claude projects or conversations.",
+                action: (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <code style={{ fontSize: 11, color: T.muted, fontFamily: "'JetBrains Mono', monospace", background: T.card, padding: "3px 8px", borderRadius: 4 }}>{cloneCmd}</code>
+                    <button onClick={() => { navigator.clipboard.writeText(cloneCmd); setCopied(true); setTimeout(() => setCopied(false), 1800); }}
+                      style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", color: copied ? "#22C55E" : T.dim, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                      {copied ? "✓" : "Copy"}
+                    </button>
                   </div>
-                </div>
-
-                {/* Right: prompt code block + copy button */}
-                <div style={{ background: "#1E293B", borderRadius: 12, border: "1px solid #334155", padding: "20px 22px", display: "flex", flexDirection: "column" }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#14B8A6", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Copy &amp; paste into Claude</div>
-                  <pre style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#94A3B8",
-                    lineHeight: 1.75, whiteSpace: "pre-wrap", margin: 0, flex: 1,
-                    overflowY: "auto", maxHeight: 300,
-                  }}>{KICKOFF_PROMPT}</pre>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(KICKOFF_PROMPT);
-                      setKickoffCopied(true);
-                      setTimeout(() => setKickoffCopied(false), 2000);
-                    }}
-                    style={{
-                      marginTop: 16, background: kickoffCopied ? "#0D9488" : "#14B8A6",
-                      color: "#0F172A", border: "none", borderRadius: 8,
-                      padding: "10px 0", fontWeight: 700, fontSize: 12,
-                      cursor: "pointer", width: "100%", transition: "background 0.2s",
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}
-                  >
-                    {kickoffCopied ? "✓ Copied to clipboard" : "Copy Kickoff Prompt"}
-                  </button>
+                )
+              },
+            ].map(step => (
+              <div key={step.n} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: T.dim, flexShrink: 0, marginTop: 1 }}>{step.n}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 3 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 6 }}>{step.desc}</div>
+                  {step.action}
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            ))}
 
-      {/* TOOLS — light */}
-      <div style={{ background: DS.light }}>
-        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28 }}>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyDark }}>
-              AI-Powered Design Tools — 04
-            </div>
-            <span style={{ fontSize: 12, color: DS.bodyDark, opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>No install — runs in the browser</span>
-          </div>
-          <PrimaryToolCard
-            tool={TOOLS.find(t => t.primary)}
-            onClick={() => setActiveTool("process")}
-            onPhaseClick={(phaseKey) => { setActivePhase(PHASE_KEY_TO_ID[phaseKey]); setActiveTool("process"); }}
-          />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-            {TOOLS.filter(t => !t.primary).map(t => <ToolCard key={t.id} tool={t} onClick={() => setActiveTool(t.id)} />)}
-          </div>
-        </div>
-      </div>
-
-      {/* AGENTIC PHILOSOPHY — below tools */}
-      {!activeTool && (
-        <div style={{ background: DS.dark }}>
-          <div style={{ maxWidth: 1160, margin: "0 auto", padding: "64px 60px" }}>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 3, color: DS.bodyLight, opacity: 0.4, marginBottom: 24 }}>
-              Agentic Product Design Philosophy — 05
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
-              <div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, marginBottom: 14, color: DS.light }}>AI amplifies throughput.</div>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: DS.bodyLight, margin: 0, opacity: 0.6 }}>
-                  Research that took days can be synthesized in minutes. Prototypes that needed a week can ship in hours. Documentation that was always skipped now gets written. AI removes the friction from the labor-intensive parts of design.
-                </p>
-              </div>
-              <div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, marginBottom: 14, color: DS.light }}>You provide judgment.</div>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: DS.bodyLight, margin: 0, opacity: 0.6 }}>
-                  Taste, empathy, strategic thinking, stakeholder navigation, ethical consideration — these remain fundamentally human skills. AI generates options. You make decisions. The best designers will be those who wield AI as a power tool, not a replacement.
-                </p>
-              </div>
+            <div style={{ paddingTop: 12, borderTop: `1px solid ${T.border}` }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+                <input type="checkbox" checked={done} onChange={toggleDone}
+                  style={{ width: 14, height: 14, accentColor: "#22C55E", cursor: "pointer" }} />
+                <span style={{ fontSize: 12, color: T.muted, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.05em" }}>I've completed setup</span>
+              </label>
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
 
-      {/* FOOTER */}
-      <div style={{ background: DS.dark }}>
-      <div style={{ borderTop: `1px solid ${DS.darkBorder}`, maxWidth: 1160, margin: "0 auto", padding: "28px 60px 56px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-        <div style={{ fontSize: 11, color: DS.bodyLight, fontFamily: "'JetBrains Mono', monospace", opacity: 0.4 }}>Agentic Product Design Framework</div>
-        <div style={{ display: "flex", gap: 24 }}>
-          {[["Skills Library", null, () => setShowSkills(true)], ["GitHub", REPO, null], ["Figma Template", FIGMA_URL, null], ["Onboarding Deck", PPTX_URL, null]].map(([label, href, onClick]) => (
-            href
-              ? <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: DS.bodyLight, textDecoration: "none", opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>{label}</a>
-              : <button key={label} onClick={onClick} style={{ fontSize: 12, color: DS.bodyLight, background: "none", border: "none", cursor: "pointer", opacity: 0.5, fontFamily: "'JetBrains Mono', monospace", padding: 0 }}>{label}</button>
+// ── Path: Phase ───────────────────────────────────────────────────────────────
+function PhasePath({ onOpenTool, onOpenSkills }) {
+  const [expanded, setExpanded] = useState(null);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      {PHASES.map(phase => {
+        const p = T.phases[phase.id];
+        const isOpen = expanded === phase.id;
+        const phaseTools = TOOLS.filter(t => t.phase === phase.id);
+        const phaseSkills = SKILL_FILES.filter(s => s.phase === phase.id);
+
+        return (
+          <div key={phase.id} style={{
+            border: `1px solid ${isOpen ? p.color + "44" : T.border}`,
+            borderRadius: 8, overflow: "hidden",
+            transition: "border-color 0.15s",
+          }}>
+            <button
+              onClick={() => setExpanded(isOpen ? null : phase.id)}
+              style={{
+                width: "100%", display: "flex", alignItems: "center",
+                padding: "16px 20px", background: isOpen ? T.surface : "transparent",
+                border: "none", cursor: "pointer", textAlign: "left", gap: 14,
+                transition: "background 0.15s",
+              }}
+            >
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: p.color, flexShrink: 0, boxShadow: isOpen ? `0 0 8px ${p.color}` : "none" }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: p.color, minWidth: 80 }}>{phase.id} — {phase.label}</span>
+              <span style={{ fontSize: 13, color: isOpen ? T.text : T.muted, flex: 1, textAlign: "left", transition: "color 0.15s" }}>{phase.desc}</span>
+              <div style={{ display: "flex", gap: 12, flexShrink: 0 }}>
+                {phase.skills > 0 && <Mono color={T.dim}>{phase.skills} skill{phase.skills > 1 ? "s" : ""}</Mono>}
+                {phase.tools > 0 && <Mono color={T.dim}>{phase.tools} tool{phase.tools > 1 ? "s" : ""}</Mono>}
+                {phase.prompts > 0 && <Mono color={T.dim}>{phase.prompts} prompt{phase.prompts > 1 ? "s" : ""}</Mono>}
+              </div>
+              <span style={{ fontSize: 11, color: T.dim, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
+            </button>
+
+            {isOpen && (
+              <div style={{ borderTop: `1px solid ${T.border}`, padding: "20px 20px 24px" }}>
+
+                {phaseTools.length > 0 && (
+                  <div style={{ marginBottom: 20 }}>
+                    <Mono color={T.dim} size={10}>Tools</Mono>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 10 }}>
+                      {phaseTools.map(tool => (
+                        <div key={tool.id} style={{
+                          display: "flex", alignItems: "center", justifyContent: "space-between",
+                          padding: "12px 14px", background: T.card, borderRadius: 6,
+                          border: `1px solid ${T.border}`,
+                        }}>
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 2 }}>{tool.name}</div>
+                            <div style={{ fontSize: 11, color: T.muted }}>{tool.subtitle}</div>
+                          </div>
+                          <button onClick={() => onOpenTool(tool.id)} style={{
+                            padding: "6px 14px", borderRadius: 5,
+                            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                            letterSpacing: "0.06em", textTransform: "uppercase",
+                            background: "transparent", border: `1px solid ${p.color}55`,
+                            color: p.color, cursor: "pointer",
+                          }}>Open →</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {phaseSkills.length > 0 && (
+                  <div>
+                    <Mono color={T.dim} size={10}>Skills</Mono>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
+                      {phaseSkills.map(skill => (
+                        <div key={skill.file} style={{
+                          display: "flex", alignItems: "center", justifyContent: "space-between",
+                          padding: "10px 14px", background: T.card, borderRadius: 6,
+                          border: `1px solid ${T.border}`,
+                        }}>
+                          <div style={{ flex: 1, marginRight: 12 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                              <Mono color={T.muted} size={11}>{skill.file}</Mono>
+                              <SkillBadge surface={skill.surface} />
+                            </div>
+                            <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
+                          </div>
+                          <a href={`${RAW}/${phase.id}-discover/${skill.file}`} download
+                            style={{
+                              padding: "5px 12px", borderRadius: 5,
+                              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                              letterSpacing: "0.06em", textTransform: "uppercase",
+                              background: "transparent", border: `1px solid ${T.border}`,
+                              color: T.muted, cursor: "pointer", textDecoration: "none",
+                              whiteSpace: "nowrap",
+                            }}>↓ .md</a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Path: Ways to Work ────────────────────────────────────────────────────────
+function WaysToWorkPath({ onOpenTool }) {
+  const [tab, setTab] = useState("tools");
+  const [expandedPrompt, setExpandedPrompt] = useState(null);
+
+  return (
+    <div>
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, marginBottom: 24, borderBottom: `1px solid ${T.border}`, paddingBottom: 0 }}>
+        {[
+          { id: "tools", label: "Tools" },
+          { id: "prompts", label: "Prompts" },
+          { id: "skills", label: "Skills" },
+        ].map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)} style={{
+            padding: "8px 16px", background: "none", border: "none",
+            borderBottom: `2px solid ${tab === t.id ? "#22C55E" : "transparent"}`,
+            fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
+            letterSpacing: "0.07em", textTransform: "uppercase",
+            color: tab === t.id ? "#22C55E" : T.muted,
+            cursor: "pointer", transition: "all 0.15s", marginBottom: -1,
+          }}>{t.label}</button>
+        ))}
+      </div>
+
+      {/* Tools tab */}
+      {tab === "tools" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {TOOLS.map(tool => (
+            <div key={tool.id} style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "16px 18px", background: T.surface, borderRadius: 8,
+              border: `1px solid ${T.border}`,
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                  <Mono color={T.dim}>{tool.number}</Mono>
+                  <span style={{ fontSize: 14, fontWeight: 500, color: T.text }}>{tool.name}</span>
+                  <PhaseTag phaseId={tool.phase} small />
+                </div>
+                <div style={{ fontSize: 12, color: T.muted }}>{tool.subtitle}</div>
+              </div>
+              <button onClick={() => onOpenTool(tool.id)} style={{
+                marginLeft: 20, padding: "7px 16px", borderRadius: 5, flexShrink: 0,
+                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                background: "transparent", border: `1px solid ${T.border}`,
+                color: T.muted, cursor: "pointer", whiteSpace: "nowrap",
+              }}>Open →</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Prompts tab */}
+      {tab === "prompts" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {PROMPTS.map(prompt => {
+            const isOpen = expandedPrompt === prompt.id;
+            return (
+              <div key={prompt.id} style={{
+                border: `1px solid ${isOpen ? "#22C55E44" : T.border}`,
+                borderRadius: 8, overflow: "hidden", transition: "border-color 0.15s",
+              }}>
+                <button
+                  onClick={() => setExpandedPrompt(isOpen ? null : prompt.id)}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "14px 18px", background: isOpen ? T.surface : "transparent",
+                    border: "none", cursor: "pointer", textAlign: "left", gap: 12,
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3 }}>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: T.text }}>{prompt.name}</span>
+                      <PhaseTag phaseId={prompt.phase} small />
+                    </div>
+                    <Mono color={T.dim} size={10}>{prompt.skill}</Mono>
+                  </div>
+                  <span style={{ fontSize: 11, color: T.dim, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
+                </button>
+
+                {isOpen && (
+                  <div style={{ borderTop: `1px solid ${T.border}`, padding: "16px 18px 18px" }}>
+                    <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 14 }}>
+                      <span style={{ color: T.dim, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>When to use · </span>
+                      {prompt.when}
+                    </div>
+                    <pre style={{
+                      fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+                      color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
+                      background: T.card, border: `1px solid ${T.border}`,
+                      borderRadius: 6, padding: "14px 16px", margin: "0 0 14px",
+                      overflowX: "auto",
+                    }}>{prompt.text}</pre>
+                    <CopyBtn text={prompt.text} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Skills tab */}
+      {tab === "skills" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {SKILL_FILES.map(skill => {
+            const dir = skill.phase ? `${skill.phase}-${T.phases[skill.phase]?.label.toLowerCase()}` : "";
+            const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
+            return (
+              <div key={skill.file} style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "12px 16px", background: T.surface, borderRadius: 8,
+                border: `1px solid ${T.border}`,
+              }}>
+                <div style={{ flex: 1, marginRight: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                    <Mono color={T.muted} size={11}>{skill.file}</Mono>
+                    <PhaseTag phaseId={skill.phase} small />
+                    <SkillBadge surface={skill.surface} />
+                  </div>
+                  <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
+                </div>
+                <a href={url} download style={{
+                  padding: "5px 12px", borderRadius: 5, flexShrink: 0,
+                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.06em", textTransform: "uppercase",
+                  background: "transparent", border: `1px solid ${T.border}`,
+                  color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
+                }}>↓ .md</a>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Path: Deliverable ─────────────────────────────────────────────────────────
+function DeliverablePath({ onOpenTool, onOpenPrompt }) {
+  const typeColor = { tool: "#22C55E", prompt: "#8B5CF6", skill: "#3B82F6" };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      {DELIVERABLES.map(d => (
+        <div key={d.name} style={{
+          display: "flex", alignItems: "center", padding: "14px 18px",
+          background: T.surface, borderRadius: 8, border: `1px solid ${T.border}`,
+          gap: 16,
+        }}>
+          <span style={{ fontSize: 13, fontWeight: 500, color: T.text, flex: "0 0 200px" }}>{d.name}</span>
+          <span style={{ color: T.border, flexShrink: 0 }}>→</span>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{
+              fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              padding: "2px 7px", borderRadius: 3,
+              background: `${typeColor[d.type]}18`,
+              border: `1px solid ${typeColor[d.type]}40`,
+              color: typeColor[d.type], flexShrink: 0,
+            }}>{d.type}</span>
+            <span style={{ fontSize: 12, color: T.muted }}>{d.label}</span>
+          </div>
+          {d.type === "tool" && (
+            <button onClick={() => onOpenTool(d.ref)} style={{
+              padding: "5px 14px", borderRadius: 5, flexShrink: 0,
+              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.06em", textTransform: "uppercase",
+              background: "transparent", border: `1px solid ${T.border}`,
+              color: T.muted, cursor: "pointer",
+            }}>Open Tool</button>
+          )}
+          {d.type === "prompt" && (
+            <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy Prompt" />
+          )}
+          {d.type === "skill" && (
+            <a href={`${RAW}/${d.ref}`} download style={{
+              padding: "5px 14px", borderRadius: 5, flexShrink: 0,
+              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.06em", textTransform: "uppercase",
+              background: "transparent", border: `1px solid ${T.border}`,
+              color: T.muted, textDecoration: "none",
+            }}>↓ Skill</a>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Tool shell ────────────────────────────────────────────────────────────────
+function ToolShell({ tool, onHome }) {
+  const ToolComponent = tool.component;
+  return (
+    <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{
+        position: "sticky", top: 0, zIndex: 100,
+        background: `${T.bg}ee`, backdropFilter: "blur(16px)",
+        borderBottom: `1px solid ${T.border}`,
+        padding: "0 28px", display: "flex", alignItems: "center", gap: 12, height: 52,
+      }}>
+        <button onClick={onHome} style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          background: "transparent", border: `1px solid ${T.border}`,
+          borderRadius: 6, padding: "5px 12px", cursor: "pointer",
+          fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+          letterSpacing: "0.06em", textTransform: "uppercase",
+          color: T.muted, transition: "all 0.15s",
+        }}>← Home</button>
+        <div style={{ width: 1, height: 16, background: T.border }} />
+        <PhaseTag phaseId={tool.phase} small />
+        <span style={{ fontSize: 13, fontWeight: 500, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>{tool.name}</span>
+      </div>
+      <ToolComponent />
+    </div>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────────────────
+export default function App() {
+  const [mounted, setMounted] = useState(false);
+  const [activePath, setActivePath] = useState(null);  // "phase" | "ways" | "deliverable"
+  const [activeTool, setActiveTool] = useState(null);
+  const [showFigmaGuide, setShowFigmaGuide] = useState(false);
+
+  useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
+
+  // Figma guide
+  if (showFigmaGuide) return <FigmaSetupGuide onBack={() => setShowFigmaGuide(false)} />;
+
+  // Active tool
+  if (activeTool) {
+    const tool = TOOLS.find(t => t.id === activeTool);
+    if (tool) return <ToolShell tool={tool} onHome={() => setActiveTool(null)} />;
+  }
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: T.bg,
+      fontFamily: "'DM Sans', sans-serif", color: T.text,
+      opacity: mounted ? 1 : 0, transition: "opacity 0.3s ease",
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+        a { color: inherit; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{
+        borderBottom: `1px solid ${T.border}`,
+        padding: "0 40px", height: 52,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        position: "sticky", top: 0, zIndex: 50,
+        background: `${T.bg}f0`, backdropFilter: "blur(12px)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", gap: 3 }}>
+            {Object.values(T.phases).map(p => (
+              <div key={p.label} style={{ width: 4, height: 4, borderRadius: "50%", background: p.color }} />
+            ))}
+          </div>
+          <span style={{ fontSize: 12, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.muted }}>
+            Agentic Product Design Framework
+          </span>
+        </div>
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          {[["GitHub", REPO], ["Figma", FIGMA_URL], ["Deck", PPTX_URL]].map(([label, href]) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
+              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.06em", textTransform: "uppercase",
+              color: T.dim, textDecoration: "none", transition: "color 0.15s",
+            }}
+              onMouseEnter={e => e.target.style.color = T.muted}
+              onMouseLeave={e => e.target.style.color = T.dim}
+            >{label}</a>
           ))}
         </div>
       </div>
+
+      {/* Main content */}
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "56px 32px 80px" }}>
+
+        {/* Home pill — only when a path is active */}
+        {activePath && <HomePill onClick={() => setActivePath(null)} />}
+
+        {/* What it is */}
+        {!activePath && (
+          <div style={{ marginBottom: 48 }}>
+            <div style={{ marginBottom: 16 }}>
+              <Mono color={T.dim}>Framework</Mono>
+            </div>
+            <h1 style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: 44, fontWeight: 400, lineHeight: 1.1,
+              color: T.text, marginBottom: 16, letterSpacing: "-0.3px",
+            }}>
+              A system for using Claude<br />
+              <em style={{ fontStyle: "italic", color: T.muted }}>across every phase of product design.</em>
+            </h1>
+            <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, maxWidth: 480, marginBottom: 0 }}>
+              From research through delivery — skills, tools, and prompts that integrate Claude into how your team already works.
+            </p>
+          </div>
+        )}
+
+        {/* Setup block — always visible on home, hidden once a path is chosen */}
+        {!activePath && <SetupBlock onOpenFigmaGuide={() => setShowFigmaGuide(true)} />}
+
+        {/* How do you want to start? */}
+        {!activePath && (
+          <div style={{ marginBottom: 16 }}>
+            <Mono color={T.dim}>How do you want to start?</Mono>
+          </div>
+        )}
+
+        {/* Path cards */}
+        <div style={{ display: "flex", gap: 10, marginBottom: activePath ? 32 : 0 }}>
+          <PathCard
+            title="Start with a Phase"
+            desc="I know where I am in the project"
+            active={activePath === "phase"}
+            onClick={() => setActivePath(activePath === "phase" ? null : "phase")}
+          />
+          <PathCard
+            title="Ways to Work"
+            desc="I know what I need to do right now"
+            active={activePath === "ways"}
+            onClick={() => setActivePath(activePath === "ways" ? null : "ways")}
+          />
+          <PathCard
+            title="Start with a Deliverable"
+            desc="I know what I need to hand off"
+            active={activePath === "deliverable"}
+            onClick={() => setActivePath(activePath === "deliverable" ? null : "deliverable")}
+          />
+        </div>
+
+        {/* Path content */}
+        {activePath === "phase" && (
+          <div style={{ marginTop: 8 }}>
+            <PhasePath
+              onOpenTool={setActiveTool}
+              onOpenSkills={() => {}}
+            />
+          </div>
+        )}
+
+        {activePath === "ways" && (
+          <div style={{ marginTop: 8 }}>
+            <WaysToWorkPath onOpenTool={setActiveTool} />
+          </div>
+        )}
+
+        {activePath === "deliverable" && (
+          <div style={{ marginTop: 8 }}>
+            <DeliverablePath
+              onOpenTool={setActiveTool}
+              onOpenPrompt={() => {}}
+            />
+          </div>
+        )}
+
+        {/* Footer — only on home */}
+        {!activePath && (
+          <div style={{ marginTop: 64, paddingTop: 24, borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Mono color={T.dim} size={10}>Agentic Product Design Framework</Mono>
+            <div style={{ display: "flex", gap: 4 }}>
+              {Object.values(T.phases).map(p => (
+                <div key={p.label} style={{ width: 24, height: 2, background: p.color, borderRadius: 1 }} />
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
