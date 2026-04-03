@@ -6,6 +6,7 @@ import FigmaSetupGuide from "./FigmaSetupGuide";
 import SkillsLibrary from "./SkillsLibrary";
 import DesignSystemBuilder from "./DesignSystemBuilder";
 import ResearchSynthesizer from "./ResearchSynthesizer";
+import ServiceBlueprintGenerator from "./ServiceBlueprintGenerator";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -79,6 +80,16 @@ const TOOLS = [
     description: "A guided 6-step pipeline that processes transcripts one session at a time — generating summaries, proposing and applying codes, synthesizing themes and insight statements, and producing a shareable Research Brief with a Phase Handoff Block for Define.",
     tags: ["Discover", "AI accelerated", "Qualitative research"],
     component: ResearchSynthesizer,
+  },
+  {
+    id: "service-blueprint",
+    number: "06",
+    phase: "01",
+    name: "Service Blueprint Generator",
+    subtitle: "Map the full experience — current state, future state, or both",
+    description: "A guided 5-step tool that generates current-state and future-state service blueprints across five swim lanes — user actions, frontstage, backstage, support processes, and evidence. Produces a structured Discover → Define handoff block at the end.",
+    tags: ["Discover", "AI accelerated", "Service design"],
+    component: ServiceBlueprintGenerator,
   },
 ];
 
