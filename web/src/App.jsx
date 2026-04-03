@@ -5,6 +5,7 @@ import ClientDeckBuilder from "./ClientDeckBuilder";
 import FigmaSetupGuide from "./FigmaSetupGuide";
 import SkillsLibrary from "./SkillsLibrary";
 import DesignSystemBuilder from "./DesignSystemBuilder";
+import ResearchSynthesizer from "./ResearchSynthesizer";
 
 // ── Design System Tokens (from Onboarding Deck) ────────────────────────────
 const DS = {
@@ -68,6 +69,16 @@ const TOOLS = [
     description: "Upload your client's design system ZIP, or build one from scratch using the Bootstrap Builder. Claude parses, normalizes, and exports a structured CLAUDE.md context block — giving any LLM full design system knowledge instantly. Design immediately in Figma via MCP with no guessing on tokens.",
     tags: ["Ideate", "Deliver", "Figma MCP", "AI accelerated"],
     component: DesignSystemBuilder,
+  },
+  {
+    id: "research-synthesizer",
+    number: "05",
+    phase: "01",
+    name: "Research Synthesizer",
+    subtitle: "Turn raw interviews into a structured Research Brief",
+    description: "A guided 6-step pipeline that processes transcripts one session at a time — generating summaries, proposing and applying codes, synthesizing themes and insight statements, and producing a shareable Research Brief with a Phase Handoff Block for Define.",
+    tags: ["Discover", "AI accelerated", "Qualitative research"],
+    component: ResearchSynthesizer,
   },
 ];
 
