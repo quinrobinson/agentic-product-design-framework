@@ -21,8 +21,8 @@ const T = {
 const STEPS = [
   { id: 1, label: "Setup",    short: "Research context"       },
   { id: 2, label: "Sessions", short: "Per-session summaries"  },
-  { id: 3, label: "Codes",    short: "Propose initial codes"  },
-  { id: 4, label: "Apply",    short: "Code across sessions"   },
+  { id: 3, label: "Patterns", short: "Find recurring patterns" },
+  { id: 4, label: "Tag",      short: "Tag across sessions"    },
   { id: 5, label: "Themes",   short: "Synthesize themes"      },
   { id: 6, label: "Brief",    short: "Research brief"         },
 ];
@@ -684,16 +684,16 @@ Structure:
           </div>
         )}
 
-        {/* ── Step 3: Propose Codes ── */}
+        {/* ── Step 3: Find Patterns ── */}
         {step === 3 && (
           <div>
-            <SectionHeader step={3} title="Propose Initial Codes"
-              desc={`Claude will analyze all ${sessions.length} session summaries and propose 8–12 thematic codes. Review the output, edit as needed, then approve before applying.`} />
+            <SectionHeader step={3} title="Find Patterns"
+              desc={`Claude analyzes all ${sessions.length} session summaries and identifies recurring patterns — labeling each one so you can track it across every session. Review, rename, or remove any pattern before moving forward.`} />
 
             {!codeProposal && (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Btn onClick={handleProposeCodes} disabled={loading}>
-                  {loading ? "Analyzing…" : `Propose Codes from ${sessions.length} Sessions`}
+                  {loading ? "Analyzing…" : `Find Patterns across ${sessions.length} Sessions`}
                 </Btn>
               </div>
             )}
@@ -701,14 +701,14 @@ Structure:
             {(streamText || codeProposal) && (
               <div style={{ marginTop: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                  <Label sub>Proposed codes — edit before approving</Label>
+                  <Label sub>Patterns found — edit before confirming</Label>
                   {codeProposal && !loading && <CopyBtn text={codeProposal} />}
                 </div>
                 <OutputBlock content={streamText} streaming={loading} />
                 {codeProposal && !loading && (
                   <>
                     <div style={{ marginTop: 16 }}>
-                      <Label>Edit codes (add, remove, rename, merge)</Label>
+                      <Label>Edit patterns (add, remove, rename, merge)</Label>
                       <Textarea value={codeProposal} onChange={setCodeProposal} rows={12} />
                     </div>
                     <div style={{ display: "flex", gap: 10, marginTop: 12, justifyContent: "flex-end" }}>
@@ -716,7 +716,7 @@ Structure:
                         Re-generate
                       </Btn>
                       <Btn small onClick={approveCodes}>
-                        Approve Codes →
+                        Confirm Patterns →
                       </Btn>
                     </div>
                   </>
@@ -726,15 +726,15 @@ Structure:
           </div>
         )}
 
-        {/* ── Step 4: Apply Codes ── */}
+        {/* ── Step 4: Tag Sessions ── */}
         {step === 4 && (
           <div>
-            <SectionHeader step={4} title="Apply Codes Across Sessions"
-              desc="Claude applies the approved coding framework systematically across all sessions — pulling direct quotes and assigning severity for each code per session." />
+            <SectionHeader step={4} title="Tag Sessions"
+              desc="Claude applies your confirmed patterns systematically across all sessions — pulling direct quotes and assigning severity for each pattern per session." />
             {!codedData && (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Btn onClick={handleApplyCodes} disabled={loading}>
-                  {loading ? "Coding…" : "Apply Codes"}
+                  {loading ? "Tagging…" : "Tag All Sessions"}
                 </Btn>
               </div>
             )}
@@ -761,7 +761,7 @@ Structure:
         {step === 5 && (
           <div>
             <SectionHeader step={5} title="Synthesize Themes"
-              desc="Claude identifies 3–5 overarching themes from the coded data — with insight statements, evidence quotes, and design implications per theme." />
+              desc="Claude identifies 3–5 overarching themes from the tagged sessions — with insight statements, evidence quotes, and design implications per theme." />
             {!themes && (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Btn onClick={handleSynthesizeThemes} disabled={loading}>
