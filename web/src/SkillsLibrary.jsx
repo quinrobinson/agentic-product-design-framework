@@ -17,8 +17,11 @@ const DS = {
 const REPO = "https://github.com/quinrobinson/Agentic-Product-Design-Framework";
 
 const SKILL_META = {
-  "user-research.md": { phase: "01", leverage: "high", surface: "chat", desc: "Turns raw interview transcripts, surveys, and analytics into a structured research brief — themes, pain points, unmet needs, and recommendations your team can act on." },
-  "competitive-analysis.md": { phase: "01", leverage: "high", surface: "chat", desc: "Maps your competitive landscape across direct, indirect, and aspirational competitors — UX patterns, strengths, gaps, and differentiation opportunities in one structured output." },
+  "research-planning.md": { phase: "01", leverage: "high", surface: "chat", desc: "Turns a project brief or business goal into a complete research plan and discussion guide — objectives, method selection, screener questions, timeline, and a ready-to-run interview guide." },
+  "research-synthesis.md": { phase: "01", leverage: "high", surface: "chat", desc: "Transforms raw interview transcripts and notes into structured themes, insight statements, and ranked pain points using a step-by-step pipeline that prevents hallucination and preserves nuance." },
+  "competitive-analysis.md": { phase: "01", leverage: "high", surface: "chat", desc: "Maps your competitive landscape across direct, indirect, and aspirational competitors — UX conventions, gaps, patterns worth stealing, and a primary differentiation opportunity." },
+  "service-blueprint.md": { phase: "01", leverage: "high", surface: "chat", desc: "Generates current-state and future-state service blueprints from research data — mapping user actions, frontstage touchpoints, backstage processes, systemic gaps, and design principles across five swim lanes." },
+  "insight-framing.md": { phase: "01", leverage: "high", surface: "chat", desc: "Sharpens research insights into prioritized How Might We statements using a scoring model — producing the top 5 HMW statements and a primary problem statement ready to open the Define phase." },
   "problem-framing.md": { phase: "02", leverage: "medium", surface: "chat", desc: "Converts fuzzy research into a sharp problem statement using HMW, JTBD, and user story framings — with assumptions surfaced and a prioritized requirements roadmap." },
   "concept-generation.md": { phase: "03", leverage: "high", surface: "chat", desc: "Generates five concept directions from conventional to moonshot, with chart type recommendations, UI pattern suggestions, and visual system scaffolding ready to paste into the Brand Style Builder." },
   "visual-design-execution.md": { phase: "03", leverage: "high", surface: "chat", desc: "Selects a visual style, builds a semantic color token architecture with light/dark pairing, defines type scale and spacing, and specifies motion timing and icon standards." },
@@ -33,7 +36,7 @@ const SKILL_META = {
 };
 
 const SKILLS = [
-  { phase: "01", dir: "01-discover", files: ["user-research.md", "competitive-analysis.md"] },
+  { phase: "01", dir: "01-discover", files: ["research-planning.md", "research-synthesis.md", "competitive-analysis.md", "service-blueprint.md", "insight-framing.md"] },
   { phase: "02", dir: "02-define", files: ["problem-framing.md"] },
   { phase: "03", dir: "03-ideate", files: ["concept-generation.md", "visual-design-execution.md"] },
   { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md"] },
@@ -56,8 +59,11 @@ const PHASE_FILTERS = [
 const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/skills";
 
 const ALL_SKILL_FILES = [
-  { path: "01-discover/user-research.md",          zipPath: "user-research/SKILL.md" },
+  { path: "01-discover/research-planning.md",      zipPath: "research-planning/SKILL.md" },
+  { path: "01-discover/research-synthesis.md",     zipPath: "research-synthesis/SKILL.md" },
   { path: "01-discover/competitive-analysis.md",   zipPath: "competitive-analysis/SKILL.md" },
+  { path: "01-discover/service-blueprint.md",      zipPath: "service-blueprint/SKILL.md" },
+  { path: "01-discover/insight-framing.md",        zipPath: "insight-framing/SKILL.md" },
   { path: "02-define/problem-framing.md",           zipPath: "problem-framing/SKILL.md" },
   { path: "03-ideate/concept-generation.md",        zipPath: "concept-generation/SKILL.md" },
   { path: "03-ideate/visual-design-execution.md",   zipPath: "visual-design-execution/SKILL.md" },
