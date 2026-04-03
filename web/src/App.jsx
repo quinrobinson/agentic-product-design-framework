@@ -201,12 +201,12 @@ const DELIVERABLES = [
 
 // ── Phase data ────────────────────────────────────────────────────────────────
 const PHASES = [
-  { id: "01", label: "Discover", desc: "Understand users, map the landscape, frame the problem",   skills: 5, tools: 2, prompts: 5 },
-  { id: "02", label: "Define",   desc: "Synthesize findings into a focused problem statement",      skills: 1, tools: 1, prompts: 0 },
-  { id: "03", label: "Ideate",   desc: "Generate concepts, explore visual directions",              skills: 2, tools: 1, prompts: 0 },
-  { id: "04", label: "Prototype",desc: "Build working prototypes and run accessibility audits",     skills: 2, tools: 0, prompts: 0 },
-  { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             skills: 1, tools: 0, prompts: 0 },
-  { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       skills: 2, tools: 0, prompts: 0 },
+  { id: "01", label: "Discover", desc: "Understand users, map the landscape, frame the problem",   guides: 5, tools: 2, prompts: 5 },
+  { id: "02", label: "Define",   desc: "Synthesize findings into a focused problem statement",      guides: 1, tools: 1, prompts: 0 },
+  { id: "03", label: "Ideate",   desc: "Generate concepts, explore visual directions",              guides: 2, tools: 1, prompts: 0 },
+  { id: "04", label: "Prototype",desc: "Build working prototypes and run accessibility audits",     guides: 2, tools: 0, prompts: 0 },
+  { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             guides: 1, tools: 0, prompts: 0 },
+  { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       guides: 2, tools: 0, prompts: 0 },
 ];
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
@@ -426,7 +426,7 @@ function PhasePath({ onOpenTool, onOpenSkills }) {
         const p = T.phases[phase.id];
         const isOpen = expanded === phase.id;
         const phaseTools = TOOLS.filter(t => t.phase === phase.id);
-        const phaseSkills = SKILL_FILES.filter(s => s.phase === phase.id);
+        const phaseGuides = SKILL_FILES.filter(s => s.phase === phase.id);
 
         return (
           <div key={phase.id} style={{
@@ -447,7 +447,7 @@ function PhasePath({ onOpenTool, onOpenSkills }) {
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: p.color, minWidth: 80 }}>{phase.id} — {phase.label}</span>
               <span style={{ fontSize: 13, color: isOpen ? T.text : T.muted, flex: 1, textAlign: "left", transition: "color 0.15s" }}>{phase.desc}</span>
               <div style={{ display: "flex", gap: 12, flexShrink: 0 }}>
-                {phase.skills > 0 && <Mono color={T.dim}>{phase.skills} skill{phase.skills > 1 ? "s" : ""}</Mono>}
+                {phase.guides > 0 && <Mono color={T.dim}>{phase.guides} guide{phase.guides > 1 ? "s" : ""}</Mono>}
                 {phase.tools > 0 && <Mono color={T.dim}>{phase.tools} tool{phase.tools > 1 ? "s" : ""}</Mono>}
                 {phase.prompts > 0 && <Mono color={T.dim}>{phase.prompts} prompt{phase.prompts > 1 ? "s" : ""}</Mono>}
               </div>
@@ -484,9 +484,9 @@ function PhasePath({ onOpenTool, onOpenSkills }) {
                   </div>
                 )}
 
-                {phaseSkills.length > 0 && (
+                {phaseGuides.length > 0 && (
                   <div>
-                    <Mono color={T.dim} size={10}>Skills</Mono>
+                    <Mono color={T.dim} size={10}>Chat Guides</Mono>
                     <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
                       {phaseSkills.map(skill => (
                         <div key={skill.file} style={{
@@ -589,7 +589,7 @@ function WaysToWorkPath({ onOpenTool }) {
         {[
           { id: "tools", label: "Tools" },
           { id: "prompts", label: "Prompts" },
-          { id: "skills", label: "Skills" },
+          { id: "skills", label: "Chat Guides" },
         ].map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             padding: "8px 16px", background: "none", border: "none",
@@ -920,17 +920,233 @@ function ToolShell({ tool, onHome }) {
   );
 }
 
+
+// ── Chat Guides Overlay ───────────────────────────────────────────────────────
+function ChatGuidesOverlay({ onBack, onOpenTool }) {
+  const [phaseFilter, setPhaseFilter] = useState("all");
+  const [surfaceFilter, setSurfaceFilter] = useState("all");
+
+  const PHASE_FILTERS = [
+    { id: "all",   label: "All" },
+    { id: "01",    label: "Discover" },
+    { id: "02",    label: "Define" },
+    { id: "03",    label: "Ideate" },
+    { id: "04",    label: "Prototype" },
+    { id: "05",    label: "Validate" },
+    { id: "06",    label: "Deliver" },
+    { id: "cross", label: "Cross-phase" },
+  ];
+
+  const SURFACE_FILTERS = [
+    { id: "all",              label: "All" },
+    { id: "chat",             label: "Chat" },
+    { id: "chat + code",      label: "Chat + Code" },
+    { id: "code + figma mcp", label: "Figma MCP" },
+  ];
+
+  const filtered = SKILL_FILES.filter(s => {
+    const phaseMatch = phaseFilter === "all" ? true
+      : phaseFilter === "cross" ? s.phase === null
+      : s.phase === phaseFilter;
+    const surfaceMatch = surfaceFilter === "all" ? true : s.surface === surfaceFilter;
+    return phaseMatch && surfaceMatch;
+  });
+
+  function FilterPills({ options, active, onChange }) {
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+        {options.map(opt => {
+          const isActive = active === opt.id;
+          const phaseColor = opt.id !== "all" && opt.id !== "cross" && T.phases[opt.id]
+            ? T.phases[opt.id].color : "#3B82F6";
+          const activeColor = opt.id === "all" || opt.id === "cross" ? "#3B82F6" : phaseColor;
+          return (
+            <button key={opt.id} onClick={() => onChange(opt.id)} style={{
+              padding: "4px 10px", borderRadius: 20, cursor: "pointer",
+              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.07em", textTransform: "uppercase",
+              border: `1px solid ${isActive ? activeColor : T.border}`,
+              background: isActive ? `${activeColor}18` : "transparent",
+              color: isActive ? activeColor : T.dim,
+              transition: "all 0.12s",
+            }}>{opt.label}</button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: T.bg, fontFamily: "'DM Sans', sans-serif", color: T.text }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{
+        borderBottom: `1px solid ${T.border}`, padding: "0 40px", height: 52,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        position: "sticky", top: 0, zIndex: 50,
+        background: `${T.bg}f0`, backdropFilter: "blur(12px)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button onClick={onBack} style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            background: "transparent", border: `1px solid ${T.border}`,
+            borderRadius: 6, padding: "5px 12px", cursor: "pointer",
+            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+            letterSpacing: "0.06em", textTransform: "uppercase",
+            color: T.muted, transition: "all 0.15s",
+          }}>← Home</button>
+          <div style={{ width: 1, height: 16, background: T.border }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3B82F6", boxShadow: "0 0 6px #3B82F6" }} />
+            <span style={{ fontSize: 13, fontWeight: 500, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>Chat Guides</span>
+          </div>
+        </div>
+        <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>
+          {filtered.length} guide{filtered.length !== 1 ? "s" : ""}
+        </span>
+      </div>
+
+      <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 32px 80px" }}>
+
+        {/* What is a Chat Guide */}
+        <div style={{
+          background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.2)",
+          borderRadius: 10, padding: "20px 24px", marginBottom: 32,
+        }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(59,130,246,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: 14 }}>📎</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: T.text, marginBottom: 6 }}>What is a Chat Guide?</div>
+              <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.65, marginBottom: 8 }}>
+                Chat Guides are <code style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, background: T.card, padding: "1px 5px", borderRadius: 3 }}>.md</code> files you attach to a Claude Chat conversation before starting work. They give Claude the full context, methods, templates, and quality standards for a specific design phase — so every response is grounded in the framework rather than generic advice.
+              </p>
+              <div style={{ display: "flex", gap: 20 }}>
+                {[
+                  "Download the .md file",
+                  "Attach it to a new Claude Chat",
+                  "Start working — Claude has full context",
+                ].map((step, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", color: "#3B82F6", fontWeight: 700 }}>0{i + 1}</span>
+                    <span style={{ fontSize: 11, color: T.muted }}>{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", color: T.dim, minWidth: 52 }}>Phase</span>
+            <FilterPills options={PHASE_FILTERS} active={phaseFilter} onChange={setPhaseFilter} />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", color: T.dim, minWidth: 52 }}>Surface</span>
+            <FilterPills options={SURFACE_FILTERS} active={surfaceFilter} onChange={setSurfaceFilter} />
+          </div>
+        </div>
+
+        {/* Guide list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {filtered.length === 0 ? (
+            <div style={{ padding: "32px 0", textAlign: "center" }}>
+              <span style={{ fontSize: 12, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>No guides match these filters</span>
+            </div>
+          ) : filtered.map(skill => {
+            const dir = skill.phase ? `${skill.phase}-${T.phases[skill.phase]?.label.toLowerCase()}` : "";
+            const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
+            const surfaceColors = {
+              "chat": { color: "#22C55E", bg: "rgba(34,197,94,0.1)", border: "rgba(34,197,94,0.25)" },
+              "chat + code": { color: "#3B82F6", bg: "rgba(59,130,246,0.1)", border: "rgba(59,130,246,0.25)" },
+              "code + figma mcp": { color: "#F59E0B", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+            };
+            const sc = surfaceColors[skill.surface] || surfaceColors["chat"];
+            const phaseColor = skill.phase ? T.phases[skill.phase]?.color : T.dim;
+
+            return (
+              <div key={skill.file} style={{
+                display: "flex", alignItems: "flex-start", justifyContent: "space-between",
+                padding: "14px 16px", background: T.surface, borderRadius: 8,
+                border: `1px solid ${T.border}`, gap: 16,
+                transition: "border-color 0.15s",
+              }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
+                onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+              >
+                <div style={{ flex: 1 }}>
+                  {/* Top row */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: T.muted }}>{skill.file}</span>
+                    {skill.phase && (
+                      <span style={{
+                        fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+                        letterSpacing: "0.08em", textTransform: "uppercase",
+                        color: phaseColor,
+                        display: "inline-flex", alignItems: "center", gap: 4,
+                      }}>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: phaseColor, display: "inline-block" }} />
+                        {skill.phase} — {T.phases[skill.phase]?.label}
+                      </span>
+                    )}
+                    {!skill.phase && (
+                      <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>Cross-phase</span>
+                    )}
+                    <span style={{
+                      fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+                      letterSpacing: "0.08em", textTransform: "uppercase",
+                      padding: "2px 7px", borderRadius: 3,
+                      background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color,
+                    }}>{sc.color === "#22C55E" ? "Chat" : sc.color === "#3B82F6" ? "Chat + Code" : "Figma MCP"}</span>
+                  </div>
+                  {/* Description */}
+                  <p style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, margin: 0 }}>{skill.desc}</p>
+                </div>
+                {/* Download */}
+                <a href={url} download style={{
+                  flexShrink: 0, padding: "6px 14px", borderRadius: 6,
+                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.06em", textTransform: "uppercase",
+                  background: "transparent", border: `1px solid ${T.border}`,
+                  color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
+                  transition: "border-color 0.15s, color 0.15s",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#3B82F6"; e.currentTarget.style.color = "#3B82F6"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+                >↓ Download</a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   const [mounted, setMounted] = useState(false);
   const [activePath, setActivePath] = useState(null);  // "phase" | "ways" | "deliverable"
   const [activeTool, setActiveTool] = useState(null);
   const [showFigmaGuide, setShowFigmaGuide] = useState(false);
+  const [showChatGuides, setShowChatGuides] = useState(false);
 
   useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
 
   // Figma guide
   if (showFigmaGuide) return <FigmaSetupGuide onBack={() => setShowFigmaGuide(false)} />;
+
+  // Chat Guides overlay
+  if (showChatGuides) return <ChatGuidesOverlay onBack={() => setShowChatGuides(false)} onOpenTool={setActiveTool} />;
 
   // Active tool
   if (activeTool) {
@@ -971,6 +1187,16 @@ export default function App() {
           </span>
         </div>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <button onClick={() => setShowChatGuides(true)} style={{
+            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+            letterSpacing: "0.06em", textTransform: "uppercase",
+            color: T.dim, background: "none", border: "none",
+            cursor: "pointer", transition: "color 0.15s", padding: 0,
+          }}
+            onMouseEnter={e => e.target.style.color = T.muted}
+            onMouseLeave={e => e.target.style.color = T.dim}
+          >Chat Guides</button>
+          <div style={{ width: 1, height: 12, background: T.border }} />
           {[["GitHub", REPO], ["Figma", FIGMA_URL], ["Deck", PPTX_URL]].map(([label, href]) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
               fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
@@ -1005,7 +1231,7 @@ export default function App() {
               <em style={{ fontStyle: "italic", color: T.muted }}>across every phase of product design.</em>
             </h1>
             <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, maxWidth: 480, marginBottom: 0 }}>
-              From research through delivery — skills, tools, and prompts that integrate Claude into how your team already works.
+              From research through delivery — Chat Guides, tools, and prompts that integrate Claude into how your team already works.
             </p>
           </div>
         )}
@@ -1017,6 +1243,72 @@ export default function App() {
         {!activePath && (
           <div style={{ marginBottom: 16 }}>
             <Mono color={T.dim}>How do you want to start?</Mono>
+          </div>
+        )}
+
+        {/* Artifact type explainer strip — always visible on home */}
+        {!activePath && (
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 1, marginBottom: 28,
+            border: `1px solid ${T.border}`, borderRadius: 10, overflow: "hidden",
+          }}>
+            {[
+              {
+                label: "Tools",
+                color: "#22C55E",
+                desc: "Interactive builders that run in the browser. No Claude Chat needed — just open and generate.",
+                cta: "Ways to Work →",
+                action: "ways",
+              },
+              {
+                label: "Prompts",
+                color: "#8B5CF6",
+                desc: "Ready-to-copy briefs that structure your Claude Chat sessions. Paste, fill in your context, run.",
+                cta: "Ways to Work →",
+                action: "ways",
+              },
+              {
+                label: "Chat Guides",
+                color: "#3B82F6",
+                desc: "Attach to any Claude Chat to give Claude full phase context before you start working together.",
+                cta: "Browse Guides →",
+                action: "guides",
+              },
+            ].map((item, i) => (
+              <button
+                key={item.label}
+                onClick={() => item.action === "guides" ? setShowChatGuides(true) : setActivePath("ways")}
+                style={{
+                  background: T.surface, border: "none",
+                  padding: "20px 20px 18px", textAlign: "left",
+                  cursor: "pointer", transition: "background 0.15s",
+                  borderRight: i < 2 ? `1px solid ${T.border}` : "none",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = T.card}
+                onMouseLeave={e => e.currentTarget.style.background = T.surface}
+              >
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  marginBottom: 10,
+                }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: item.color, boxShadow: `0 0 6px ${item.color}` }} />
+                  <span style={{
+                    fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                    letterSpacing: "0.08em", textTransform: "uppercase",
+                    color: item.color,
+                  }}>{item.label}</span>
+                </div>
+                <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, marginBottom: 14 }}>
+                  {item.desc}
+                </p>
+                <span style={{
+                  fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.07em", textTransform: "uppercase",
+                  color: T.dim,
+                }}>{item.cta}</span>
+              </button>
+            ))}
           </div>
         )}
 
