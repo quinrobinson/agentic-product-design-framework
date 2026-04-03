@@ -1012,6 +1012,83 @@ function ToolShell({ tool, onHome }) {
 }
 
 
+// ── Zip download button ───────────────────────────────────────────────────────
+function ZipDownloadBtn({ skills }) {
+  const [status, setStatus] = useState("idle"); // idle | loading | done | error
+
+  async function handleZip() {
+    setStatus("loading");
+    try {
+      // Load JSZip dynamically
+      if (!window.JSZip) {
+        await new Promise((res, rej) => {
+          const s = document.createElement("script");
+          s.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+          s.onload = res; s.onerror = rej;
+          document.head.appendChild(s);
+        });
+      }
+      const zip = new window.JSZip();
+      const folder = zip.folder("agentic-design-framework-skills");
+
+      // Fetch all visible skill files in parallel
+      const results = await Promise.allSettled(
+        skills.map(async skill => {
+          const phaseLabel = skill.phase ? T.phases[skill.phase]?.label?.toLowerCase() : "";
+          const dir = skill.phase ? `${skill.phase}-${phaseLabel}` : "";
+          const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`Failed: ${skill.file}`);
+          const text = await res.text();
+          return { file: skill.file, text };
+        })
+      );
+
+      results.forEach(r => {
+        if (r.status === "fulfilled") {
+          folder.file(r.value.file, r.value.text);
+        }
+      });
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "agentic-design-framework-skills.zip";
+      a.click();
+      URL.revokeObjectURL(url);
+      setStatus("done");
+      setTimeout(() => setStatus("idle"), 2500);
+    } catch (e) {
+      console.error(e);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 2500);
+    }
+  }
+
+  const label = status === "loading" ? "Zipping…"
+    : status === "done" ? "✓ Downloaded"
+    : status === "error" ? "Failed"
+    : `↓ All ${skills.length} as .zip`;
+
+  return (
+    <button onClick={handleZip} disabled={status === "loading"} style={{
+      padding: "5px 12px", borderRadius: 5,
+      fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+      letterSpacing: "0.06em", textTransform: "uppercase",
+      background: "transparent",
+      border: `1px solid ${status === "done" ? "#22C55E" : status === "error" ? "#EF4444" : T.border}`,
+      color: status === "done" ? "#22C55E" : status === "error" ? "#EF4444" : T.muted,
+      cursor: status === "loading" ? "not-allowed" : "pointer",
+      whiteSpace: "nowrap", transition: "all 0.15s",
+      opacity: status === "loading" ? 0.6 : 1,
+    }}
+      onMouseEnter={e => { if (status === "idle") { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}}
+      onMouseLeave={e => { if (status === "idle") { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}}
+    >{label}</button>
+  );
+}
+
 // ── Skills Library Overlay ───────────────────────────────────────────────────
 function SkillsLibraryOverlay({ onBack, onOpenSkill }) {
   const [phaseFilter, setPhaseFilter] = useState("all");
@@ -1098,9 +1175,12 @@ function SkillsLibraryOverlay({ onBack, onOpenSkill }) {
             <span style={{ fontSize: 13, fontWeight: 500, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>Skills Library</span>
           </div>
         </div>
-        <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>
-          {filtered.length} guide{filtered.length !== 1 ? "s" : ""}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>
+            {filtered.length} skill{filtered.length !== 1 ? "s" : ""}
+          </span>
+          <ZipDownloadBtn skills={filtered} />
+        </div>
       </div>
 
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 32px 80px" }}>
@@ -1147,7 +1227,7 @@ function SkillsLibraryOverlay({ onBack, onOpenSkill }) {
           </div>
         </div>
 
-        {/* Guide list */}
+        {/* Skill list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {filtered.length === 0 ? (
             <div style={{ padding: "32px 0", textAlign: "center" }}>
@@ -1202,18 +1282,31 @@ function SkillsLibraryOverlay({ onBack, onOpenSkill }) {
                   {/* Description */}
                   <p style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, margin: 0 }}>{skill.desc}</p>
                 </div>
-                {/* Download */}
-                <a href={url} download style={{
-                  flexShrink: 0, padding: "6px 14px", borderRadius: 6,
-                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "0.06em", textTransform: "uppercase",
-                  background: "transparent", border: `1px solid ${T.border}`,
-                  color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
-                  transition: "border-color 0.15s, color 0.15s",
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#3B82F6"; e.currentTarget.style.color = "#3B82F6"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-                >↓ Download</a>
+                {/* Actions */}
+                <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+                  <button onClick={() => onOpenSkill(skill)} style={{
+                    padding: "5px 12px", borderRadius: 5,
+                    fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    background: "transparent", border: `1px solid ${T.border}`,
+                    color: T.muted, cursor: "pointer", whiteSpace: "nowrap",
+                    transition: "all 0.15s",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+                  >Preview →</button>
+                  <a href={url} download style={{
+                    padding: "5px 10px", borderRadius: 5,
+                    fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    background: "transparent", border: `1px solid ${T.border}`,
+                    color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
+                    transition: "all 0.15s",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+                  >↓</a>
+                </div>
               </div>
             );
           })}
