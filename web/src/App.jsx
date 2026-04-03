@@ -185,18 +185,15 @@ Every HMW must trace to a research finding, not an assumption.`,
 
 // ── Deliverables map ─────────────────────────────────────────────────────────
 const DELIVERABLES = [
-  { name: "Research Brief",       type: "tool",   ref: "research-synthesizer",  label: "Research Synthesizer"        },
-  { name: "Service Blueprint",    type: "tool",   ref: "service-blueprint",     label: "Blueprint Generator"         },
-  { name: "Research Plan",        type: "prompt", ref: "plan-research",         label: "Plan Your Research"          },
-  { name: "Interview Guide",      type: "prompt", ref: "interview-guide",       label: "Build an Interview Guide"    },
+  { name: "Research Brief",       type: "tool",   ref: "research-synthesizer",  label: "Research Synthesizer"         },
+  { name: "Service Blueprint",    type: "tool",   ref: "service-blueprint",     label: "Blueprint Generator"          },
+  { name: "Design Brief",         type: "tool",   ref: "brief",                 label: "AI Brief Generator"           },
+  { name: "Client Deck",          type: "tool",   ref: "deck",                  label: "Client Deck Builder"          },
+  { name: "Design System",        type: "tool",   ref: "design-system",         label: "Design System Builder"        },
+  { name: "Research Plan",        type: "prompt", ref: "plan-research",         label: "Plan Your Research"           },
+  { name: "Interview Guide",      type: "prompt", ref: "interview-guide",       label: "Build an Interview Guide"     },
   { name: "Competitive Analysis", type: "prompt", ref: "competitive-landscape", label: "Map the Competitive Landscape"},
-  { name: "HMW Statements",       type: "prompt", ref: "hmw-statements",        label: "Generate HMW Statements"     },
-  { name: "Design Brief",         type: "tool",   ref: "brief",                 label: "AI Brief Generator"          },
-  { name: "Client Deck",          type: "tool",   ref: "deck",                  label: "Client Deck Builder"         },
-  { name: "Component Specs",      type: "skill",  ref: "design-delivery.md",    label: "design-delivery.md"          },
-  { name: "Design System",        type: "tool",   ref: "design-system",         label: "Design System Builder"       },
-  { name: "Concept Directions",   type: "skill",  ref: "concept-generation.md", label: "concept-generation.md"       },
-  { name: "Usability Test Plan",  type: "skill",  ref: "usability-testing.md",  label: "usability-testing.md"        },
+  { name: "HMW Statements",       type: "prompt", ref: "hmw-statements",        label: "Generate HMW Statements"      },
 ];
 
 // ── Phase data ────────────────────────────────────────────────────────────────
@@ -528,6 +525,59 @@ function PhasePath({ onOpenTool, onOpenSkills }) {
 function WaysToWorkPath({ onOpenTool }) {
   const [tab, setTab] = useState("tools");
   const [expandedPrompt, setExpandedPrompt] = useState(null);
+  const [phaseFilter, setPhaseFilter] = useState("all");
+  const [surfaceFilter, setSurfaceFilter] = useState("all");
+
+  const PHASE_FILTERS = [
+    { id: "all", label: "All" },
+    { id: "01",  label: "Discover" },
+    { id: "02",  label: "Define" },
+    { id: "03",  label: "Ideate" },
+    { id: "04",  label: "Prototype" },
+    { id: "05",  label: "Validate" },
+    { id: "06",  label: "Deliver" },
+    { id: "cross", label: "Cross-phase" },
+  ];
+
+  const SURFACE_FILTERS = [
+    { id: "all",           label: "All" },
+    { id: "chat",          label: "Chat" },
+    { id: "chat + code",   label: "Chat + Code" },
+    { id: "code + figma mcp", label: "Figma MCP" },
+  ];
+
+  const filteredSkills = SKILL_FILES.filter(s => {
+    const phaseMatch = phaseFilter === "all"
+      ? true
+      : phaseFilter === "cross"
+      ? s.phase === null
+      : s.phase === phaseFilter;
+    const surfaceMatch = surfaceFilter === "all" ? true : s.surface === surfaceFilter;
+    return phaseMatch && surfaceMatch;
+  });
+
+  function FilterPills({ options, active, onChange }) {
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+        {options.map(opt => {
+          const isActive = active === opt.id;
+          const phaseColor = opt.id !== "all" && opt.id !== "cross" && T.phases[opt.id]
+            ? T.phases[opt.id].color : null;
+          return (
+            <button key={opt.id} onClick={() => onChange(opt.id)} style={{
+              padding: "4px 10px", borderRadius: 20, cursor: "pointer",
+              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.07em", textTransform: "uppercase",
+              border: `1px solid ${isActive ? (phaseColor || "#22C55E") : T.border}`,
+              background: isActive ? `${phaseColor || "#22C55E"}18` : "transparent",
+              color: isActive ? (phaseColor || "#22C55E") : T.dim,
+              transition: "all 0.12s",
+            }}>{opt.label}</button>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -605,7 +655,6 @@ function WaysToWorkPath({ onOpenTool }) {
                   </div>
                   <span style={{ fontSize: 11, color: T.dim, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
                 </button>
-
                 {isOpen && (
                   <div style={{ borderTop: `1px solid ${T.border}`, padding: "16px 18px 18px" }}>
                     <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 14 }}>
@@ -630,34 +679,58 @@ function WaysToWorkPath({ onOpenTool }) {
 
       {/* Skills tab */}
       {tab === "skills" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {SKILL_FILES.map(skill => {
-            const dir = skill.phase ? `${skill.phase}-${T.phases[skill.phase]?.label.toLowerCase()}` : "";
-            const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
-            return (
-              <div key={skill.file} style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "12px 16px", background: T.surface, borderRadius: 8,
-                border: `1px solid ${T.border}`,
-              }}>
-                <div style={{ flex: 1, marginRight: 12 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <Mono color={T.muted} size={11}>{skill.file}</Mono>
-                    <PhaseTag phaseId={skill.phase} small />
-                    <SkillBadge surface={skill.surface} />
-                  </div>
-                  <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
-                </div>
-                <a href={url} download style={{
-                  padding: "5px 12px", borderRadius: 5, flexShrink: 0,
-                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "0.06em", textTransform: "uppercase",
-                  background: "transparent", border: `1px solid ${T.border}`,
-                  color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
-                }}>↓ .md</a>
+        <div>
+          {/* Filters */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Mono color={T.dim} size={10}>Phase</Mono>
+              <FilterPills options={PHASE_FILTERS} active={phaseFilter} onChange={setPhaseFilter} />
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Mono color={T.dim} size={10}>Surface</Mono>
+              <FilterPills options={SURFACE_FILTERS} active={surfaceFilter} onChange={setSurfaceFilter} />
+            </div>
+          </div>
+
+          {/* Result count */}
+          <div style={{ marginBottom: 12 }}>
+            <Mono color={T.dim} size={10}>{filteredSkills.length} skill{filteredSkills.length !== 1 ? "s" : ""}</Mono>
+          </div>
+
+          {/* Skill rows */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {filteredSkills.length === 0 ? (
+              <div style={{ padding: "24px 0", textAlign: "center" }}>
+                <Mono color={T.dim}>No skills match these filters</Mono>
               </div>
-            );
-          })}
+            ) : filteredSkills.map(skill => {
+              const dir = skill.phase ? `${skill.phase}-${T.phases[skill.phase]?.label.toLowerCase()}` : "";
+              const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
+              return (
+                <div key={skill.file} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "12px 16px", background: T.surface, borderRadius: 8,
+                  border: `1px solid ${T.border}`,
+                }}>
+                  <div style={{ flex: 1, marginRight: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <Mono color={T.muted} size={11}>{skill.file}</Mono>
+                      <PhaseTag phaseId={skill.phase} small />
+                      <SkillBadge surface={skill.surface} />
+                    </div>
+                    <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
+                  </div>
+                  <a href={url} download style={{
+                    padding: "5px 12px", borderRadius: 5, flexShrink: 0,
+                    fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    background: "transparent", border: `1px solid ${T.border}`,
+                    color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
+                  }}>↓ .md</a>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
@@ -665,53 +738,153 @@ function WaysToWorkPath({ onOpenTool }) {
 }
 
 // ── Path: Deliverable ─────────────────────────────────────────────────────────
-function DeliverablePath({ onOpenTool, onOpenPrompt }) {
-  const typeColor = { tool: "#22C55E", prompt: "#8B5CF6", skill: "#3B82F6" };
+const DELIVERABLE_GUIDE_PROMPT = `I'm working on a product design project and need help figuring out the right deliverable for my situation.
+
+Please ask me these three questions one at a time — wait for my answer before asking the next:
+
+1. What phase of the project are you in?
+   (Discovery, Definition, Ideation, Prototyping, Validation, or Delivery — or "not sure")
+
+2. Who is the primary audience for what you need to produce?
+   (Client / Stakeholder / Engineering team / Design team / Myself)
+
+3. What decision does this deliverable need to support?
+   (e.g. align the team, get sign-off, guide development, understand users)
+
+Based on my answers, recommend the most appropriate deliverable and tell me:
+- Whether to use a Tool, a Prompt, or a Skill file to produce it
+- The exact name of the tool, prompt, or skill to use
+- One sentence on why this is the right choice for my situation`;
+
+function DeliverablePath({ onOpenTool }) {
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [guideCopied, setGuideCopied] = useState(false);
+
+  const filtered = DELIVERABLES.filter(d =>
+    typeFilter === "all" ? true : d.type === typeFilter
+  );
+
+  const typeColor = { tool: "#22C55E", prompt: "#8B5CF6" };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      {DELIVERABLES.map(d => (
-        <div key={d.name} style={{
-          display: "flex", alignItems: "center", padding: "14px 18px",
-          background: T.surface, borderRadius: 8, border: `1px solid ${T.border}`,
-          gap: 16,
-        }}>
-          <span style={{ fontSize: 13, fontWeight: 500, color: T.text, flex: "0 0 200px" }}>{d.name}</span>
-          <span style={{ color: T.border, flexShrink: 0 }}>→</span>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{
-              fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-              letterSpacing: "0.08em", textTransform: "uppercase",
-              padding: "2px 7px", borderRadius: 3,
-              background: `${typeColor[d.type]}18`,
-              border: `1px solid ${typeColor[d.type]}40`,
-              color: typeColor[d.type], flexShrink: 0,
-            }}>{d.type}</span>
-            <span style={{ fontSize: 12, color: T.muted }}>{d.label}</span>
-          </div>
-          {d.type === "tool" && (
-            <button onClick={() => onOpenTool(d.ref)} style={{
-              padding: "5px 14px", borderRadius: 5, flexShrink: 0,
-              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-              letterSpacing: "0.06em", textTransform: "uppercase",
-              background: "transparent", border: `1px solid ${T.border}`,
-              color: T.muted, cursor: "pointer",
-            }}>Open Tool</button>
-          )}
-          {d.type === "prompt" && (
-            <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy Prompt" />
-          )}
-          {d.type === "skill" && (
-            <a href={`${RAW}/${d.ref}`} download style={{
-              padding: "5px 14px", borderRadius: 5, flexShrink: 0,
-              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-              letterSpacing: "0.06em", textTransform: "uppercase",
-              background: "transparent", border: `1px solid ${T.border}`,
-              color: T.muted, textDecoration: "none",
-            }}>↓ Skill</a>
-          )}
+    <div>
+      {/* Filter pills */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
+        {[
+          { id: "all", label: "All" },
+          { id: "tool", label: "Tool" },
+          { id: "prompt", label: "Prompt" },
+        ].map(f => {
+          const isActive = typeFilter === f.id;
+          const color = f.id === "tool" ? "#22C55E" : f.id === "prompt" ? "#8B5CF6" : null;
+          return (
+            <button key={f.id} onClick={() => setTypeFilter(f.id)} style={{
+              padding: "4px 12px", borderRadius: 20, cursor: "pointer",
+              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.07em", textTransform: "uppercase",
+              border: `1px solid ${isActive ? (color || "#22C55E") : T.border}`,
+              background: isActive ? `${color || "#22C55E"}18` : "transparent",
+              color: isActive ? (color || "#22C55E") : T.dim,
+              transition: "all 0.12s",
+            }}>{f.label}</button>
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Mono color={T.dim} size={10}>{filtered.length} deliverable{filtered.length !== 1 ? "s" : ""}</Mono>
         </div>
-      ))}
+      </div>
+
+      {/* Deliverable rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 16 }}>
+        {filtered.map(d => (
+          <div key={d.name} style={{
+            display: "flex", alignItems: "center", padding: "13px 16px",
+            background: T.surface, borderRadius: 8, border: `1px solid ${T.border}`,
+            gap: 14,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 500, color: T.text, flex: "0 0 190px" }}>{d.name}</span>
+            <span style={{ color: T.border, flexShrink: 0, fontSize: 12 }}>→</span>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{
+                fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.08em", textTransform: "uppercase",
+                padding: "2px 7px", borderRadius: 3,
+                background: `${typeColor[d.type]}18`,
+                border: `1px solid ${typeColor[d.type]}40`,
+                color: typeColor[d.type], flexShrink: 0,
+              }}>{d.type}</span>
+              <span style={{ fontSize: 12, color: T.muted }}>{d.label}</span>
+            </div>
+            {d.type === "tool" && (
+              <button onClick={() => onOpenTool(d.ref)} style={{
+                padding: "5px 14px", borderRadius: 5, flexShrink: 0,
+                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                background: "transparent", border: `1px solid ${T.border}`,
+                color: T.muted, cursor: "pointer",
+              }}>Open Tool</button>
+            )}
+            {d.type === "prompt" && (
+              <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy Prompt" />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Don't see what you need? */}
+      <div style={{
+        border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden",
+      }}>
+        <button
+          onClick={() => setGuideOpen(!guideOpen)}
+          style={{
+            width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "13px 16px", background: "transparent", border: "none",
+            cursor: "pointer", textAlign: "left",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 12, color: T.muted }}>Don't see the deliverable you need?</span>
+          </div>
+          <span style={{
+            fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace",
+            transform: guideOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s",
+          }}>▾</span>
+        </button>
+
+        {guideOpen && (
+          <div style={{ borderTop: `1px solid ${T.border}`, padding: "16px 16px 18px" }}>
+            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, marginBottom: 14 }}>
+              Copy this prompt into Claude Chat. Claude will ask you three questions and recommend the right deliverable, method, and tool for your situation.
+            </p>
+            <pre style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+              color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
+              background: T.card, border: `1px solid ${T.border}`,
+              borderRadius: 6, padding: "14px 16px", margin: "0 0 14px",
+              overflowX: "auto",
+            }}>{DELIVERABLE_GUIDE_PROMPT}</pre>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(DELIVERABLE_GUIDE_PROMPT);
+                setGuideCopied(true);
+                setTimeout(() => setGuideCopied(false), 1800);
+              }}
+              style={{
+                padding: "8px 16px", borderRadius: 6,
+                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
+                cursor: "pointer",
+                border: `1.5px solid ${guideCopied ? "#22C55E" : T.border}`,
+                background: "transparent",
+                color: guideCopied ? "#22C55E" : T.muted,
+                transition: "all 0.15s",
+              }}
+            >{guideCopied ? "✓ Copied" : "Copy Prompt"}</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
