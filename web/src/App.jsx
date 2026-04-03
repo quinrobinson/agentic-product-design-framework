@@ -1257,21 +1257,21 @@ export default function App() {
               id: "phase",
               label: "Start with a Phase",
               color: "#22C55E",
-              desc: "I know where I am in the project — show me tools and guides for that phase.",
+              desc: "I know where I am in the project. Show me tools and guides for that phase.",
               cta: "Choose a phase →",
             },
             {
               id: "ways",
               label: "Ways to Work",
               color: "#8B5CF6",
-              desc: "I know what I need to do right now — show me tools, prompts, and guides by method.",
+              desc: "I know what I need to do. Show me tools, prompts, and guides by method.",
               cta: "Browse methods →",
             },
             {
               id: "deliverable",
               label: "Start with a Deliverable",
               color: "#F59E0B",
-              desc: "I know what I need to hand off — find the fastest path to that output.",
+              desc: "I know what I need to hand off. Find the fastest path to that output.",
               cta: "Find a deliverable →",
             },
           ].map((item, i) => {
@@ -1295,8 +1295,8 @@ export default function App() {
               >
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
                   <div style={{
-                    width: 6, height: 6, borderRadius: "50%", background: item.color,
-                    boxShadow: isActive ? `0 0 8px ${item.color}` : "none",
+                    width: 6, height: 6, borderRadius: "50%", background: "#FFFFFF",
+                    boxShadow: isActive ? "0 0 8px rgba(255,255,255,0.8)" : "0 0 6px rgba(255,255,255,0.3)",
                     transition: "box-shadow 0.15s",
                   }} />
                   <span style={{
