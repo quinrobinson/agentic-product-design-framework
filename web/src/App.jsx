@@ -13,6 +13,8 @@ import ConceptGenerator from "./ConceptGenerator";
 import IdeaClusteringTool from "./IdeaClusteringTool";
 import UXCopyWriter from "./UXCopyWriter";
 import UserFlowMapper from "./UserFlowMapper";
+import ComponentArchitecturePlanner from "./ComponentArchitecturePlanner";
+import ComponentStateSpecifier from "./ComponentStateSpecifier";
 import FindingsSynthesizer from "./FindingsSynthesizer";
 import InsightReportGenerator from "./InsightReportGenerator";
 import ComponentSpecGenerator from "./ComponentSpecGenerator";
@@ -58,6 +60,8 @@ const TOOLS = [
   { id: "idea-clustering",      number: "10", phase: "03", name: "Idea Clustering",             subtitle: "Transform raw concepts into a strategic landscape — clusters, tensions, and recommendations", component: IdeaClusteringTool },
   { id: "ux-copy-writer",       number: "11", phase: "04", name: "UX Copy Writer",              subtitle: "Generate complete interface copy — voice brief, flow copy, error states, and empty states",      component: UXCopyWriter },
   { id: "user-flow-mapper",     number: "12", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper },
+  { id: "component-architecture", number: "13", phase: "04", name: "Component Architecture Planner", subtitle: "Define every component, variant, and token assignment before opening Figma", component: ComponentArchitecturePlanner },
+  { id: "component-state",      number: "14", phase: "04", name: "Component State Specifier",    subtitle: "Document every state, transition, and Figma property for one component at a time", component: ComponentStateSpecifier },
   { id: "findings-synthesizer",  number: "13", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer },
   { id: "insight-report",        number: "14", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator },
   { id: "component-spec",        number: "15", phase: "06", name: "Component Spec Generator",     subtitle: "Generate complete component specs — anatomy, all states, behavior, spacing, and edge cases — ready for developer handoff", component: ComponentSpecGenerator },
@@ -1266,7 +1270,9 @@ const DELIVERABLES = [
   { name: "Concept Set",             type: "tool",   ref: "concept-generator",      label: "Concept Generator"             },
   { name: "Cluster Map",             type: "tool",   ref: "idea-clustering",        label: "Idea Clustering"               },
   { name: "UX Copy",                 type: "tool",   ref: "ux-copy-writer",         label: "UX Copy Writer"                },
-  { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",       label: "User Flow Mapper"              },
+  { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",         label: "User Flow Mapper"                    },
+  { name: "Component Architecture",  type: "tool",   ref: "component-architecture",   label: "Component Architecture Planner"      },
+  { name: "Component State Spec",    type: "tool",   ref: "component-state",          label: "Component State Specifier"           },
   { name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",   label: "Findings Synthesizer"          },
   { name: "Findings Report",         type: "tool",   ref: "insight-report",         label: "Insight Report Generator"      },
   { name: "Component Spec",          type: "tool",   ref: "component-spec",         label: "Component Spec Generator"      },
