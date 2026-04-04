@@ -2142,7 +2142,7 @@ Start by helping me create a component inventory and token architecture plan.`,
 Start by helping me build a responsible AI design scorecard covering transparency, fairness, user control, error recovery, and trust calibration.`,
   },
   {
-    id: 13, type: "ai",
+    id: 13, type: "general",
     title: "Work directly in Figma with Claude",
     mission: "Use Claude Code + Figma MCP to build, annotate, and structure design work directly in your Figma file — without copy-pasting between tools.",
     when: ["You want Claude to build a FigJam board, wireframe frames, or spec annotations directly in your file", "You're working in Ideate, Prototype, or Deliver and want Claude to do the Figma work, not just describe it", "You want to skip the manual step of translating Claude's output into Figma"],
