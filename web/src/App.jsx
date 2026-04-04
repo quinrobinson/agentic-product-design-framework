@@ -1639,7 +1639,7 @@ function PhasePath({ onOpenTool, onOpenSkill }) {
                     <div key={ph.id} style={{ width: 20, height: 2, background: T.phases[ph.id].color, borderRadius: 1 }} />
                   ))}
                 </div>
-                <p style={{ fontSize: 14, fontFamily: "'DM Serif Display', serif", color: T.text, lineHeight: 1.5, marginBottom: 10 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.5, marginBottom: 10 }}>
                   Six phases. Three artifact types. One continuous workflow.
                 </p>
                 <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, marginBottom: 0 }}>
@@ -1670,22 +1670,6 @@ function PhasePath({ onOpenTool, onOpenSkill }) {
               </div>
             </div>
 
-            {/* Phase sequence hint */}
-            <div style={{ marginTop: 28, paddingTop: 20, borderTop: `1px solid ${T.border}` }}>
-              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 12 }}>Phase sequence</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
-                {PHASES.map((ph, i) => (
-                  <div key={ph.id} style={{ display: "flex", alignItems: "center" }}>
-                    <button onClick={() => { setSelected(ph.id); setTab("how"); }}
-                      style={{ fontSize: 11, color: T.phases[ph.id].color, background: "none", border: "none", cursor: "pointer", padding: "3px 0", fontFamily: "'DM Sans', sans-serif", opacity: 0.85, transition: "opacity 0.15s" }}
-                      onMouseEnter={e => e.currentTarget.style.opacity = "1"}
-                      onMouseLeave={e => e.currentTarget.style.opacity = "0.85"}
-                    >{ph.label}</button>
-                    {i < PHASES.length - 1 && <span style={{ fontSize: 10, color: T.dim, margin: "0 8px" }}>→</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         ) : (
           /* ── Phase detail panel ── */
@@ -3022,14 +3006,13 @@ export default function App() {
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
                   <div style={{
                     width: 6, height: 6, borderRadius: "50%",
-                    background: isActive ? item.color : T.dim,
-                    boxShadow: isActive ? `0 0 6px ${item.color}` : "none",
-                    transition: "all 0.15s",
+                    background: isActive ? T.text : T.dim,
+                    transition: "background 0.15s",
                   }} />
                   <span style={{
                     fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
                     letterSpacing: "0.08em", textTransform: "uppercase",
-                    color: isActive ? item.color : T.muted,
+                    color: isActive ? T.text : T.muted,
                     transition: "color 0.15s",
                   }}>{item.label}</span>
                 </div>
@@ -3039,7 +3022,7 @@ export default function App() {
                 <span style={{
                   fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
                   letterSpacing: "0.07em", textTransform: "uppercase",
-                  color: isActive ? item.color : T.dim,
+                  color: isActive ? T.muted : T.dim,
                   transition: "color 0.15s",
                   marginTop: 14, display: "block",
                 }}>{isActive ? "▲ Active" : item.cta}</span>
