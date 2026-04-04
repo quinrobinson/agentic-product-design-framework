@@ -1596,16 +1596,15 @@ function FigmaMCPCallout({ phaseId, onOpenSkill }) {
       border: `1px solid ${T.border}`,
       borderRadius: 8,
     }}>
+      <span style={{
+        fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+        letterSpacing: "0.08em", textTransform: "uppercase",
+        padding: "2px 7px", borderRadius: 3,
+        background: T.card, border: `1px solid ${T.border}`, color: T.muted,
+        display: "inline-block", marginBottom: 8,
+      }}>Figma MCP</span>
       <div className="figma-callout-inner">
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
-          <span style={{
-            fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            padding: "2px 7px", borderRadius: 3, flexShrink: 0,
-            background: T.card, border: `1px solid ${T.border}`, color: T.muted,
-          }}>Figma MCP</span>
-          <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5 }}>{FIGMA_MCP_COPY[phaseId]}</span>
-        </div>
+        <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5, flex: 1 }}>{FIGMA_MCP_COPY[phaseId]}</span>
         <button
           onClick={() => onOpenSkill(figmaSkill)}
           style={{
@@ -3295,6 +3294,7 @@ export default function App() {
           .three-ways-row { flex-direction: column; gap: 8px; }
           .three-ways-badge-wrap { background: none !important; border: none !important; padding: 0 !important; font-size: 10px !important; color: #666 !important; }
           .figma-callout-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+          .figma-callout-inner button { align-self: flex-start; }
           .deliverable-row { flex-wrap: wrap; gap: 10px; }
           .deliverable-label { display: none; }
           .phase-counts { display: none; }
