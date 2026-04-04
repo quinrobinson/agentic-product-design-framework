@@ -3542,7 +3542,7 @@ export default function App() {
                   border: "none",
                   padding: "20px 20px 18px", textAlign: "left",
                   cursor: "pointer", transition: "background 0.15s",
-                  borderBottom: isActive ? `1px solid ${T.borderHover}` : "1px solid transparent",
+                  borderBottom: isActive ? `2px solid ${T.text}` : "2px solid transparent",
                   outline: "none",
                   display: "flex", flexDirection: "column",
                 }}
