@@ -2472,33 +2472,37 @@ function DeliverablePath({ onOpenTool }) {
       <div style={{ border: `1px solid ${T.border}`, borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden", minHeight: 200, marginBottom: 12 }}>
         {!selected ? (
           /* Default state */
-          <div style={{ padding: "32px 32px 36px", display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
-            <div style={{ flex: "1 1 260px", maxWidth: 340 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.5, marginBottom: 10 }}>
-                Know what you need to produce?
-              </p>
-              <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, margin: 0 }}>
-                Select a phase above to see every deliverable available for that stage — with a description of what it produces and a direct link to the tool or prompt that makes it.
-              </p>
-            </div>
-            <div style={{ flex: "1 1 320px" }}>
-              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 12 }}>Deliverables by phase</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
-                {PHASES_ORDER.map(ph => {
-                  const m = PHASE_META[ph];
-                  const count = DELIVERABLES.filter(d => d.phase === ph).length;
-                  return (
-                    <button key={ph} onClick={() => setSelected(ph)} style={{ padding: "8px 10px", borderRadius: 7, border: `1px solid ${T.border}`, background: "transparent", cursor: "pointer", textAlign: "left", transition: "all 0.12s" }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = m.color; e.currentTarget.style.background = m.dim; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.background = "transparent"; }}
-                    >
-                      <div style={{ fontSize: 9, color: m.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 2 }}>{ph}</div>
-                      <div style={{ fontSize: 11, fontWeight: 500, color: T.text, marginBottom: 2 }}>{m.label}</div>
-                      <div style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>{count} deliverable{count !== 1 ? "s" : ""}</div>
-                    </button>
-                  );
-                })}
-              </div>
+          <div style={{ padding: "28px 28px 32px" }}>
+            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 520 }}>
+              Select a phase above to see every deliverable for that stage. Each deliverable is produced by either a Tool or a Prompt.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {[
+                {
+                  type: "tool", color: "#22C55E", dim: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.25)",
+                  badge: "Interactive", headline: "Tools",
+                  desc: "Guided multi-step workflows with real-time AI generation. Walk through structured steps — Claude produces each output as you go. Best when you want a complete, well-structured deliverable without manually writing prompts.",
+                  when: "When you want a full workflow in one session",
+                },
+                {
+                  type: "prompt", color: "#8B5CF6", dim: "rgba(139,92,246,0.08)", border: "rgba(139,92,246,0.25)",
+                  badge: "Copy + Paste", headline: "Prompts",
+                  desc: "Pre-engineered prompts for Claude Chat. Copy, paste your context, and get a targeted output. Best when you need something fast, want to stay in an existing Claude conversation, or need to iterate quickly.",
+                  when: "When you need something fast or want to stay in chat",
+                },
+              ].map(item => (
+                <div key={item.type} style={{ background: item.dim, border: `1px solid ${item.border}`, borderRadius: 8, padding: "16px 18px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: `${item.color}18`, border: `1px solid ${item.color}40`, color: item.color }}>{item.badge}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{item.headline}</span>
+                  </div>
+                  <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 10px" }}>{item.desc}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 10, color: item.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase" }}>Use when</span>
+                    <span style={{ fontSize: 11, color: T.muted }}>{item.when}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ) : (
