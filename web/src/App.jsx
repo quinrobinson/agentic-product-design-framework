@@ -16,6 +16,8 @@ import UXCopyWriter from "./UXCopyWriter";
 import UserFlowMapper from "./UserFlowMapper";
 import FindingsSynthesizer from "./FindingsSynthesizer";
 import InsightReportGenerator from "./InsightReportGenerator";
+import ComponentSpecGenerator from "./ComponentSpecGenerator";
+import DesignQALogger from "./DesignQALogger";
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
 const T = {
@@ -60,6 +62,8 @@ const TOOLS = [
   { id: "user-flow-mapper",     number: "13", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper },
   { id: "findings-synthesizer",  number: "14", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer },
   { id: "insight-report",        number: "15", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator },
+  { id: "component-spec",        number: "16", phase: "06", name: "Component Spec Generator",     subtitle: "Generate complete component specs — anatomy, all states, behavior, spacing, and edge cases — ready for developer handoff", component: ComponentSpecGenerator },
+  { id: "design-qa",             number: "17", phase: "06", name: "Design QA Logger",             subtitle: "Structure QA notes into a severity-rated issue log with launch recommendation and developer sign-off checklist", component: DesignQALogger },
 ];
 
 // ── Skill registry ───────────────────────────────────────────────────────────
@@ -1032,6 +1036,8 @@ const DELIVERABLES = [
   { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",       label: "User Flow Mapper"              },
   { name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",   label: "Findings Synthesizer"          },
   { name: "Findings Report",         type: "tool",   ref: "insight-report",         label: "Insight Report Generator"      },
+  { name: "Component Spec",          type: "tool",   ref: "component-spec",         label: "Component Spec Generator"      },
+  { name: "QA Issue Log",            type: "tool",   ref: "design-qa",              label: "Design QA Logger"              },
 ];
 
 // ── Phase data ────────────────────────────────────────────────────────────────
@@ -1041,7 +1047,7 @@ const PHASES = [
   { id: "03", label: "Ideate",   desc: "Generate concepts, explore visual directions",              skills: 2, tools: 1, prompts: 5 },
   { id: "04", label: "Prototype",desc: "Build working prototypes and run accessibility audits",     skills: 2, tools: 2, prompts: 5 },
   { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             skills: 1, tools: 2, prompts: 5 },
-  { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       skills: 5, tools: 0, prompts: 0 },
+  { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       skills: 5, tools: 2, prompts: 0 },
 ];
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
