@@ -1681,11 +1681,6 @@ function PhasePath({ onOpenTool }) {
 
               {/* Left: What this is */}
               <div style={{ flex: "1 1 280px", maxWidth: 360 }}>
-                <div style={{ display: "flex", gap: 5, marginBottom: 16 }}>
-                  {PHASES.map(ph => (
-                    <div key={ph.id} style={{ width: 20, height: 2, background: T.phases[ph.id].color, borderRadius: 1 }} />
-                  ))}
-                </div>
                 <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.5, marginBottom: 10 }}>
                   Six phases. Three artifact types. One continuous workflow.
                 </p>
@@ -3469,13 +3464,8 @@ export default function App() {
 
         {/* Footer — only on home */}
         {!activePath && (
-          <div style={{ marginTop: 64, paddingTop: 24, borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ marginTop: 64, paddingTop: 24, borderTop: `1px solid ${T.border}` }}>
             <Mono color={T.dim} size={10}>Agentic Product Design Framework</Mono>
-            <div style={{ display: "flex", gap: 4 }}>
-              {Object.values(T.phases).map(p => (
-                <div key={p.label} style={{ width: 24, height: 2, background: p.color, borderRadius: 1 }} />
-              ))}
-            </div>
           </div>
         )}
 
