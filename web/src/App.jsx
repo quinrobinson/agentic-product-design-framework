@@ -1700,7 +1700,7 @@ function PhasePath({ onOpenTool }) {
                 { label: "Prompts", badge: "Copy + Paste", desc: "Phase-specific prompts engineered for Claude Chat. Paste into a conversation and provide your context." },
                 { label: "Skills", badge: "Attach to Claude", desc: "Attach .md files to a Claude project or conversation. Claude follows the methodology automatically." },
               ].map(item => (
-                <div key={item.label} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
+                <div key={item.label} style={{ border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
                   <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, marginBottom: 6 }}>{item.badge}</div>
                   <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 4 }}>{item.label}</div>
                   <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55 }}>{item.desc}</div>
@@ -2472,7 +2472,7 @@ function DeliverablePath({ onOpenTool }) {
                   when: "When you need something fast or want to stay in chat",
                 },
               ].map(item => (
-                <div key={item.headline} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
+                <div key={item.headline} style={{ border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
                   <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, marginBottom: 6 }}>{item.badge}</div>
                   <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 4 }}>{item.headline}</div>
                   <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55, marginBottom: 6 }}>{item.desc}</div>
