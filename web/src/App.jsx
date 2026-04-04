@@ -1257,29 +1257,34 @@ Touch targets:
 
 // ── Deliverables map ─────────────────────────────────────────────────────────
 const DELIVERABLES = [
-  { name: "Research Brief",       type: "tool",   ref: "research-synthesizer",  label: "Research Synthesizer"         },
-  { name: "Service Blueprint",    type: "tool",   ref: "service-blueprint",     label: "Blueprint Generator"          },
-  { name: "Design Brief",         type: "tool",   ref: "brief",                 label: "AI Brief Generator"           },
-  { name: "Client Deck",          type: "tool",   ref: "deck",                  label: "Client Deck Builder"          },
-  { name: "Design System",        type: "tool",   ref: "design-system",         label: "Design System Builder"        },
-  { name: "Research Plan",        type: "prompt", ref: "plan-research",         label: "Plan Your Research"           },
-  { name: "Interview Guide",      type: "prompt", ref: "interview-guide",       label: "Build an Interview Guide"     },
-  { name: "Competitive Analysis", type: "prompt", ref: "competitive-landscape", label: "Map the Competitive Landscape"},
-  { name: "HMW Statements",       type: "prompt", ref: "hmw-statements",        label: "Generate HMW Statements"      },
-  { name: "Competitive Analysis",  type: "tool",   ref: "competitive-snapshot",   label: "Competitive Snapshot Builder"  },
-  { name: "Problem Statement",       type: "tool",   ref: "problem-framing",        label: "Problem Framing"               },
-  { name: "Journey Map",             type: "tool",   ref: "journey-mapping",        label: "Journey Mapping"               },
-  { name: "Concept Set",             type: "tool",   ref: "concept-generator",      label: "Concept Generator"             },
-  { name: "Cluster Map",             type: "tool",   ref: "idea-clustering",        label: "Idea Clustering"               },
-  { name: "UX Copy",                 type: "tool",   ref: "ux-copy-writer",         label: "UX Copy Writer"                },
-  { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",         label: "User Flow Mapper"                    },
-  { name: "Component Architecture",  type: "tool",   ref: "component-architecture",   label: "Component Architecture Planner"      },
-  { name: "Component State Spec",    type: "tool",   ref: "component-state",          label: "Component State Specifier"           },
-  { name: "Prototype Handoff",       type: "tool",   ref: "proto-handoff",            label: "Prototype Handoff Generator"         },
-  { name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",   label: "Findings Synthesizer"          },
-  { name: "Findings Report",         type: "tool",   ref: "insight-report",         label: "Insight Report Generator"      },
-  { name: "Component Spec",          type: "tool",   ref: "component-spec",         label: "Component Spec Generator"      },
-  { name: "QA Issue Log",            type: "tool",   ref: "design-qa",              label: "Design QA Logger"              },
+  // Discover
+  { phase: "01", name: "Research Brief",          type: "tool",   ref: "research-synthesizer",    label: "Research Synthesizer",           desc: "Turns raw interview notes and surveys into a structured brief with themes, pain points, and unmet needs.", output: "Shareable research brief" },
+  { phase: "01", name: "Service Blueprint",       type: "tool",   ref: "service-blueprint",       label: "Service Blueprint Generator",    desc: "Maps the full experience across five swim lanes — exposing backstage failures invisible in a journey map.", output: "Current and/or future-state blueprint" },
+  { phase: "01", name: "Competitive Analysis",    type: "tool",   ref: "competitive-snapshot",    label: "Competitive Snapshot Builder",   desc: "Audits competitors one by one using real web search, then synthesizes the landscape with differentiation opportunities.", output: "Competitive landscape + opportunity map" },
+  { phase: "01", name: "Research Plan",           type: "prompt", ref: "plan-research",           label: "Plan Your Research",             desc: "Generates a complete research plan from a project brief — method recommendation, screener, timeline, and success criteria.", output: "Research plan ready to execute" },
+  { phase: "01", name: "Interview Guide",         type: "prompt", ref: "interview-guide",         label: "Build an Interview Guide",       desc: "Writes a full discussion guide with warm-up, core questions, probes, and an observer notes template.", output: "Discussion guide + observer template" },
+  { phase: "01", name: "HMW Statements",          type: "prompt", ref: "hmw-statements",          label: "Generate HMW Statements",        desc: "Converts research findings into ranked How Might We statements across five angles — ready to brief ideation.", output: "Prioritised HMW statement set" },
+  // Define
+  { phase: "02", name: "Problem Statement",       type: "tool",   ref: "problem-framing",         label: "Problem Framing",                desc: "Generates three framings (HMW / JTBD / User+Need+Insight), pressure-tests each, and recommends the strongest.", output: "Chosen, tested problem statement" },
+  { phase: "02", name: "Journey Map",             type: "tool",   ref: "journey-mapping",         label: "Journey Mapping",                desc: "Produces a six-lane research-grounded journey map — actions, thoughts, emotions, pain points, workarounds, opportunities.", output: "Journey map with critical moments flagged" },
+  // Ideate
+  { phase: "03", name: "Concept Set",             type: "tool",   ref: "concept-generator",       label: "Concept Generator",              desc: "Generates concepts across five thinking angles including First Principles, Analogous, and Worst Idea First — breaking out of obvious directions.", output: "Named concept cards with strengths and risks" },
+  { phase: "03", name: "Cluster Map",             type: "tool",   ref: "idea-clustering",         label: "Idea Clustering",                desc: "Groups a raw concept set by underlying strategic mechanism — not surface similarity — and maps tensions and gaps.", output: "Strategic landscape with recommended directions" },
+  { phase: "03", name: "Design System",           type: "tool",   ref: "design-system",           label: "Design System Builder",          desc: "Live token editor with presets and component previews. Set brand colors, type, and spacing — export CSS ready to drop into Figma.", output: "CSS tokens + client delivery checklist" },
+  // Prototype
+  { phase: "04", name: "UX Copy",                 type: "tool",   ref: "ux-copy-writer",          label: "UX Copy Writer",                 desc: "Locks voice and tone first, then writes all flow copy, error states, empty states, and confirmations — grounded in the brief.", output: "Complete copy document for prototyping" },
+  { phase: "04", name: "User Flow",               type: "tool",   ref: "user-flow-mapper",        label: "User Flow Mapper",               desc: "Maps the happy path, every branch, and every error state — producing a screen inventory and scoped prototype brief.", output: "Screen inventory + prototype brief" },
+  { phase: "04", name: "Component Architecture",  type: "tool",   ref: "component-architecture",  label: "Component Architecture Planner", desc: "Takes your screen inventory and identifies every component, defines the variant matrix, and assigns design tokens before Figma opens.", output: "Ordered build list + token assignments" },
+  { phase: "04", name: "Component State Spec",    type: "tool",   ref: "component-state",         label: "Component State Specifier",      desc: "Documents every state for one component — triggers, token deltas, transition timing, and Figma property setup.", output: "State spec + Figma property configuration" },
+  { phase: "04", name: "Prototype Handoff",       type: "tool",   ref: "proto-handoff",           label: "Prototype Handoff Generator",    desc: "Documents decisions, surfaces gaps testers need to know about, ranks hypotheses by risk, and generates a Findings Synthesizer handoff block.", output: "Validate handoff block + ranked hypotheses" },
+  // Validate
+  { phase: "05", name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",    label: "Findings Synthesizer",           desc: "Structures raw session notes, synthesizes patterns across participants, rates severity, and produces a Go/No-Go decision.", output: "Severity-rated issue list + Go/No-Go" },
+  { phase: "05", name: "Findings Report",         type: "tool",   ref: "insight-report",          label: "Insight Report Generator",       desc: "Generates audience-specific versions of findings — engineering, executive, design team — plus an iteration brief for the next cycle.", output: "Three stakeholder reports + iteration brief" },
+  // Deliver
+  { phase: "06", name: "Design Brief",            type: "tool",   ref: "brief",                   label: "AI Brief Generator",             desc: "Answers a few questions about your project and generates a structured brief with problem statement, phase roadmap, and a first Claude prompt.", output: "Project brief + ready-to-paste first prompt" },
+  { phase: "06", name: "Client Deck",             type: "tool",   ref: "deck",                    label: "Client Deck Builder",            desc: "Identifies the right deck type for your situation, then writes slide-by-slide structure with speaker notes and opening hook.", output: "Slide structure + speaker notes" },
+  { phase: "06", name: "Component Spec",          type: "tool",   ref: "component-spec",          label: "Component Spec Generator",       desc: "Documents component anatomy, all interactive states, behavior, spacing, edge cases — complete enough for a developer to build without questions.", output: "Full component spec document" },
+  { phase: "06", name: "QA Issue Log",            type: "tool",   ref: "design-qa",               label: "Design QA Logger",               desc: "Structures implementation review notes into a P0–P3 severity-rated issue log with an explicit launch recommendation.", output: "QA report + launch sign-off decision" },
 ];
 
 // ── Phase data ────────────────────────────────────────────────────────────────
@@ -2406,99 +2411,162 @@ Based on my answers, recommend the most appropriate deliverable and tell me:
 - One sentence on why this is the right choice for my situation`;
 
 function DeliverablePath({ onOpenTool }) {
+  const PHASE_META = {
+    "01": { label: "Discover",   color: "#22C55E", dim: "rgba(34,197,94,0.12)",  border: "rgba(34,197,94,0.25)"  },
+    "02": { label: "Define",     color: "#8B5CF6", dim: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.25)" },
+    "03": { label: "Ideate",     color: "#F59E0B", dim: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.25)" },
+    "04": { label: "Prototype",  color: "#3B82F6", dim: "rgba(59,130,246,0.12)", border: "rgba(59,130,246,0.25)" },
+    "05": { label: "Validate",   color: "#EF4444", dim: "rgba(239,68,68,0.12)",  border: "rgba(239,68,68,0.25)"  },
+    "06": { label: "Deliver",    color: "#14B8A6", dim: "rgba(20,184,166,0.12)", border: "rgba(20,184,166,0.25)" },
+  };
+  const PHASES_ORDER = ["01","02","03","04","05","06"];
+
   const [typeFilter, setTypeFilter] = useState("all");
-  const [guideOpen, setGuideOpen] = useState(false);
+  const [openPhases, setOpenPhases] = useState({});
   const [guideCopied, setGuideCopied] = useState(false);
+
+  function togglePhase(ph) {
+    setOpenPhases(prev => ({ ...prev, [ph]: !prev[ph] }));
+  }
+
+  const typeColor = { tool: "#22C55E", prompt: "#8B5CF6" };
 
   const filtered = DELIVERABLES.filter(d =>
     typeFilter === "all" ? true : d.type === typeFilter
   );
 
-  const typeColor = { tool: "#22C55E", prompt: "#8B5CF6" };
+  const byPhase = PHASES_ORDER.map(ph => ({
+    ph,
+    items: filtered.filter(d => d.phase === ph),
+  })).filter(g => g.items.length > 0);
 
   return (
     <div>
-      {/* Filter pills */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
+      {/* Type filter */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
         {[
           { id: "all", label: "All" },
           { id: "tool", label: "Tool" },
           { id: "prompt", label: "Prompt" },
         ].map(f => {
           const isActive = typeFilter === f.id;
+          const accent = f.id === "tool" ? typeColor.tool : f.id === "prompt" ? typeColor.prompt : null;
           return (
             <button key={f.id} onClick={() => setTypeFilter(f.id)} style={{
-              padding: "4px 12px", borderRadius: 20, cursor: "pointer",
+              padding: "4px 14px", borderRadius: 20, cursor: "pointer",
               fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: "0.07em", textTransform: "uppercase",
-              border: `1px solid ${isActive ? T.borderHover : T.border}`,
-              background: isActive ? T.card : "transparent",
-              color: isActive ? T.text : T.dim,
+              border: `1px solid ${isActive ? (accent || T.borderHover) : T.border}`,
+              background: isActive ? `${accent || "#fff"}18` : "transparent",
+              color: isActive ? (accent || T.text) : T.dim,
               transition: "all 0.12s",
             }}>{f.label}</button>
           );
         })}
-        <div style={{ marginLeft: "auto" }}>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
           <Mono color={T.dim} size={10}>{filtered.length} deliverable{filtered.length !== 1 ? "s" : ""}</Mono>
         </div>
       </div>
 
-      {/* Deliverable rows */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 16 }}>
-        {filtered.map(d => (
-          <div key={d.name} className="deliverable-row" style={{
-            background: T.surface, borderRadius: 8, border: `1px solid ${T.border}`,
-          }}>
-            <span style={{ fontSize: 13, fontWeight: 500, color: T.text, flex: "1 1 140px", minWidth: 0 }}>{d.name}</span>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-              <span style={{
-                fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "0.08em", textTransform: "uppercase",
-                padding: "2px 7px", borderRadius: 3,
-                background: `${typeColor[d.type]}18`,
-                border: `1px solid ${typeColor[d.type]}40`,
-                color: typeColor[d.type], flexShrink: 0,
-              }}>{d.type}</span>
-              <span className="deliverable-label" style={{ fontSize: 12, color: T.muted }}>{d.label}</span>
+      {/* Phase groups */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
+        {byPhase.map(({ ph, items }) => {
+          const meta = PHASE_META[ph];
+          const isOpen = !!openPhases[ph];
+          return (
+            <div key={ph} style={{ border: `1px solid ${isOpen ? meta.border : T.border}`, borderRadius: 10, overflow: "hidden", transition: "border-color 0.15s" }}>
+              {/* Phase header — clickable */}
+              <button onClick={() => togglePhase(ph)} style={{
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "11px 14px", background: isOpen ? meta.dim : "transparent",
+                border: "none", cursor: "pointer", textAlign: "left", transition: "background 0.15s",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{
+                    fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em",
+                    textTransform: "uppercase", padding: "2px 7px", borderRadius: 3,
+                    background: meta.dim, border: `1px solid ${meta.border}`, color: meta.color,
+                  }}>{ph}</span>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: isOpen ? meta.color : T.text }}>{meta.label}</span>
+                  <span style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>
+                    {items.length} deliverable{items.length !== 1 ? "s" : ""}
+                  </span>
+                </div>
+                <span style={{ fontSize: 10, color: T.dim, transition: "transform 0.2s", display: "inline-block", transform: isOpen ? "rotate(180deg)" : "none" }}>▾</span>
+              </button>
+
+              {/* Cards grid — shown when open */}
+              {isOpen && (
+                <div style={{ padding: "12px 12px 14px", borderTop: `1px solid ${T.border}`, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
+                  {items.map(d => (
+                    <div key={d.ref} style={{
+                      background: T.surface, border: `1px solid ${T.border}`, borderRadius: 8,
+                      padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
+                      transition: "border-color 0.12s",
+                    }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+                    >
+                      {/* Card header */}
+                      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{d.name}</span>
+                        <span style={{
+                          fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+                          letterSpacing: "0.08em", textTransform: "uppercase",
+                          padding: "2px 7px", borderRadius: 3, flexShrink: 0,
+                          background: `${typeColor[d.type]}18`,
+                          border: `1px solid ${typeColor[d.type]}40`,
+                          color: typeColor[d.type],
+                        }}>{d.type}</span>
+                      </div>
+
+                      {/* Description */}
+                      <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0 }}>{d.desc}</p>
+
+                      {/* Output pill */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>Output</span>
+                        <span style={{ fontSize: 11, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "2px 9px" }}>{d.output}</span>
+                      </div>
+
+                      {/* Tool label + action */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
+                        <span style={{ fontSize: 11, color: T.dim }}>{d.label}</span>
+                        {d.type === "tool" && (
+                          <button onClick={() => onOpenTool(d.ref)} style={{
+                            padding: "5px 14px", borderRadius: 5, flexShrink: 0,
+                            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                            letterSpacing: "0.06em", textTransform: "uppercase",
+                            background: "transparent", border: `1px solid ${meta.color}60`,
+                            color: meta.color, cursor: "pointer", transition: "all 0.12s",
+                          }}
+                            onMouseEnter={e => { e.currentTarget.style.background = meta.dim; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                          >Open tool</button>
+                        )}
+                        {d.type === "prompt" && (
+                          <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy prompt" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            {d.type === "tool" && (
-              <button onClick={() => onOpenTool(d.ref)} style={{
-                padding: "5px 14px", borderRadius: 5, flexShrink: 0,
-                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "0.06em", textTransform: "uppercase",
-                background: "transparent", border: `1px solid ${T.border}`,
-                color: T.muted, cursor: "pointer",
-              }}>Open Tool</button>
-            )}
-            {d.type === "prompt" && (
-              <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy Prompt" />
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Don't see what you need? */}
-      <div style={{
-        border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden",
-      }}>
-        <button
-          onClick={() => setGuideOpen(!guideOpen)}
-          style={{
-            width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "13px 16px", background: "transparent", border: "none",
-            cursor: "pointer", textAlign: "left",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: 12, color: T.muted }}>Don't see the deliverable you need?</span>
-          </div>
-          <span style={{
-            fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace",
-            transform: guideOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s",
-          }}>▾</span>
+      {/* Don't see what you need */}
+      <div style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden" }}>
+        <button onClick={() => setOpenPhases(prev => ({ ...prev, _guide: !prev._guide }))} style={{
+          width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "13px 16px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left",
+        }}>
+          <span style={{ fontSize: 12, color: T.muted }}>Don't see the deliverable you need?</span>
+          <span style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace", display: "inline-block", transform: openPhases._guide ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
         </button>
-
-        {guideOpen && (
+        {openPhases._guide && (
           <div style={{ borderTop: `1px solid ${T.border}`, padding: "16px 16px 18px" }}>
             <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, marginBottom: 14 }}>
               Copy this prompt into Claude Chat. Claude will ask you three questions and recommend the right deliverable, method, and tool for your situation.
@@ -2507,32 +2575,22 @@ function DeliverablePath({ onOpenTool }) {
               fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
               color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
               background: T.card, border: `1px solid ${T.border}`,
-              borderRadius: 6, padding: "14px 16px", margin: "0 0 14px",
-              overflowX: "auto",
+              borderRadius: 6, padding: "14px 16px", margin: "0 0 14px", overflowX: "auto",
             }}>{DELIVERABLE_GUIDE_PROMPT}</pre>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(DELIVERABLE_GUIDE_PROMPT);
-                setGuideCopied(true);
-                setTimeout(() => setGuideCopied(false), 1800);
-              }}
-              style={{
-                padding: "8px 16px", borderRadius: 6,
-                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
-                cursor: "pointer",
-                border: `1.5px solid ${guideCopied ? "#22C55E" : T.border}`,
-                background: "transparent",
-                color: guideCopied ? "#22C55E" : T.muted,
-                transition: "all 0.15s",
-              }}
-            >{guideCopied ? "✓ Copied" : "Copy Prompt"}</button>
+            <button onClick={() => { navigator.clipboard.writeText(DELIVERABLE_GUIDE_PROMPT); setGuideCopied(true); setTimeout(() => setGuideCopied(false), 1800); }} style={{
+              padding: "8px 16px", borderRadius: 6, fontSize: 11,
+              fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em",
+              textTransform: "uppercase", fontWeight: 600, cursor: "pointer",
+              border: `1.5px solid ${guideCopied ? "#22C55E" : T.border}`,
+              background: "transparent", color: guideCopied ? "#22C55E" : T.muted, transition: "all 0.15s",
+            }}>{guideCopied ? "✓ Copied" : "Copy Prompt"}</button>
           </div>
         )}
       </div>
     </div>
   );
 }
+
 
 // ── Tool shell ────────────────────────────────────────────────────────────────
 function ToolShell({ tool, onHome }) {
