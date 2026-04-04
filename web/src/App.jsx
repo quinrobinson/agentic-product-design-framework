@@ -1690,7 +1690,7 @@ function PhasePath({ onOpenTool }) {
       <div style={{ overflow: "hidden", minHeight: 280 }}>
         {!selected ? (
           /* ── Default: How to Use ── */
-          <div style={{ padding: "28px 32px 32px" }}>
+          <div style={{ padding: "28px 0 32px" }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1, marginBottom: 6, whiteSpace: "nowrap" }}>Six phases. Three artifact types. One continuous workflow.</p>
             <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 20px" }}>Each phase produces artifacts that feed the next. Select any phase above to see its tools, skills, prompts, and how to use it.</p>
             <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Three ways to work with Claude</div>
@@ -1710,7 +1710,7 @@ function PhasePath({ onOpenTool }) {
           </div>
         ) : (
           /* ── Phase detail panel ── */
-          <div style={{ padding: "24px 28px 32px" }}>
+          <div style={{ padding: "24px 0 32px" }}>
 
             {/* Phase header */}
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
@@ -2455,7 +2455,7 @@ function DeliverablePath({ onOpenTool }) {
       <div style={{ overflow: "hidden", minHeight: 200, marginBottom: 12 }}>
         {!selected ? (
           /* Default state */
-          <div style={{ padding: "28px 28px 32px" }}>
+          <div style={{ padding: "28px 0 32px" }}>
             <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 16px", maxWidth: 520 }}>
               Select a phase above to see every deliverable for that stage. Each deliverable is produced by either a Tool or a Prompt.
             </p>
@@ -2483,7 +2483,7 @@ function DeliverablePath({ onOpenTool }) {
           </div>
         ) : (
           /* Phase deliverable cards */
-          <div style={{ padding: "20px 20px 24px" }}>
+          <div style={{ padding: "20px 0 24px" }}>
             {/* Phase header + type filter inline */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -2913,13 +2913,13 @@ function SkillsLibraryOverlay({ onBack }) {
         {/* Phase detail panel */}
         <div style={{ overflow: "hidden", marginBottom: 20 }}>
           {!selected ? (
-            <div style={{ padding: "28px 24px 32px" }}>
+            <div style={{ padding: "28px 0 32px" }}>
               <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, margin: 0, maxWidth: 520 }}>
                 Select a phase above to browse skill files for that stage. Skill files are downloaded and attached to Claude Chat — they give Claude the methodology, templates, and quality standards for that phase automatically.
               </p>
             </div>
           ) : (
-            <div style={{ padding: "20px 20px 24px" }}>
+            <div style={{ padding: "20px 0 24px" }}>
               {/* Phase header + surface filter */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
