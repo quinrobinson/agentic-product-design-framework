@@ -1690,40 +1690,23 @@ function PhasePath({ onOpenTool }) {
       <div style={{ overflow: "hidden", minHeight: 280 }}>
         {!selected ? (
           /* ── Default: How to Use ── */
-          <div style={{ padding: "36px 40px 40px" }}>
-            <div style={{ display: "flex", gap: 48, flexWrap: "wrap" }}>
-
-              {/* Left: What this is */}
-              <div style={{ flex: "1 1 280px", maxWidth: 360 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.5, marginBottom: 10 }}>
-                  Six phases. Three artifact types. One continuous workflow.
-                </p>
-                <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, marginBottom: 0 }}>
-                  Each phase produces artifacts that feed the next. Select any phase above to see its tools, skills, prompts, and how to use it.
-                </p>
-              </div>
-
-              {/* Right: Three artifact types */}
-              <div style={{ flex: "1 1 400px" }}>
-                <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 14 }}>Three ways to work with Claude</div>
-                <div className="ways-explainer-grid">
-                  {[
-                    { label: "Tools", badge: "Interactive", desc: "Guided multi-step tools with real-time AI generation. Run a complete workflow in one session." },
-                    { label: "Prompts", badge: "Copy + Paste", desc: "Phase-specific prompts engineered for Claude Chat. Paste into a conversation and provide your context." },
-                    { label: "Skills", badge: "Attach to Claude", desc: "Attach .md files to a Claude project or conversation. Claude follows the methodology automatically." },
-                  ].map(item => (
-                    <div key={item.label} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                      <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, minWidth: 72, paddingTop: 2, flexShrink: 0 }}>{item.badge}</span>
-                      <div>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 2 }}>{item.label}</div>
-                        <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55 }}>{item.desc}</div>
-                      </div>
-                    </div>
-                  ))}
+          <div style={{ padding: "28px 32px 32px" }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1, marginBottom: 6, whiteSpace: "nowrap" }}>Six phases. Three artifact types. One continuous workflow.</p>
+            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 20px" }}>Each phase produces artifacts that feed the next. Select any phase above to see its tools, skills, prompts, and how to use it.</p>
+            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Three ways to work with Claude</div>
+            <div className="ways-explainer-grid">
+              {[
+                { label: "Tools", badge: "Interactive", desc: "Guided multi-step tools with real-time AI generation. Run a complete workflow in one session." },
+                { label: "Prompts", badge: "Copy + Paste", desc: "Phase-specific prompts engineered for Claude Chat. Paste into a conversation and provide your context." },
+                { label: "Skills", badge: "Attach to Claude", desc: "Attach .md files to a Claude project or conversation. Claude follows the methodology automatically." },
+              ].map(item => (
+                <div key={item.label} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
+                  <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, marginBottom: 6 }}>{item.badge}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55 }}>{item.desc}</div>
                 </div>
-              </div>
+              ))}
             </div>
-
           </div>
         ) : (
           /* ── Phase detail panel ── */
@@ -2473,29 +2456,27 @@ function DeliverablePath({ onOpenTool }) {
         {!selected ? (
           /* Default state */
           <div style={{ padding: "28px 28px 32px" }}>
-            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 520 }}>
+            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 16px", maxWidth: 520 }}>
               Select a phase above to see every deliverable for that stage. Each deliverable is produced by either a Tool or a Prompt.
             </p>
-            <div className="ways-explainer-grid">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {[
                 {
                   badge: "Interactive", headline: "Tools",
-                  desc: "Guided multi-step workflows with real-time AI generation. Walk through structured steps — Claude produces each output as you go. Best when you want a complete, well-structured deliverable without manually writing prompts.",
+                  desc: "Guided multi-step workflows with real-time AI generation. Walk through structured steps — Claude produces each output as you go.",
                   when: "When you want a full workflow in one session",
                 },
                 {
                   badge: "Copy + Paste", headline: "Prompts",
-                  desc: "Pre-engineered prompts for Claude Chat. Copy, paste your context, and get a targeted output. Best when you need something fast, want to stay in an existing Claude conversation, or need to iterate quickly.",
+                  desc: "Pre-engineered prompts for Claude Chat. Copy, paste your context, and get a targeted output. Best when you need something fast or want to stay in an existing Claude conversation.",
                   when: "When you need something fast or want to stay in chat",
                 },
               ].map(item => (
-                <div key={item.headline} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                  <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, minWidth: 72, paddingTop: 2, flexShrink: 0 }}>{item.badge}</span>
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 2 }}>{item.headline}</div>
-                    <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55, marginBottom: 3 }}>{item.desc}</div>
-                    <div style={{ fontSize: 11, color: T.dim }}>{item.when}</div>
-                  </div>
+                <div key={item.headline} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
+                  <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, marginBottom: 6 }}>{item.badge}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginBottom: 4 }}>{item.headline}</div>
+                  <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.55, marginBottom: 6 }}>{item.desc}</div>
+                  <div style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}>{item.when}</div>
                 </div>
               ))}
             </div>
