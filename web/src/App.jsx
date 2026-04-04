@@ -14,6 +14,8 @@ import ConceptGenerator from "./ConceptGenerator";
 import IdeaClusteringTool from "./IdeaClusteringTool";
 import UXCopyWriter from "./UXCopyWriter";
 import UserFlowMapper from "./UserFlowMapper";
+import FindingsSynthesizer from "./FindingsSynthesizer";
+import InsightReportGenerator from "./InsightReportGenerator";
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
 const T = {
@@ -56,6 +58,8 @@ const TOOLS = [
   { id: "idea-clustering",      number: "11", phase: "03", name: "Idea Clustering",             subtitle: "Transform raw concepts into a strategic landscape — clusters, tensions, and recommendations", component: IdeaClusteringTool },
   { id: "ux-copy-writer",       number: "12", phase: "04", name: "UX Copy Writer",              subtitle: "Generate complete interface copy — voice brief, flow copy, error states, and empty states",      component: UXCopyWriter },
   { id: "user-flow-mapper",     number: "13", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper },
+  { id: "findings-synthesizer",  number: "14", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer },
+  { id: "insight-report",        number: "15", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator },
 ];
 
 // ── Skill registry ───────────────────────────────────────────────────────────
@@ -782,6 +786,8 @@ const DELIVERABLES = [
   { name: "Cluster Map",             type: "tool",   ref: "idea-clustering",        label: "Idea Clustering"               },
   { name: "UX Copy",                 type: "tool",   ref: "ux-copy-writer",         label: "UX Copy Writer"                },
   { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",       label: "User Flow Mapper"              },
+  { name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",   label: "Findings Synthesizer"          },
+  { name: "Findings Report",         type: "tool",   ref: "insight-report",         label: "Insight Report Generator"      },
 ];
 
 // ── Phase data ────────────────────────────────────────────────────────────────
@@ -790,7 +796,7 @@ const PHASES = [
   { id: "02", label: "Define",   desc: "Synthesize findings into a focused problem statement",      skills: 1, tools: 1, prompts: 0 },
   { id: "03", label: "Ideate",   desc: "Generate concepts, explore visual directions",              skills: 2, tools: 1, prompts: 5 },
   { id: "04", label: "Prototype",desc: "Build working prototypes and run accessibility audits",     skills: 2, tools: 2, prompts: 5 },
-  { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             skills: 1, tools: 0, prompts: 0 },
+  { id: "05", label: "Validate", desc: "Test with users, synthesize findings, iterate",             skills: 1, tools: 2, prompts: 0 },
   { id: "06", label: "Deliver",  desc: "Hand off specs, documentation, and design decisions",       skills: 2, tools: 0, prompts: 0 },
 ];
 
