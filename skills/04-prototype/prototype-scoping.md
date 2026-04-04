@@ -1,243 +1,222 @@
 ---
 name: prototype-scoping
 phase: 04 — Prototype
-description: Define the minimum prototype needed to validate the riskiest assumption — what to include, what to defer, what fidelity is appropriate, and what questions the prototype must answer. Use before any wireframing begins to prevent over-building. The most skipped and most expensive-when-skipped step in the Prototype phase. Depends on outputs from concept-critique.md and storyboarding.md.
+description: Define exactly what to build — and what to leave out — before prototyping begins. Use to translate a selected concept and validated user flow into a precise prototype brief: which screens, which paths, which fidelity, and which questions it must answer. The most skipped and most expensive-when-skipped step in the Prototype phase. Depends on outputs from concept-critique.md, storyboarding.md, and user-flow-mapping.md. Outputs feed directly into wireframing.
 ai_leverage: high
 claude_surface: chat
 ---
 
 # Prototype Scoping
 
-Define the minimum representation of a concept that answers the questions that matter — before building more than you need.
+Define what the prototype is for before building it — so every design decision serves a specific question.
 
 ## When to Use
 
-- Before starting wireframes on a new feature or concept
-- When the team is unsure what the prototype needs to include
-- When a previous prototype was too polished and took too long to build
-- When stakeholders are expecting a prototype but the team hasn't defined what it should test
-- When there's pressure to prototype everything — and you need a principled way to scope it down
+- Before starting any wireframes — to define exactly what to build
+- When the team is tempted to prototype everything "just to be safe"
+- When stakeholders are asking for a high-fidelity prototype before functional questions are answered
+- When fidelity level is unclear — should this be paper, lo-fi, mid-fi, or hi-fi?
+- When previous prototypes have been too large to test usefully
 
 ---
 
-## The Core Principle
+## The Prototype Scoping Rule
 
-A prototype exists to answer questions. If you don't know what questions it's answering, you'll build too much, at too high a fidelity, and learn too little.
+**A prototype's scope is defined by the questions it must answer — not by the concept it represents.**
 
-**The scoping formula:** Minimum fidelity × Minimum scope = Maximum learning per hour invested.
+The most common prototyping failure: building a prototype that represents the full concept rather than one that answers the specific questions the team doesn't yet know the answer to. The result is a prototype that's too large to test efficiently and too polished to pivot from.
 
-Every hour spent polishing a prototype that could test at lower fidelity is an hour not spent on testing, iteration, or the next concept. The goal is not a beautiful prototype. The goal is an answer.
+The scope question is: **What's the minimum I need to build to answer my highest-risk questions?**
 
 ---
 
 ## What Claude Needs to Start
 
 1. **Selected concept** — name, one-liner, core mechanism
-2. **Top 3 risks from concept critique** — the assumptions most likely to break the concept
-3. **Storyboard** — the scenario and scenes from `storyboarding.md`
-4. **Success criteria** — how you'll know the prototype test succeeded
-5. **Constraints** — timeline, who's building it, what tools are available
+2. **Top 3 risks from critique** — the assumptions most likely to fail (from `concept-critique.md`)
+3. **Storyboard** — the scenario and critical moments (from `storyboarding.md`)
+4. **User flow** — complete screen/state inventory (from `user-flow-mapping.md`)
+5. **Constraints** — timeline, prototyping tool, team size
 
 ---
 
-## Step 1: Identify the Questions
+## Step 1: Translate Risks into Prototype Questions
 
-The prototype scope is determined by its questions — not by the full feature scope.
+The critique's top risks become the prototype's test questions. This is the most important step.
 
 **Claude prompt:**
-> "Based on these concept critique findings and storyboard, identify the 3 questions this prototype must answer.
+> "Translate these concept risks into specific prototype questions.
 >
-> Each question should:
-> - Be answerable through observation — not a survey question
-> - Correspond to a specific assumption from the critique
-> - Have a clear 'yes/no' or 'works/doesn't work' test
+> For each risk, generate:
+> 1. **The prototype question** — what specific user behavior or reaction would confirm or deny this risk?
+> 2. **What to prototype** — the minimum screen or interaction needed to surface this behavior
+> 3. **What success looks like** — what the user does or says that means this risk is resolved
+> 4. **What failure looks like** — what tells us the risk was justified
 >
-> Format each question as:
-> **Question:** [The thing we need to know]
-> **Assumption it tests:** [The belief from the critique this corresponds to]
-> **How we'll observe it:** [What we'll see in testing that answers the question]
-> **What 'yes' looks like:** [Evidence that the assumption is valid]
-> **What 'no' looks like:** [Evidence that the assumption fails]
+> Top risks from critique:
+> [paste top 3 from concept-critique.md]
 >
-> Concept: [paste]
-> Top risks from critique: [paste]
-> Storyboard: [paste]"
+> Storyboard: [paste key scenes and risk moment]
+> User flow: [paste]"
 
 ---
 
-## Step 2: Define the Minimum Scope
+## Step 2: Choose the Right Fidelity
 
-Once the questions are defined, scope the prototype to exactly what's needed to answer them.
+Fidelity should be the minimum needed to answer the prototype questions — nothing more.
+
+**Fidelity decision framework:**
+
+| If you need to test... | Use this fidelity |
+|---|---|
+| Does the flow make sense? Is the sequence logical? | Lo-fi — sketches or rough wireframes |
+| Can users find things and navigate? | Lo-fi to Mid-fi — labeled wireframes with basic nav |
+| Do users understand the copy and labels? | Mid-fi — real copy, no visual design |
+| Will users trust this and use it seriously? | Mid-fi to Hi-fi — some visual design, brand elements |
+| Does the visual design support the interaction? | Hi-fi — full visual design, real content |
+| Would users pay for this / recommend it? | Hi-fi — near-production quality |
 
 **Claude prompt:**
-> "Given these 3 prototype questions, define the minimum prototype scope.
+> "Recommend the appropriate fidelity for this prototype.
 >
-> For each question, identify:
-> - **Which scenes from the storyboard** must be in the prototype to answer it
-> - **Which screens** those scenes require
-> - **What the screen must contain** to generate the observation (not the full design — just what's necessary)
+> Prototype questions: [paste from Step 1]
+> Timeline: [how long to build + test]
+> Team: [who's building it]
+> Tool: [Figma / paper / code / other]
 >
-> Then produce:
-> 1. **In scope** — every screen and state that's needed to answer at least one question
-> 2. **Out of scope** — screens and states that don't contribute to answering the questions (with rationale)
-> 3. **Happy path only or branches too?** — whether alternative paths and error states are needed for this round
+> For each prototype question:
+> - What fidelity is required to get a valid answer?
+> - What fidelity would be over-engineering?
 >
-> The test: if removing something from scope means you can't answer one of the 3 questions, it must stay in. If removing it doesn't affect any question, it should be cut.
+> Then recommend: a single fidelity level for the whole prototype, or a mixed approach (different fidelity for different parts), and explain why."
+
+---
+
+## Step 3: Define the Prototype Scope
+
+**Claude prompt:**
+> "Generate the prototype scope definition.
+>
+> From the user flow below, identify which screens and paths to include based on the prototype questions.
+>
+> For each screen/path in the flow, classify as:
+> - **Core** — required to answer the prototype questions
+> - **Supporting** — needed for the prototype to make sense, but not the primary test
+> - **Deferred** — can be excluded without invalidating the test; simulate with a placeholder
+>
+> Then generate the scope summary:
+> - Total screens in full flow: [N]
+> - Screens in prototype: [N]
+> - Paths covered: [list]
+> - Paths simulated/skipped: [list + how to handle them in prototype]
 >
 > Prototype questions: [paste]
-> Storyboard scenes: [paste]"
+> Complete user flow: [paste screen inventory]
+> Constraints: [timeline, tool, team]"
 
 ---
 
-## Step 3: Choose the Fidelity
+## The Prototype Brief
 
-Fidelity is the most important scoping decision. The right fidelity is the lowest that still generates valid observations.
+Package everything into a brief a prototyper can act on without further briefing.
 
 **Claude prompt:**
-> "Recommend the appropriate prototype fidelity for this test. Evaluate each fidelity option:
+> "Generate a complete prototype brief.
 >
-> **Paper / sketch**
-> - When it's right: testing navigation logic, information architecture, screen sequence
-> - When it fails: when the visual or copy treatment affects behavior (especially for emotion-driven or trust-sensitive flows)
+> Prototype questions: [paste]
+> Selected concept: [paste]
+> Persona + scenario: [paste]
+> Fidelity decision: [paste]
+> Scope (Core / Supporting / Deferred): [paste]
+> Constraints: [paste]
 >
-> **Lo-fi digital (grayscale wireframes, placeholder copy)**
-> - When it's right: testing task completion, flow logic, primary navigation
-> - When it fails: when copy clarity is a core assumption being tested, when visual hierarchy affects the task
+> Generate:
 >
-> **Mid-fi (real copy, basic layout, no visual polish)**
-> - When it's right: most usability testing. Tests flow AND copy without the cost of hi-fi
-> - When it fails: when the visual design itself is part of the trust signal (e.g. financial products, medical products)
+> ## Prototype Brief: [Concept Name]
 >
-> **Hi-fi (near-final visual design)**
-> - When it's right: stakeholder sign-off, testing visual design as a variable, final validation before dev
-> - When it fails: almost always too early — hi-fi takes 3–5× longer to build and change
+> ### Purpose
+> [One sentence — what this prototype exists to answer]
 >
-> Given these 3 prototype questions and constraints, recommend a fidelity and explain why.
+> ### Prototype questions
+> 1. [Question] — [what user behavior answers it]
+> 2. [Question]
+> 3. [Question]
 >
-> Questions: [paste]
-> Constraints: [timeline, who's building, tools available]"
-
----
-
-### Fidelity Decision Matrix
-
-| Question type | Appropriate fidelity |
-|---|---|
-| Does the flow make sense? | Paper or lo-fi |
-| Can users find and complete the task? | Lo-fi or mid-fi |
-| Do users understand what the copy means? | Mid-fi (real copy required) |
-| Do users trust the product enough to continue? | Mid-fi or hi-fi |
-| Does the visual design communicate the right brand? | Hi-fi only |
-| Would stakeholders approve this direction? | Mid-fi or hi-fi |
-
----
-
-## Step 4: Write the Prototype Brief
-
-Package the scope decision into a brief that the person building the prototype can act on immediately.
-
-**Claude prompt:**
-> "Generate a prototype brief from this scoping session. The brief should enable someone to build the prototype without any further clarification.
+> ### Fidelity
+> [Level + rationale]
 >
-> Prototype brief format:
+> ### Scope
+> **Build these screens:** [list with one-line description of each]
+> **Simulate these paths:** [how to handle out-of-scope paths — dead-end screen, placeholder, etc.]
+> **Explicitly exclude:** [what's not being built and why]
 >
-> **What we're testing:** [1 sentence — the concept and the core question]
-> **Who we're testing with:** [Persona description and recruitment criteria]
-> **Fidelity:** [Lo-fi / Mid-fi / Hi-fi — and why]
+> ### Starting state
+> [What state the prototype is in when testing begins — what data/content is pre-populated]
 >
-> **In scope (must build):**
-> [List each screen with what it must contain — not the design, the content and interaction]
+> ### Scenario setup
+> [How to brief a test participant — what they know, what role they're playing, what they're trying to do]
 >
-> **Out of scope (do not build):**
-> [List what's explicitly excluded — with rationale for each]
+> ### Success indicators
+> [What user behaviors would tell us the prototype answered its questions positively]
 >
-> **The 3 questions this prototype must answer:**
-> 1. [Question + what we'll observe]
-> 2. [Question + what we'll observe]
-> 3. [Question + what we'll observe]
+> ### Failure indicators
+> [What would tell us the concept needs rework before further investment]
 >
-> **What 'done' looks like:**
-> [Specific criteria for when the prototype is ready to test — not 'when it looks good']
->
-> **Build time estimate:** [Hours or days — based on scope and fidelity]
->
-> Scoping outputs: [paste questions, scope, fidelity decision]"
-
----
-
-## Step 5: Define the Test Criteria
-
-Before building the prototype, define what a passing test looks like. This prevents post-hoc rationalization of results.
-
-**Claude prompt:**
-> "Define pass/fail criteria for this prototype test. For each of the 3 questions:
->
-> **If the answer is yes (assumption validated):**
-> - What specific behaviors would we observe?
-> - What threshold makes it a 'yes'? (e.g. 4 of 5 users complete the task without assistance)
->
-> **If the answer is no (assumption fails):**
-> - What specific behaviors would we observe?
-> - What would we do next? (Iterate on this concept / pivot to a different concept / go back to ideation)
->
-> **The threshold for proceeding to hi-fi:**
-> [What needs to be true before we invest in higher-fidelity design]
->
-> Questions: [paste]
-> Concept risks: [paste from critique]"
+> ### What this prototype is NOT testing
+> [Explicit list — manages expectations during review]"
 
 ---
 
 ## Quality Checklist
 
-Before starting wireframes:
-- [ ] 3 prototype questions defined — specific, observable, linked to critique assumptions
-- [ ] Scope is in and out — every screen is explicitly in or explicitly deferred
-- [ ] Fidelity is justified — not just "we always do mid-fi"
-- [ ] Prototype brief is written — builder can start without further briefing
-- [ ] Pass/fail criteria are defined before building — not after seeing results
-- [ ] Build time estimated — team has committed to a timeline before starting
+Before building the prototype:
+- [ ] Prototype questions written — specific, observable, answerable
+- [ ] Fidelity chosen for the right reasons — minimum needed, not maximum possible
+- [ ] Screen count is defensible — could explain why each one is necessary
+- [ ] Out-of-scope paths have a plan — dead-end screen or placeholder, not ignored
+- [ ] Starting state defined — prototype doesn't start with empty or unrealistic data
+- [ ] Scenario setup written — can brief a test participant in under 2 minutes
+- [ ] Success and failure indicators defined — team knows what to look for during testing
 
 ---
 
 ## Phase Handoff Block
 
 ```
-## Handoff: Prototype — Prototype Scoping
+## Handoff: Prototype — Scoping
 ### Project: [PROJECT NAME]
 ### Date: [DATE]
 
 ---
 
-### The prototype
-**Concept:** [Name + one-liner]
-**Fidelity:** [Lo-fi / Mid-fi / Hi-fi]
-**Estimated build time:** [Hours/days]
+### Prototype questions
+1. [Question — what user behavior answers it]
+2. [Question]
+3. [Question]
 
-### 3 questions this prototype must answer
-1. [Question] — passes if: [observable evidence]
-2. [Question] — passes if: [observable evidence]
-3. [Question] — passes if: [observable evidence]
+### Fidelity
+[Level] — [rationale]
 
 ### Scope
-**In scope:**
-[List of screens with brief content description]
+Core screens: [N — list]
+Supporting screens: [N]
+Deferred/simulated: [list + how handled]
 
-**Out of scope:**
-[List of deferred screens — with rationale]
+### Starting state
+[What's pre-populated when testing begins]
 
-### Pass/fail criteria
-**Proceed to hi-fi / next phase if:**
-[Specific threshold — e.g. 4/5 users complete primary task without prompting]
+### Scenario setup for testing
+[How to brief participants]
 
-**Return to ideation if:**
-[Specific failure signal — e.g. all users abandon at screen 3]
+### Success indicators
+[Specific user behaviors that confirm the concept works]
 
-### What the test script should focus on
-[The critical observation points — the moments in the prototype where the questions get answered]
+### Failure indicators
+[Specific behaviors that tell us to rework]
+
+### NOT testing
+[Explicit exclusions]
 
 ---
-*This brief is the wireframing scope.*
-*Do not add screens that aren't in the in-scope list.*
-*Pass/fail criteria should be shared with the test facilitator before testing begins.*
+*Paste this block when starting wireframing and when opening Test Script drafting.*
 ```

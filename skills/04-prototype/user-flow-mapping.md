@@ -1,247 +1,242 @@
 ---
 name: user-flow-mapping
 phase: 04 — Prototype
-description: Map the complete step-by-step paths a user takes to accomplish a task — including decision points, alternative paths, error states, and edge cases — before wireframing begins. Use at the start of Prototype to define what needs to be built before building it. The map becomes the scope document for the prototype. Depends on outputs from storyboarding.md and prototype-scoping.md. Outputs feed directly into wireframing and ux-copy-writing.md.
+description: Map the complete step-by-step path a user takes to accomplish a goal — including decision points, branches, error paths, and edge cases — before any wireframes are built. Use at the start of Prototype to define the full scope of what needs to be designed. Claude generates flows that are more complete than most designers produce solo, surfacing edge cases and error branches that typically get deferred. Depends on outputs from storyboarding.md and concept-critique.md. Outputs feed into ux-copy.md, prototype-scoping.md, and wireframing.
 ai_leverage: high
 claude_surface: chat
 ---
 
 # User Flow Mapping
 
-Define every path a user can take through a feature — including the ones they'll take when something goes wrong — before drawing a single screen.
+Define every path a user can take before drawing a single screen — including the paths where things go wrong.
 
 ## When to Use
 
-- Starting a new feature and need to define scope before wireframing
-- The storyboard covers the happy path but not error states or alternative paths
-- Team is disagreeing about what screens need to exist
-- You need a complete screen inventory before prototyping begins
-- Prototype scope is unclear and you need to define it before building
+- Starting a prototype and need to define the full scope of screens
+- Auditing an existing flow to find gaps, dead ends, or missing error states
+- Aligning the team on what the prototype needs to cover before wireframing starts
+- Identifying which paths are in scope for v1 vs. deferred
+- Handing off a complete flow spec to a prototyper or engineer
 
 ---
 
-## What a User Flow Map Is — and Isn't
+## What a User Flow Is — and Isn't
 
-**A user flow map is:** A step-by-step diagram of every path a user can take through a feature or experience — including what they see, what they decide, what happens when things go wrong, and where they end up.
+**A user flow is:** A step-by-step map of every action, decision, and system response in a user's path through a feature — from trigger to resolution.
 
-**A user flow map is not:** A wireframe. Not a sitemap. Not a journey map. Not a process diagram.
+**A user flow is not:** A journey map (which maps the emotional experience), a wireframe (which maps screen layouts), or a sitemap (which maps content hierarchy).
 
-The key difference from a storyboard: a storyboard shows one scenario with emotional context. A user flow map shows all scenarios as a branching diagram — optimistic path, alternative paths, error paths, exit points.
+The user flow answers: "What happens at every step — including when things go wrong?"
 
-**Why this comes before wireframing:** Every branch in a user flow is a screen. Every decision point is a design decision. Discovering these after wireframing has started means redoing work. Discovering them in a flow mapping session means the wireframing scope is already defined.
+---
+
+## Why Completeness Matters
+
+Most manually drawn user flows capture the happy path and 2–3 branches. Claude systematically generates:
+- **Happy path** — when everything goes right
+- **Alternative paths** — valid routes that don't follow the primary path
+- **Error paths** — what happens when inputs are wrong, connections fail, or permissions are missing
+- **Edge cases** — unusual but valid situations (first-time use, returning user, empty state, boundary conditions)
+- **Exit points** — where users leave the flow and what happens
+
+A flow missing its error paths produces a prototype missing the moments users need the most help.
 
 ---
 
 ## What Claude Needs to Start
 
-1. **Entry point** — where does this flow begin? (Button click, page load, notification tap)
-2. **End point(s)** — what does success look like? What does abandonment look like?
-3. **Primary task** — the one thing the user is trying to accomplish
-4. **Persona** — who is doing this, and what do they already know?
-5. **Known constraints** — anything the system can or can't do (auth states, permissions, API limitations)
-6. **Storyboard** — the scenario narrative from `storyboarding.md` if available
+1. **Selected concept** — name, one-liner, core mechanism from `storyboarding.md`
+2. **Primary persona** — who is performing this flow
+3. **Trigger** — what specific event or action initiates the flow
+4. **Goal** — what the user is trying to accomplish — what does success look like?
+5. **Key constraints** — technical, permission, or scope constraints that affect the flow
+6. **Scope boundary** — what's in v1 vs. explicitly deferred
 
 ---
 
-## Step 1: Map the Happy Path
+## Step 1: Define the Flow Boundaries
 
-Start with the optimistic path — the one where everything works and the user succeeds. This is the backbone the other paths branch from.
+Lock scope before generating anything. An unbounded flow expands infinitely.
 
 **Claude prompt:**
-> "Map the happy path for this user flow. List every step in sequence — not screens yet, but user actions and system responses.
+> "Define the flow boundaries for this user flow.
 >
-> Format each step as:
-> **[Step N]:** [Actor] — [Action or Response]
-> - Actor: User or System
-> - Action: What the user does (tap, type, select, scroll)
-> - Response: What the system does (load, validate, navigate, display)
+> Concept: [name + one-liner]
+> Persona: [name + context]
 >
-> At each step, flag any decisions the user makes (these become branches).
-> At the end, list the steps that require a screen or state change.
+> Help me define:
+> 1. **Trigger** — the specific event that starts this flow (not 'when the user wants to...' — a specific action or moment)
+> 2. **Entry point** — where in the product the flow begins
+> 3. **Success end state** — what the user sees and feels when the flow completes successfully
+> 4. **Failure end states** — what happens if the user can't complete the flow (abandonment, error, redirect)
+> 5. **In scope** — what this flow must cover for the prototype to test its core assumption
+> 6. **Out of scope** — what explicitly won't be designed in v1 (and why)
 >
-> Entry point: [where the flow starts]
-> End point: [what success looks like]
-> Primary task: [what the user is trying to do]
-> Persona: [who — context and what they already know]
-> Constraints: [anything the system can/can't do]"
+> Focus on the single most important path first — we'll branch from there."
 
 ---
 
-## Step 2: Identify and Map All Decision Points
+## Step 2: Generate the Happy Path
 
-Every time the user makes a choice or the system returns a variable result, that's a branch. Each branch needs its own path.
+Start with the path where everything goes right. This establishes the spine of the flow.
 
 **Claude prompt:**
-> "Review the happy path above and identify every decision point — moments where the flow could go differently.
+> "Generate the happy path user flow for this scenario.
+>
+> Concept: [name + core mechanism]
+> Persona: [name + context + goal]
+> Trigger: [specific starting event]
+> Success state: [what completion looks like]
+> Key constraints: [paste]
+>
+> For each step in the happy path:
+> - **Step name:** [short label — verb + noun]
+> - **User action:** [what the user does — specific and observable]
+> - **System response:** [what the product does — what the user sees or hears]
+> - **Decision point:** [Yes/No — does this step require a choice?]
+> - **Screen/state:** [name of the screen or UI state this step occurs in]
+>
+> Format as a numbered sequence. Mark decision points with [DECISION].
+> Stop at the success end state."
+
+---
+
+## Step 3: Branch the Decision Points
+
+Every decision point creates at least two paths. Map them all.
+
+**Claude prompt:**
+> "Identify every [DECISION] in this happy path and generate the branch for each.
 >
 > For each decision point:
-> - **What branches are possible?** (List all options, not just the obvious ones)
-> - **What triggers each branch?** (User choice, system state, permission level, data presence)
-> - **Where does each branch lead?** (Same flow, different end state, error, or exit)
+> - What triggers the decision?
+> - What are all possible outcomes? (minimum 2, often 3–4)
+> - For each outcome: what does the user see and what happens next?
+> - Does any outcome loop back to a previous step, or lead to a new path?
 >
-> Then map each alternative branch as its own step sequence.
->
-> Also identify:
-> - **Gates** — points where the user must have something (permission, data, payment) to proceed
-> - **Loops** — points where the user might need to repeat a step
-> - **Exit points** — points where a user might abandon the flow (by choice or by force)
->
-> Happy path: [paste]"
+> Happy path: [paste]
+> Concept constraints: [paste]"
 
 ---
 
-## Step 3: Map All Error States
+## Step 4: Generate Error Paths
 
-Error states are the most commonly missed flows. Every time the system can fail — or the user can do something unexpected — there's an error path.
+Error paths are where most flows are incomplete. Generate them systematically.
 
 **Claude prompt:**
-> "Map all error states for this flow. For each error:
+> "Generate all error paths for this user flow. For each error:
 >
-> 1. **Where it can occur** — which step in the happy path this error interrupts
-> 2. **What triggers it** — the technical or user-behavior cause
-> 3. **What the user sees** — the error state (not the copy — the screen type or component)
-> 4. **What paths are available** — retry, back, contact support, exit
-> 5. **Whether the user's progress is preserved** — do they start over or can they recover?
+> 1. **Error type** — what caused it
+> 2. **Where it occurs** — which step in the happy path
+> 3. **What the user sees** — the error state
+> 4. **Recovery options** — what the user can do to resolve it
+> 5. **Unrecoverable path** — if the user can't resolve it, where do they end up?
 >
-> Error categories to cover:
-> - Network/connection failures
-> - Validation errors (user input doesn't meet requirements)
-> - Permission errors (user doesn't have access to do this)
-> - Not found errors (something they're looking for doesn't exist)
-> - Timeout errors (async operation took too long)
-> - Conflict errors (the thing they're trying to do was already done)
-> - Rate limit / quota errors (if applicable)
-> - [Product-specific errors based on the flow]
+> Error categories to cover for each applicable step:
+> - **Validation errors** — user input doesn't meet requirements
+> - **Network/timeout** — connection lost, request timed out
+> - **Permission errors** — user lacks access (not logged in, plan limit, role restriction)
+> - **Conflict errors** — duplicate record, action already taken
+> - **Not found** — resource deleted or URL invalid
+> - **System errors** — backend failure, unexpected state
+> - **Session errors** — user logged out mid-flow
 >
-> Full flow with decision points: [paste]"
+> Happy path: [paste]
+> Key constraints: [paste]"
 
 ---
 
-## Step 4: Generate the Screen Inventory
+## Step 5: Map Edge Cases
 
-A user flow map directly produces a screen inventory — every state that needs to exist in the prototype.
+Edge cases are valid but unusual paths. They're typically discovered in usability testing — map them before that.
 
 **Claude prompt:**
-> "From this complete user flow (happy path + branches + error states), generate a screen inventory.
+> "Generate edge cases for this flow.
 >
-> For each unique screen or state:
-> - **Screen name** — what this state is called (used consistently across the prototype)
-> - **Screen type** — Page / Modal / Sheet / Toast / Inline state / Empty state / Error state
-> - **When it appears** — which step in the flow triggers this screen
-> - **What it contains** — headline, primary action, secondary actions (not design — content)
-> - **Where it goes** — every possible exit from this screen
+> Edge case categories to consider:
+> - **Zero state** — user has no data, no history, nothing populated
+> - **First-time use** — user encounters this flow for the first time
+> - **Returning user** — user has partially completed this flow before
+> - **Interrupted flow** — user leaves mid-flow and returns
+> - **Boundary conditions** — maximum/minimum values, character limits, file size limits
+> - **Multiple simultaneous actions** — user opens multiple tabs, submits twice
+> - **Slow/degraded performance** — what happens when the system is slow
 >
-> Group screens by: Happy path screens / Alternative path screens / Error states / Empty states
+> For each edge case:
+> - Describe the situation
+> - Which step in the happy path it affects
+> - What the user experiences
+> - Whether this is in scope for v1 or deferred
 >
-> Total screen count at the end — this is the prototype scope.
+> Happy path: [paste]
+> Persona context: [paste]"
+
+---
+
+## Step 6: Complete Flow Document
+
+Compile all paths into a single structured document.
+
+**Claude prompt:**
+> "Compile the complete user flow document from all paths generated.
+>
+> ## Flow Overview
+> - Name: [flow name]
+> - Persona: [who]
+> - Trigger: [what starts it]
+> - Success state: [what completion looks like]
+> - Scope: [in / out]
+>
+> ## Screen / State Inventory
+> [Every unique screen or state — this becomes the prototype build list]
+>
+> ## Happy Path
+> [Numbered steps — user action + system response + decision points]
+>
+> ## Branch Paths
+> [For each decision point: all branches with steps]
+>
+> ## Error Paths
+> [By error type: where it occurs + what user sees + recovery]
+>
+> ## Edge Cases
+> [By case: situation + affected step + in scope / deferred]
+>
+> ## Open Design Decisions
+> [Steps where the right behavior is a genuine design choice — not obvious]
+>
+> All paths: [paste everything generated]"
+
+---
+
+## Scope Decision — What Goes in the Prototype
+
+**Claude prompt:**
+> "Review this complete user flow and identify the minimum set of paths to include in the v1 prototype to answer these specific questions:
+>
+> Prototype questions: [paste from concept-critique.md or storyboarding.md]
+>
+> For each path in the flow:
+> - Is it required to answer the prototype questions? (Core / Supporting / Deferred)
+> - If deferred — what's the risk of not including it?
+>
+> Recommend: the minimum viable prototype scope — fewest screens that still answer the key questions.
 >
 > Complete flow: [paste]"
 
 ---
 
-### Screen Inventory Template
-
-```
-# Screen Inventory: [Feature Name]
-### Flow version: [N] | Date: [DATE]
-
----
-
-## Happy Path Screens
-
-| # | Screen Name | Type | Triggered By | Primary Action | Leads To |
-|---|---|---|---|---|---|
-| 1 | [Name] | Page | [Trigger] | [CTA] | [Next screen] |
-| 2 | [Name] | Modal | [Trigger] | [CTA] | [Next screen] |
-
----
-
-## Alternative Path Screens
-
-| # | Screen Name | Type | Condition | Primary Action | Leads To |
-|---|---|---|---|---|---|
-| 1 | [Name] | [Type] | [When this appears] | [CTA] | [Next screen] |
-
----
-
-## Error States
-
-| # | Error Name | Triggered By | User Can Fix? | Primary Action |
-|---|---|---|---|---|
-| 1 | [Name] | [Cause] | Yes / No | [Action] |
-
----
-
-## Empty States
-
-| # | State Name | When It Appears | First-Use? | Primary Action |
-|---|---|---|---|---|
-| 1 | [Name] | [Condition] | Yes / No | [CTA] |
-
----
-
-**Total screens:** [N]
-**Prototype scope (recommended):** [Which screens to include in the first prototype, and why]
-```
-
----
-
-## Step 5: Validate the Flow
-
-Before handing off to wireframing, run these validation checks.
-
-**Claude prompt:**
-> "Validate this user flow against five criteria:
->
-> 1. **Completeness** — is every decision point accounted for? Are there any paths that lead nowhere?
->
-> 2. **User mental model** — does the flow match how [persona] expects this to work? Flag any steps that might surprise them.
->
-> 3. **Error coverage** — for every action the user takes, what happens if the system can't complete it? Are all failure modes covered?
->
-> 4. **Exit completeness** — can the user exit the flow at every reasonable point? Are there any dead ends?
->
-> 5. **Minimum viable scope** — which branches are essential for a first prototype and which could be deferred? What's the smallest flow that tests the core assumption?
->
-> Complete flow and screen inventory: [paste]
-> Core assumption to test (from concept critique): [paste]"
-
----
-
-## Edge Case Generation
-
-One of Claude's most valuable contributions to flow mapping is systematic edge case generation — the scenarios a designer working alone typically misses.
-
-**Claude prompt:**
-> "Generate edge cases for this user flow. Think systematically across:
->
-> 1. **State edge cases** — what happens when the user arrives in an unexpected state? (Already completed this action, partial completion from a previous session, different permission level)
->
-> 2. **Data edge cases** — what happens with extreme data? (Empty names, extremely long strings, special characters, zero items, maximum items, single item)
->
-> 3. **Timing edge cases** — what happens if the user is slow, fast, or interrupted? (Session timeout, leaves and returns mid-flow, double-taps, rage-clicks)
->
-> 4. **Context edge cases** — what happens in unusual contexts? (Offline, slow connection, different device, different screen size)
->
-> 5. **User behavior edge cases** — what happens when users do the unexpected? (Goes back when they shouldn't, skips a step, submits twice, refreshes mid-flow)
->
-> For each edge case: describe what happens, whether it's handled, and what the design should do if it isn't.
->
-> Flow: [paste]"
-
----
-
 ## Quality Checklist
 
-Before handing off to wireframing:
-- [ ] Happy path is complete — every step from entry to success is mapped
-- [ ] Every decision point has all branches mapped — not just the expected one
-- [ ] Every error state is documented — what triggers it, what the user sees, what they can do
-- [ ] Every screen has a unique name — no ambiguous "screen 3" or "modal"
-- [ ] All empty states are identified — first-use and cleared states
-- [ ] Screen inventory total count is agreed — team knows what they're building
-- [ ] Prototype scope is defined — which screens are in v1 and which are deferred
-- [ ] Core assumption (from concept critique) is visible in the flow — the prototype tests it
+Before starting wireframes:
+- [ ] Trigger is specific — one observable event, not a vague goal
+- [ ] Happy path covers every step from trigger to success state
+- [ ] Every decision point has all branches documented
+- [ ] Every error category covered — validation, network, permission, system at minimum
+- [ ] Zero state and first-time use edge cases documented
+- [ ] Screen inventory complete — every unique screen or state listed
+- [ ] Design decisions flagged — team has discussed or deferred each one
+- [ ] Prototype scope defined — which paths are in v1
 
 ---
 
@@ -255,40 +250,31 @@ Before handing off to wireframing:
 ---
 
 ### What we completed
-- Happy path steps: [N]
-- Decision points mapped: [N]
-- Alternative paths: [N]
-- Error states: [N]
-- Total screens inventoried: [N]
-- Prototype scope (v1): [N screens]
+- Happy path: [N steps]
+- Branch paths: [N branches from N decision points]
+- Error paths: [N error types covered]
+- Edge cases: [N documented]
+- Total unique screens/states: [N]
 
-### Entry and exit points
-- Entry: [where the flow starts]
-- Success exit: [what completion looks like]
-- Abandonment exits: [where users might leave — and how many]
+### Flow overview
+- Persona: [name + context]
+- Trigger: [specific starting event]
+- Success state: [what completion looks like]
+- In scope: [what v1 covers]
+- Out of scope: [what's deferred]
 
-### Prototype scope (v1)
-**In scope:**
-[List screens included in first prototype]
+### Prototype scope
+- Core paths: [list]
+- Screens required: [N — list key ones]
+- Explicitly excluded: [what's not being prototyped]
 
-**Deferred:**
-[List screens not in v1 — with rationale]
+### Open design decisions
+1. [Decision] — [options] — [what we need to know]
+2. [Decision] — [options]
 
-### Core assumption this flow tests
-[The riskiest assumption from concept critique — which screen or step reveals it]
-
-### Most complex decision point
-[The branch that requires the most design thinking — and what the options are]
-
-### Edge cases to handle in v1
-[The edge cases that are likely enough and impactful enough to include in the prototype]
-
-### Open questions for wireframing
-- [Design decision the flow map raised but didn't resolve]
-- [Interaction pattern that needs exploration]
+### Riskiest moments in the flow
+1. [Step] — [why risky] — [what prototype must reveal]
 
 ---
-*This screen inventory is the wireframing scope.*
-*Every screen in v1 scope must appear in the prototype.*
-*Deferred screens should be noted in the prototype as out of scope.*
+*Paste this block when opening UX Copy and Prototype Scoping.*
 ```

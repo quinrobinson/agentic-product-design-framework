@@ -1,306 +1,325 @@
 ---
-name: ux-copy-writing
+name: ux-copy
 phase: 04 — Prototype
-description: Generate all interface text for a product or feature — labels, CTAs, error messages, empty states, onboarding copy, tooltips, confirmations, and microcopy — grounded in the product's voice and user context. The highest-value single AI activity in the design process. Use whenever a prototype or feature needs real copy before testing, when placeholder text is blocking stakeholder feedback, or when inconsistent copy is creating usability friction. Depends on outputs from storyboarding.md or prototype-scoping.md.
-ai_leverage: very_high
+description: Write all interface text for a prototype or product — labels, CTAs, error messages, empty states, onboarding copy, tooltips, microcopy, and confirmation language. Use when building a prototype that needs real copy instead of Lorem ipsum, when auditing existing copy for clarity and consistency, or when handing off a complete copy spec to engineering. Claude's highest-leverage single activity in the design process. Depends on outputs from storyboarding.md and user-flow-mapping.md. Outputs feed directly into prototyping and test-script.md.
+ai_leverage: very high
 claude_surface: chat
 ---
 
 # UX Copy Writing
 
-Write all interface text — completely, consistently, and grounded in how your users actually talk — before a single user sees the prototype.
+Write every word a user reads — labels, actions, errors, empty states, onboarding, and confirmations — grounded in the user's mental model and the product's voice.
 
 ## When to Use
 
-- A prototype needs real copy before usability testing
-- Placeholder text is preventing stakeholders from giving meaningful feedback
-- Copy is inconsistent across screens and creating usability confusion
-- You need a complete error state library before dev handoff
-- Onboarding or empty states need to be written and haven't been prioritized
+- Building a prototype and need real copy instead of Lorem ipsum
+- Auditing existing product copy for clarity, consistency, or tone
+- Writing error messages and empty states that designers typically defer
+- Preparing a complete copy spec for engineering handoff
+- Rewriting an existing flow to reduce cognitive load or improve conversion
 
 ---
 
-## Why UX Copy Is the Most Underinvested Prototype Activity
+## Why UX Copy Is Claude's Highest-Leverage Activity
 
-Most design teams treat copy as something that gets filled in later — after the design is approved, before development. This creates three compounding problems:
+Writing complete UX copy for a mid-sized feature takes a solo designer 2–3 days and is almost always incomplete — error states get deferred, empty states get "TBD," onboarding copy gets written by whoever has time. The result is a product that works mechanically but feels cold, confusing, or inconsistent.
 
-**Testing with placeholder copy produces unreliable results.** Users react to words. "Submit" and "Get started" produce different behavior. Lorem ipsum tells you nothing about whether your labels communicate correctly.
-
-**Copy reveals design gaps.** When you try to write a confirmation message for a flow, you often discover the flow is ambiguous. Writing forces clarity that wireframing defers.
-
-**Late copy means late changes.** If copy is written after design approval, every copy change potentially triggers layout changes. Writing copy during prototyping is always cheaper than writing it after.
-
-Claude's leverage here is exceptional: a complete UX copy set for a mid-sized feature — all screens, all states, all messages — takes a designer 2–3 days manually and is almost always incomplete. With a well-briefed Claude session, it takes 20–40 minutes and is systematically complete.
+Claude generates a complete copy set for an entire user flow in 20–30 minutes. The draft needs editing, but it's complete — every state covered, every edge case addressed, every label consistent with the others.
 
 ---
 
-## What Claude Needs to Start
+## Before Writing — Establish the Voice
 
-1. **Product context** — what it does, for whom, in what context
-2. **Voice and tone** — 3–5 adjectives describing the product's personality, plus examples of what it sounds like and what it doesn't
-3. **Feature or flow scope** — which screens or user journey to write copy for
-4. **User context** — who they are and what emotional state they're in when they hit each screen
-5. **Storyboard or prototype brief** — the flow from `storyboarding.md` or `prototype-scoping.md`
-
----
-
-## Step 1: Define Voice and Tone
-
-Before writing a word of copy, lock the voice. Copy written without a voice brief produces generic, corporate-sounding text.
+Copy without a voice definition produces inconsistent output. Establish these before generating any copy.
 
 **Claude prompt:**
-> "Define the voice and tone for this product based on the context below.
+> "Define the UX writing voice for [product name]. Based on this product context and persona:
 >
-> Produce:
-> 1. **Voice** — 4 adjectives that describe the product's personality (not aspirational — actual)
-> 2. **Tone shifts** — how the tone changes in different emotional moments (error states, success, onboarding vs. returning user)
-> 3. **We sound like:** [3 example phrases] / **We don't sound like:** [3 example phrases]
-> 4. **Words we use** / **Words we avoid**
-> 5. **Reading level target** — what complexity level fits this user and context?
+> Product: [what it is, what it does]
+> Primary persona: [who uses it — role, context, sophistication level]
+> Brand personality (if known): [adjectives, examples, competitors to reference]
 >
-> Product: [description]
-> Primary user: [persona — context, goals, emotional state when using this product]
-> Brand context: [any existing voice guidelines, comparable products]"
+> Generate:
+> 1. Three voice attributes with do/don't examples for each
+> 2. Tone spectrum — how voice shifts across contexts (onboarding vs. error vs. success)
+> 3. Five vocabulary rules — specific words to use and avoid
+> 4. Reading level target — and what that means for sentence length and structure"
+
+**Voice template:**
+```
+## UX Voice: [Product Name]
+
+### Voice attributes
+1. [Attribute] — Do: "[example]" / Don't: "[example]"
+2. [Attribute] — Do: "[example]" / Don't: "[example]"
+3. [Attribute] — Do: "[example]" / Don't: "[example]"
+
+### Tone by context
+- Onboarding: [how to sound]
+- Neutral/working: [how to sound]
+- Success: [how to sound]
+- Error/warning: [how to sound]
+- Empty states: [how to sound]
+
+### Vocabulary rules
+- Use: [word] instead of [word]
+- Avoid: [word or phrase and why]
+
+### Reading level
+[Target grade level] — [what that means in practice]
+```
 
 ---
 
-### Voice and Tone Reference Card
+## Step 1: Map the Copy Inventory
 
-```
-# Voice + Tone: [Product Name]
+Before writing, enumerate every text element in the flow. This prevents the most common failure mode — writing some copy and discovering 30% of states were missed when building the prototype.
 
-## Voice (consistent — who we are)
-[Adjective 1] — [one sentence explaining what this means for copy]
-[Adjective 2] — [one sentence]
-[Adjective 3] — [one sentence]
-[Adjective 4] — [one sentence]
-
-## Tone shifts (situational — how we adjust)
-| Moment | Tone | Example |
-|---|---|---|
-| Onboarding (first use) | [tone] | [example phrase] |
-| Mid-flow (in the zone) | [tone] | [example phrase] |
-| Error (something went wrong) | [tone] | [example phrase] |
-| Success (task complete) | [tone] | [example phrase] |
-| Empty state (nothing yet) | [tone] | [example phrase] |
-
-## We sound like / We don't sound like
-✓ [Example phrase] ✗ [What we're replacing / avoiding]
-✓ [Example phrase] ✗ [What we're replacing / avoiding]
-✓ [Example phrase] ✗ [What we're replacing / avoiding]
-
-## Words we use / Words we avoid
-✓ [Word/phrase] — [why] | ✗ [Word/phrase] — [why]
-```
+**Claude prompt:**
+> "Map the complete copy inventory for this user flow.
+>
+> For each screen or state, list every text element that needs copy:
+> - Page/screen title
+> - Body text or description
+> - All labels (fields, sections, navigation)
+> - All CTAs and buttons
+> - All links
+> - Placeholder text (form fields)
+> - Helper text / tooltips
+> - Validation messages (inline errors)
+> - Empty states
+> - Loading states
+> - Success states
+> - Error states (system, network, permission, not found)
+> - Confirmation dialogs
+>
+> User flow: [paste flow from user-flow-mapping.md or storyboard]
+> Product context: [what each screen does]"
 
 ---
 
 ## Step 2: Write the Core Flow Copy
 
-Generate copy for every screen in the primary user flow first — before edge cases and error states.
+Generate copy for the main path first — what a user sees when everything goes right.
 
 **Claude prompt:**
-> "Write complete UX copy for every screen in this flow. For each screen:
-> - **Headline** — the primary message (what this screen is doing for the user)
-> - **Body** — supporting context if needed (not always required — challenge every word)
-> - **Primary CTA** — the main action button (action verb + context, not just 'Submit')
-> - **Secondary actions** — any links, back buttons, or alternative paths
-> - **Helper text** — form field labels, placeholders, input hints
+> "Write UX copy for the core user flow below. Apply this voice:
+> [paste voice definition]
 >
-> Voice brief: [paste reference card]
-> User flow: [paste from storyboard or prototype brief — screen by screen]
-> User context at each screen: [emotional state, what they just did, what they need to know]"
+> For each screen, write:
+> - **Title:** [screen title — action-oriented where possible]
+> - **Body:** [any explanatory text — keep short, earn every word]
+> - **Labels:** [all field and section labels]
+> - **CTAs:** [all buttons and primary actions — verb-first]
+> - **Placeholders:** [form field placeholder text — hint, not label]
+> - **Helper text:** [inline guidance below fields]
+>
+> Rules:
+> - CTAs must start with a verb: Save, Continue, Add, Generate — never 'Click here' or 'Submit'
+> - Labels are nouns: Email address, Project name — not questions
+> - Placeholder text hints at format, not just repeats the label: 'you@company.com' not 'Email'
+> - Body copy must earn every word — remove any sentence that doesn't help the user
+> - Maintain consistent terminology — pick one word for each concept and use it everywhere
+>
+> Core user flow:
+> [paste step-by-step flow — screen by screen]
+>
+> Product voice: [paste voice attributes]
+> Primary persona: [paste]"
 
 ---
 
-### Copy Quality Standards
+## Step 3: Write Error States
 
-**Headlines:**
-- Lead with user benefit, not system action
-- 5 words or fewer when possible — test every word's necessity
-- Present tense, active voice
-- Don't: "Settings updated successfully" / Do: "You're all set"
-
-**CTAs:**
-- Always verb + noun — never just a verb ("Continue" is weaker than "Continue to payment")
-- Specific beats generic — "Start free trial" beats "Get started"
-- Match the user's mental model — what do they think they're doing?
-- One primary CTA per screen — two competing primaries means the IA is broken
-
-**Body copy:**
-- Every word must earn its space — cut anything that doesn't change behavior
-- Plain language — if a 12-year-old can't understand it, rewrite it
-- Avoid passive voice, hedging language ("may," "might," "possibly"), jargon
-- Maximum 2 sentences for in-flow body copy — more than that belongs in a tooltip or help doc
-
-**Form labels and placeholders:**
-- Labels: sentence case, noun phrases, no colons
-- Placeholders: example data, not re-stating the label ("e.g. jane@email.com" not "Email address")
-- Helper text: what the user needs to know, not system constraints ("We'll send a code to this number" not "10-digit mobile number required")
-
----
-
-## Step 3: Write Error States and Empty States
-
-Error and empty states are the most under-written copy in most products. They're also the moments users most need good copy — when something has gone wrong or nothing has happened yet.
+Error messages are the most consistently under-written copy in any product. They're also the highest-stakes — users read errors closely, and poor error copy destroys trust.
 
 **Claude prompt:**
-> "Write complete error state and empty state copy for this product. For each state:
-> - **Error headline** — what happened (don't say 'Error' — say what actually happened)
-> - **Error body** — why it happened and what to do about it (if the user can fix it)
-> - **Primary action** — the most helpful next step
-> - **Secondary action** — an escape route
+> "Write error messages for every failure state in this flow.
 >
-> Error states to cover:
-> 1. Network/connection failure
-> 2. Form validation errors (field-level and form-level)
-> 3. Permission denied
-> 4. Empty search results
-> 5. Timeout
-> 6. [Product-specific errors from the user flow]
+> For each error, write three elements:
+> 1. **Error title** (if applicable) — what went wrong in plain language
+> 2. **Error body** — what happened and what the user can do about it
+> 3. **Recovery action** — the specific next step (button label or instruction)
 >
-> Empty states to cover:
-> 1. First-time use (nothing yet — most important to get right)
-> 2. Cleared state (user deleted everything)
-> 3. No search results
-> 4. No notifications / no activity
+> Error categories to cover for each applicable screen:
+> - Validation errors (inline — field-level, triggered on blur or submit)
+> - Submission errors (form-level — when multiple fields fail or backend rejects)
+> - Network errors (no connection, timeout, slow response)
+> - Permission errors (not authorized, logged out, plan limit)
+> - Not found errors (resource deleted, URL invalid)
+> - System errors (something went wrong on our end)
+> - Conflict errors (duplicate, already exists)
 >
-> Voice brief: [paste]
-> Product context: [paste]"
+> Rules:
+> - Never blame the user: 'Invalid email' → 'Check the email address — it looks like something's missing'
+> - Never use jargon: '404 error', 'null value', 'exception'
+> - Always tell the user what to do next — not just what went wrong
+> - Match the severity to the tone — minor validation: calm. Data loss: direct but not alarming.
+>
+> Flow context: [paste]
+> Product voice: [paste]"
 
 ---
 
-### Error State Principles
+## Step 4: Write Empty States
 
-**Don't blame the user.** "You entered an invalid email" → "That email doesn't look right"
-
-**Don't be vague.** "Something went wrong" tells the user nothing. "We couldn't save your changes — try again in a moment" is actionable.
-
-**Always give a next step.** If the user can fix it: tell them how. If they can't: tell them who can (support link) or when it'll resolve.
-
-**Match severity to tone.** A missed required field is minor — keep the tone light. A data loss error is serious — drop the humor.
-
-**The error message formula:** [What happened] + [Why (if knowable)] + [What to do]
-
----
-
-## Step 4: Write Onboarding and First-Use Copy
-
-First-use copy is the highest-leverage copy in any product. Users are deciding in the first 60 seconds whether to engage or leave.
+Empty states are a retention opportunity disguised as an edge case. A good empty state explains why nothing's here and gives the user a reason and path to fill it.
 
 **Claude prompt:**
-> "Write first-use onboarding copy for this product. The user has just signed up or launched for the first time.
+> "Write empty state copy for every screen or component that can appear without content.
 >
-> Write:
-> 1. **Welcome message** — what the product does for them (benefit, not feature list)
-> 2. **First action prompt** — the single thing they should do right now, and why
-> 3. **Empty state copy** — for the main content area before they've created anything (this is the most important empty state)
-> 4. **Progress/completion indicators** — copy for any setup steps or onboarding checklist
-> 5. **First success message** — when they complete their first meaningful action
+> For each empty state:
+> 1. **Heading** — what this space is for (not 'No items found')
+> 2. **Body** — why it's empty and what the user will see when it's not
+> 3. **CTA** — the action that fills it (if applicable)
 >
-> The user at this moment: [emotional state — uncertain? excited? skeptical?]
-> What they want to accomplish: [their primary goal]
-> What they need to do first: [the first action that makes the product useful]
-> Voice brief: [paste]"
+> Empty state categories:
+> - First-time / zero state (user has never added anything)
+> - Search/filter (no results match the query)
+> - Cleared (user deleted everything)
+> - Awaiting data (content will appear when others act or when time passes)
+> - Permission (user can't see content due to access level)
+>
+> Rules:
+> - Zero states are the best onboarding copy you'll write — make them welcoming
+> - Don't apologize: 'Sorry, nothing here' → 'Your projects will appear here'
+> - If there's an action to take, surface it — empty state + CTA converts better than empty state alone
+> - Be specific: 'No results for "dashboard"' not 'No results found'
+>
+> Screens with potential empty states: [list]
+> Product voice: [paste]
+> Persona: [paste]"
 
 ---
 
-## Step 5: Write Microcopy and System Messages
+## Step 5: Write Onboarding Copy
 
-Microcopy is the small text most teams skip: tooltips, confirmation dialogs, loading states, notification copy.
+Onboarding copy is where users decide whether to invest time in a product. It carries a disproportionate share of the product's first impression.
 
 **Claude prompt:**
-> "Write complete microcopy for this product. For each:
+> "Write onboarding copy for [product / feature name].
 >
-> **Tooltips** (for: [list UI elements that need tooltips])
-> Format: One sentence, maximum 15 words, present tense
+> Generate copy for each onboarding moment:
+> 1. **Welcome screen** — first thing users see: value proposition in one sentence
+> 2. **Setup steps** (if any) — each step: title, body (why this matters), CTA
+> 3. **First success moment** — what users see after completing the first meaningful action
+> 4. **Contextual tooltips** — inline guidance at moments of first encounter with key features
+> 5. **Progressive disclosure hints** — copy that reveals depth over time (not all at once)
 >
-> **Confirmation dialogs** (for: [list destructive or irreversible actions])
-> Format: Headline (what's about to happen) + Body (consequence, if any) + CTA (action, not 'Yes') + Cancel
+> Onboarding principles to apply:
+> - Lead with what the user gets, not what the product does
+> - One thing per screen — don't stack value props
+> - Make the first action feel achievable in under 2 minutes
+> - The first success moment is more important than the welcome screen
 >
-> **Loading and progress states** (for: [list async operations])
-> Format: Action verb in present progressive + timeframe if known
+> Product: [what it does]
+> Primary persona: [paste]
+> Core value prop: [what's the one thing this product does for users]
+> Product voice: [paste]"
+
+---
+
+## Step 6: Write Confirmations and Success States
+
+Confirmations and success messages are where products earn emotional trust — or waste the opportunity.
+
+**Claude prompt:**
+> "Write confirmation and success copy for all actions in this flow that result in a significant outcome.
 >
-> **Notification and alert copy** (for: [list notification types])
-> Format: What happened + why it matters to the user
+> For each:
+> 1. **Confirmation dialog** (before irreversible actions): title, body, confirm CTA, cancel CTA
+> 2. **Success message** (after completion): what happened, what comes next, any follow-on action
+> 3. **Toast/snackbar** (for minor confirmations): one line, action confirmed
 >
-> **Success confirmations** (for: [list key task completions])
-> Format: What succeeded + what happens next (if relevant)
+> Rules for confirmations:
+> - The confirm button should say what happens: 'Delete project' not 'OK'
+> - The cancel button should say what doesn't happen: 'Keep project' not 'Cancel'
+> - Body copy must explain consequences clearly — especially for destructive actions
 >
-> Voice brief: [paste]"
+> Rules for success states:
+> - Don't just say 'Success' — tell the user what was created, saved, or sent
+> - If there's a next step, suggest it: 'Your report is ready — share it with your team'
+> - Match the emotional register to the significance: saving a draft ≠ publishing a project
+>
+> Flow context: [paste]
+> Product voice: [paste]"
 
 ---
 
 ## Copy Audit — Reviewing Existing Copy
 
-If copy already exists and needs review rather than generation from scratch:
+Use Claude to audit existing product copy for clarity, consistency, and voice.
 
 **Claude prompt:**
-> "Audit the copy in this product against these criteria. For each piece of copy, flag issues and provide a rewrite.
+> "Audit the UX copy in this flow against these criteria:
 >
-> Audit criteria:
-> 1. **Clarity** — can a first-time user understand this immediately?
-> 2. **Voice consistency** — does this match the voice brief?
-> 3. **CTA strength** — is the primary action specific and action-oriented?
-> 4. **Error handling** — do error messages explain what happened and what to do?
-> 5. **Passive voice** — flag and rewrite passive constructions
-> 6. **Jargon** — flag terms a non-expert user might not understand
-> 7. **Word count** — flag anything that could be cut by 30%+ without losing meaning
+> 1. **Clarity** — does every element communicate instantly? Flag anything that requires re-reading
+> 2. **Consistency** — is terminology consistent? Flag any word used multiple ways or two words used for the same thing
+> 3. **Voice** — does copy match the defined voice? Flag anything that sounds off-brand
+> 4. **Completeness** — are any states missing copy? Flag any 'TBD', 'Lorem ipsum', or blank labels
+> 5. **CTA quality** — do all CTAs start with a verb? Flag any that don't
+> 6. **Error quality** — do all errors tell users what to do next? Flag any that only describe what went wrong
 >
-> Voice brief: [paste]
-> Current copy to audit: [paste or describe screen by screen]"
+> For each issue found: state the problem, quote the current copy, and suggest a replacement.
+>
+> Flow copy to audit: [paste all current copy]
+> Voice definition: [paste]"
 
 ---
 
 ## Quality Checklist
 
-Before handing off to usability testing:
-- [ ] Every screen has a headline — no screen is title-less
-- [ ] Every CTA uses verb + noun — no standalone "Continue" or "Next"
-- [ ] All form fields have labels (not just placeholders)
-- [ ] Error states cover all failure modes identified in concept critique
-- [ ] Empty states explain what will appear here and how to add it
-- [ ] First-use copy exists and doesn't just list features
-- [ ] Copy is consistent — same terms used for same concepts throughout
-- [ ] No Lorem ipsum remains in screens that will be shown to users
-- [ ] Voice is consistent — no screen sounds like a different product
+Before handing off to prototype build or engineering:
+- [ ] Voice definition complete — three attributes with do/don't examples
+- [ ] Copy inventory mapped — every screen and state enumerated before writing
+- [ ] Every CTA starts with a verb — no 'Submit', 'OK', or 'Click here'
+- [ ] Terminology consistent — one word per concept, used everywhere
+- [ ] Error messages include recovery action — not just what went wrong
+- [ ] Empty states have a CTA where appropriate — zero state ≠ dead end
+- [ ] Onboarding leads with user value — not product features
+- [ ] Confirmations use action-specific language — 'Delete project' not 'OK'
+- [ ] Reading level appropriate for persona — not too formal, not too casual
+- [ ] No Lorem ipsum or TBD remaining in prototype copy
 
 ---
 
 ## Phase Handoff Block
 
 ```
-## Handoff: Prototype — UX Copy Writing
+## Handoff: Prototype — UX Copy
 ### Project: [PROJECT NAME]
 ### Date: [DATE]
 
 ---
 
 ### What we completed
-- Screens with copy written: [N]
-- Error states written: [N]
-- Empty states written: [N]
-- Copy audit run: Yes / No
+- Voice definition: [complete / partial]
+- Copy inventory: [N screens / states documented]
+- Core flow copy: [complete / partial]
+- Error states: [N written]
+- Empty states: [N written]
+- Onboarding copy: [complete / partial]
+- Confirmations/success: [complete / partial]
 
-### Voice and tone summary
-Voice: [4 adjectives]
-Tone in error states: [description]
-Key copy rules: [3 most important voice rules for this product]
+### Voice summary
+[3 attributes — one sentence each]
+Reading level: [target]
 
-### Copy inventory
-[List every screen/state with copy — name and CTA]
+### Copy decisions made
+- [Terminology choice]: use "[word]" not "[word]" — [rationale]
+- [Tone decision]: [what context gets what tone]
+- [Format decision]: [any specific formatting conventions]
 
-### Copy that still needs work
-- [Screen/state] — [what's missing or needs revision]
+### Open copy questions
+- [State or screen where copy is still uncertain]
+- [Terminology the team hasn't aligned on]
 
-### Open questions
-- [Any copy decisions that require product or stakeholder input]
-- [Terms or labels the team hasn't aligned on]
-
-### What test scripts should probe
-[Specific copy elements to observe during usability testing — labels users might misread, CTAs that might be ambiguous]
+### For test script
+When testing the prototype, watch for:
+- [Copy element where user reaction will be most revealing]
+- [Error state that needs real-world validation]
+- [Onboarding moment that may be confusing]
 
 ---
-*Attach the full copy document to the prototype before usability testing.*
-*Flag copy elements to observe closely in the test script.*
+*Paste this block when opening Test Script drafting.*
 ```
