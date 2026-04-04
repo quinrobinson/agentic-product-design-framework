@@ -1827,250 +1827,487 @@ function PhasePath({ onOpenTool, onOpenSkill }) {
 
 
 // ── Path: Ways to Work ────────────────────────────────────────────────────────
-function WaysToWorkPath({ onOpenTool }) {
-  const [tab, setTab] = useState("tools");
-  const [expandedPrompt, setExpandedPrompt] = useState(null);
-  const [phaseFilter, setPhaseFilter] = useState("all");
-  const [surfaceFilter, setSurfaceFilter] = useState("all");
-  const [toolPhaseFilter, setToolPhaseFilter] = useState("all");
+const SCENARIOS = [
+  {
+    id: 1, type: "general",
+    title: "Current state audit",
+    mission: "Evaluate an existing product or experience — heuristics, analytics, competitive benchmarking — and frame what needs to change.",
+    when: ["You've inherited a product and need to understand what's broken", "Leadership wants a baseline before committing to a redesign", "You need to justify a design investment with evidence"],
+    phases: [
+      { key: "01", note: "Heuristic eval, analytics review, competitive audit, stakeholder interviews" },
+      { key: "02", note: "Synthesize findings into prioritized problem areas and a design brief" },
+    ],
+    deliverables: ["Heuristic evaluation report", "Analytics findings summary", "Competitive benchmark", "Prioritized issue list", "Design brief"],
+    skills: ["user-research.md", "competitive-analysis.md", "problem-framing.md"],
+    time: "1–2 weeks",
+    prompt: `I'm conducting a current state audit of [PRODUCT/FEATURE]. Help me run a structured evaluation covering:
+- Heuristic review against Nielsen's 10 principles
+- Key analytics patterns to investigate (I have access to [TOOL])
+- Competitive benchmarking against [2–3 COMPETITORS]
 
-  const PHASE_FILTERS = [
-    { id: "all", label: "All" },
-    { id: "01",  label: "Discover" },
-    { id: "02",  label: "Define" },
-    { id: "03",  label: "Ideate" },
-    { id: "04",  label: "Prototype" },
-    { id: "05",  label: "Validate" },
-    { id: "06",  label: "Deliver" },
-    { id: "cross", label: "Cross-phase" },
-  ];
+My goal is to produce a prioritized issue list and design brief for a redesign. Start by helping me set up an evaluation framework.`,
+  },
+  {
+    id: 2, type: "general",
+    title: "Research study end-to-end",
+    mission: "Run a complete generative or evaluative study — from planning and recruiting through synthesis and insight delivery.",
+    when: ["You need to understand users before designing anything", "Stakeholders are making assumptions you want to validate or challenge", "You're kicking off a new product area with no prior research"],
+    phases: [
+      { key: "01", note: "Research planning, guide writing, recruitment screener, data collection" },
+      { key: "02", note: "Synthesis, affinity mapping, insight framing, opportunity identification" },
+    ],
+    deliverables: ["Research plan", "Discussion guide or survey", "Recruitment screener", "Synthesis board", "Insights report", "Opportunity areas"],
+    skills: ["user-research.md", "problem-framing.md", "figma-playbook.md"],
+    time: "2–4 weeks",
+    prompt: `I need to run a [generative/evaluative] research study for [PRODUCT/FEATURE AREA]. Help me plan end-to-end:
+- Research questions I'm trying to answer: [LIST]
+- Target participants: [DESCRIPTION]
+- Methods I'm considering: [e.g. interviews, surveys, usability test]
+- Timeline: [WEEKS AVAILABLE]
 
-  const SURFACE_FILTERS = [
-    { id: "all",           label: "All" },
-    { id: "chat",          label: "Chat" },
-    { id: "chat + code",   label: "Chat + Code" },
-    { id: "code + figma mcp", label: "Figma MCP" },
-  ];
+Start by helping me write a research plan with objectives, method rationale, and a recruitment screener.`,
+  },
+  {
+    id: 3, type: "general",
+    title: "Design thinking workshop",
+    mission: "Plan and run a full workshop — from framing the challenge to facilitating ideation and capturing outputs for follow-through.",
+    when: ["You need to align a cross-functional team around a problem", "You're kicking off a new initiative and need shared direction", "Leadership wants visible collaborative progress on a strategic challenge"],
+    phases: [
+      { key: "01", note: "Challenge framing, pre-work, stakeholder input gathering" },
+      { key: "02", note: "HMW statements, problem framing, constraint mapping" },
+      { key: "03", note: "Brainstorming, concept voting, prioritization" },
+    ],
+    deliverables: ["Workshop brief", "Facilitation guide", "HMW statement set", "Ideation session outputs", "Concept shortlist", "Follow-up action plan"],
+    skills: ["problem-framing.md", "concept-generation.md", "figma-playbook.md"],
+    time: "1–2 weeks including prep",
+    prompt: `I'm planning a design thinking workshop for [TEAM/STAKEHOLDERS] on the topic of [CHALLENGE AREA]. Help me design the full session:
+- Duration: [HALF DAY / FULL DAY / MULTI-DAY]
+- Participants: [N people, roles]
+- Goal: [what we want to leave with]
+- Tools available: [Miro / FigJam / physical]
 
-  const filteredSkills = SKILL_FILES.filter(s => {
-    const phaseMatch = phaseFilter === "all"
-      ? true
-      : phaseFilter === "cross"
-      ? s.phase === null
-      : s.phase === phaseFilter;
-    const surfaceMatch = surfaceFilter === "all" ? true : s.surface === surfaceFilter;
-    return phaseMatch && surfaceMatch;
-  });
+Start by helping me frame the core challenge as a set of HMW statements and outline a facilitation arc.`,
+  },
+  {
+    id: 4, type: "general",
+    title: "Concept to stakeholder pitch",
+    mission: "Turn an early idea into a presentable concept — framed problem, design rationale, lo-fi prototype, and supporting narrative.",
+    when: ["You have a concept but need buy-in before investing in full design", "You're pitching to leadership and need more than a verbal idea", "You need to align stakeholders before a sprint or project kickoff"],
+    phases: [
+      { key: "02", note: "Frame the problem, write the brief, define success criteria" },
+      { key: "03", note: "Generate and evaluate concept directions" },
+      { key: "04", note: "Build a lo-fi or narrative prototype to make the concept tangible" },
+    ],
+    deliverables: ["Problem statement", "Design brief", "Concept sketches or wireframes", "Lo-fi prototype or storyboard", "Pitch narrative"],
+    skills: ["problem-framing.md", "concept-generation.md", "prototyping.md"],
+    time: "3–5 days",
+    prompt: `I need to turn a rough concept into a stakeholder pitch. The idea is [DESCRIBE CONCEPT]. Help me structure this into a compelling presentation:
+- Problem it solves: [DESCRIPTION]
+- Target user: [DESCRIPTION]
+- Key constraints: [TIME / TECH / BUDGET]
+- Audience for the pitch: [STAKEHOLDERS]
 
-  function FilterPills({ options, active, onChange }) {
-    return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-        {options.map(opt => {
-          const isActive = active === opt.id;
+Start by helping me write a crisp problem statement and a pitch narrative structure.`,
+  },
+  {
+    id: 5, type: "ai",
+    title: "AI maturity assessment",
+    mission: "Evaluate how ready a team or org is to design with AI — current tools, workflows, skill gaps, and a prioritized roadmap for adoption.",
+    when: ["A design team wants to start using AI but doesn't know where to begin", "Leadership wants to understand the team's AI capability before investing", "You're an IC designer assessing your own practice to level up"],
+    phases: [
+      { key: "01", note: "Audit current tools, workflows, and team AI usage patterns" },
+      { key: "02", note: "Gap analysis, maturity scoring, roadmap framing" },
+    ],
+    deliverables: ["AI tool inventory", "Workflow audit", "Maturity scorecard", "Gap analysis", "Adoption roadmap"],
+    skills: ["user-research.md", "problem-framing.md"],
+    time: "1–2 weeks",
+    prompt: `I want to assess AI maturity for [MY DESIGN PRACTICE / MY TEAM / OUR ORG]. Help me run a structured assessment:
+- Who I'm assessing: [solo designer / team of N / org-wide]
+- Current AI usage: [none / ad hoc / some tools / integrated]
+- Goal: [personal development / team enablement / leadership report]
+
+Start by helping me build an AI maturity scorecard with dimensions, rating criteria, and a gap analysis template.`,
+  },
+  {
+    id: 6, type: "general",
+    title: "Future state vision",
+    mission: "Build a compelling vision of where the product or experience could go — grounded in research, current state analysis, and forward-looking design concepts.",
+    when: ["You need to show leadership where the product should go in 1–3 years", "You're making the case for a significant redesign or strategic pivot", "Your team needs a north star to align near-term decisions against"],
+    phases: [
+      { key: "01", note: "Current state audit, user research, market signals" },
+      { key: "02", note: "Gap analysis, opportunity framing, vision criteria" },
+      { key: "03", note: "Future state concepts, scenario planning" },
+      { key: "04", note: "Vision prototype or experience concept for presentation" },
+    ],
+    deliverables: ["Current vs future state comparison", "Opportunity map", "Vision narrative", "Future state concept designs", "Presentation deck"],
+    skills: ["user-research.md", "competitive-analysis.md", "problem-framing.md", "concept-generation.md", "prototyping.md"],
+    time: "2–4 weeks",
+    prompt: `I'm building a future state vision for [PRODUCT/AREA]. Help me structure this project from current state through a compelling vision presentation:
+- Current state problems: [DESCRIBE]
+- Time horizon: [1 year / 3 years / longer]
+- Audience: [LEADERSHIP / BOARD / TEAM]
+- Constraints to design within: [TECH / BUSINESS / MARKET]
+
+Start by helping me map the current state gaps and frame the opportunity areas that will anchor the vision.`,
+  },
+  {
+    id: 7, type: "ai",
+    title: "Designing an AI-powered feature",
+    mission: "Design a product feature where AI is the core interaction — scoping what the model does, how outputs surface, and how users build trust over time.",
+    when: ["You're adding a generative AI capability to an existing product", "You need to design around model outputs that are probabilistic, not deterministic", "You're figuring out how to handle low-confidence results, errors, and user control"],
+    phases: [
+      { key: "01", note: "Understand what users expect from AI in this context; research trust and mental models" },
+      { key: "02", note: "Scope the AI's role, define success, map failure modes" },
+      { key: "03", note: "Explore output surfaces, feedback patterns, and trust-building interactions" },
+      { key: "04", note: "Build for all states: loading, confident, uncertain, wrong, recovering" },
+      { key: "05", note: "Test with real model outputs; measure trust calibration" },
+    ],
+    deliverables: ["AI feature brief", "Trust and mental model research", "Interaction patterns for AI states", "Prototype with error and uncertainty states", "Validation findings"],
+    skills: ["user-research.md", "problem-framing.md", "concept-generation.md", "prototyping.md", "usability-testing.md"],
+    time: "4–8 weeks",
+    prompt: `I'm designing an AI-powered feature: [DESCRIBE THE FEATURE AND WHAT THE AI DOES]. Help me approach this systematically:
+- What the AI does: [summarizes / generates / recommends / classifies / etc.]
+- User context: [who uses it, when, and what they're trying to accomplish]
+- Key risks: [wrong outputs / hallucinations / user over-trust / under-trust]
+
+Start by helping me map user mental models and expectations for AI in this context, and identify the critical trust moments I need to design for.`,
+  },
+  {
+    id: 8, type: "general",
+    title: "Design sprint",
+    mission: "Run a compressed 3–5 day sprint — map the problem, generate and vote on ideas, prototype one direction, and test with real users.",
+    when: ["You have a clear problem and need answers fast", "You want to validate a risky assumption before committing to build", "A cross-functional team needs to move from debate to decision"],
+    phases: [
+      { key: "01", note: "Day 1: map the challenge, expert interviews, HMW generation" },
+      { key: "02", note: "Day 1–2: target selection, sprint question" },
+      { key: "03", note: "Day 2–3: lightning demos, sketching, storyboard" },
+      { key: "04", note: "Day 4: build a realistic facade prototype" },
+      { key: "05", note: "Day 5: test with 5 users, synthesize findings" },
+    ],
+    deliverables: ["Sprint map", "HMW statements", "Storyboard", "Prototype", "Usability test findings", "Sprint retrospective"],
+    skills: ["problem-framing.md", "concept-generation.md", "prototyping.md", "usability-testing.md"],
+    time: "5 days",
+    prompt: `I'm running a design sprint on [CHALLENGE / PRODUCT AREA]. Help me plan and execute it day by day:
+- Sprint team: [ROLES]
+- Core challenge: [ONE SENTENCE]
+- Sprint question (what we want to answer): [QUESTION OR TBD]
+- Days available: [3 / 4 / 5]
+
+Start with Day 1: help me build the sprint map and generate a strong set of HMW statements from what we know.`,
+  },
+  {
+    id: 9, type: "ai",
+    title: "AI workflow integration audit",
+    mission: "Map where AI currently fits in a design team's process, identify high-leverage gaps, and recommend tools or skills to close them.",
+    when: ["A design team is using AI ad hoc and wants to systematize it", "You've adopted some AI tools but they're not connected to your actual workflow", "You want to know which phases of your process have the most room for AI leverage"],
+    phases: [
+      { key: "01", note: "Map current workflow phase by phase; inventory existing AI tool usage" },
+      { key: "02", note: "Score leverage by phase; prioritize gaps" },
+      { key: "06", note: "Produce an integration playbook with specific tools and skill files per phase" },
+    ],
+    deliverables: ["Phase-by-phase workflow map", "AI leverage scorecard", "Gap analysis", "Tool recommendations per phase", "Integration playbook"],
+    skills: ["user-research.md", "problem-framing.md", "design-delivery.md"],
+    time: "1–2 weeks",
+    prompt: `I want to audit how AI fits into my design workflow and build a plan to integrate it more intentionally:
+- My role: [solo designer / team lead / design ops]
+- Phases I work through: [all six / subset]
+- Current AI usage: [describe what you use and when]
+- Biggest friction in my current workflow: [describe]
+
+Start by helping me map my current workflow phase by phase and score where AI could add the most leverage.`,
+  },
+  {
+    id: 10, type: "general",
+    title: "New feature from zero",
+    mission: "Take a feature request from brief to build-ready — research, framing, design, testing, and handoff documentation for engineering.",
+    when: ["A feature has been prioritized and you're the designer owning it end-to-end", "You have a brief but no research, designs, or specs yet", "You need to deliver something fully handoff-ready, not just explorations"],
+    phases: [
+      { key: "01", note: "Understand user needs and context for this feature" },
+      { key: "02", note: "Frame the problem, write the brief, define requirements" },
+      { key: "03", note: "Generate and evaluate design directions" },
+      { key: "04", note: "Build and iterate on the design" },
+      { key: "05", note: "Test with users, incorporate findings" },
+      { key: "06", note: "Component specs, handoff docs, QA checklist" },
+    ],
+    deliverables: ["Research insights", "Problem statement & brief", "Design explorations", "Validated prototype", "Component specs", "Handoff package"],
+    skills: ["user-research.md", "problem-framing.md", "concept-generation.md", "prototyping.md", "usability-testing.md", "design-delivery.md", "phase-handoff.md"],
+    time: "4–8 weeks",
+    prompt: `I'm designing a new feature from scratch: [FEATURE NAME AND DESCRIPTION]. Help me run this end-to-end:
+- Product: [PRODUCT NAME]
+- User: [TARGET USER]
+- Business goal: [WHAT SUCCESS LOOKS LIKE]
+- Constraints: [TECH / TIMELINE / SCOPE]
+
+Start with Discover: help me write a research plan to understand what users need from this feature before I design anything.`,
+  },
+  {
+    id: 11, type: "general",
+    title: "Design system build or audit",
+    mission: "Build a new component library from scratch or audit an existing one — tokens, components, documentation, and handoff for scale.",
+    when: ["Your product has inconsistent UI and needs a shared system", "Engineering is asking for tokens and component specs", "You're onboarding new designers and need a source of truth"],
+    phases: [
+      { key: "03", note: "Visual direction, token architecture, component inventory" },
+      { key: "04", note: "Component build, state documentation, usage guidelines" },
+      { key: "06", note: "Token export, component specs, contribution docs" },
+    ],
+    deliverables: ["Token set", "Component inventory", "Component specs with states", "Usage guidelines", "Handoff documentation", "Contribution governance"],
+    skills: ["design-systems.md", "visual-design-execution.md", "design-delivery.md", "figma-playbook.md"],
+    time: "4–12 weeks",
+    prompt: `I need to [build a new design system / audit our existing one] for [PRODUCT]. Help me scope and execute this:
+- Current state: [no system / partial tokens / inconsistent components / needs audit]
+- Platform: [Web / iOS / Android / Cross-platform]
+- Team size: [N designers, N engineers]
+- Priority: [tokens / core components / patterns / documentation]
+
+Start by helping me create a component inventory and token architecture plan.`,
+  },
+  {
+    id: 12, type: "ai",
+    title: "Responsible AI design review",
+    mission: "Audit an existing or in-progress AI product for transparency, bias, error handling, and user trust — producing actionable design recommendations.",
+    when: ["You're shipping an AI feature and want to check it against responsible design principles", "Users have reported feeling misled or confused by AI outputs", "Legal or leadership has asked for a design-layer risk assessment"],
+    phases: [
+      { key: "01", note: "Understand how the AI behaves, where it fails, and what users experience" },
+      { key: "05", note: "Evaluate against transparency, fairness, control, and error recovery principles" },
+      { key: "06", note: "Produce a prioritized recommendations report and design spec for fixes" },
+    ],
+    deliverables: ["AI behavior audit", "Responsible design scorecard", "User trust evaluation", "Prioritized recommendations", "Design spec for mitigations"],
+    skills: ["user-research.md", "usability-testing.md", "design-delivery.md"],
+    time: "1–3 weeks",
+    prompt: `I need to run a responsible AI design review of [PRODUCT / FEATURE]. Help me audit it systematically:
+- What the AI does: [describe]
+- Known concerns: [bias / transparency / error handling / user control / other]
+- Users affected: [describe]
+- Output needed: [internal review / leadership report / design fixes]
+
+Start by helping me build a responsible AI design scorecard covering transparency, fairness, user control, error recovery, and trust calibration.`,
+  },
+];
+
+function WaysToWorkPath() {
+  const [filter, setFilter] = useState("all");
+  const [activeScenario, setActiveScenario] = useState(null);
+
+  const filtered = filter === "all" ? SCENARIOS
+    : filter === "ai" ? SCENARIOS.filter(s => s.type === "ai")
+    : SCENARIOS.filter(s => s.type === "general");
+
+  return (
+    <div style={{ position: "relative" }}>
+      {/* Filter pills */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
+        {[{ id: "all", label: "All scenarios" }, { id: "general", label: "General" }, { id: "ai", label: "AI — specific" }].map(f => {
+          const isActive = filter === f.id;
           return (
-            <button key={opt.id} onClick={() => onChange(opt.id)} style={{
-              padding: "4px 10px", borderRadius: 20, cursor: "pointer",
+            <button key={f.id} onClick={() => setFilter(f.id)} style={{
+              padding: "4px 12px", borderRadius: 20, cursor: "pointer",
               fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: "0.07em", textTransform: "uppercase",
               border: `1px solid ${isActive ? T.borderHover : T.border}`,
-              background: isActive ? T.card : "transparent",
+              background: isActive ? T.surface : "transparent",
               color: isActive ? T.text : T.dim,
               transition: "all 0.12s",
-            }}>{opt.label}</button>
+            }}>{f.label}</button>
           );
         })}
+      </div>
+
+      {/* Count */}
+      <div style={{ marginBottom: 14 }}>
+        <Mono color={T.dim} size={10}>{filtered.length} scenario{filtered.length !== 1 ? "s" : ""}</Mono>
+      </div>
+
+      {/* Scenario list */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 1, border: `1px solid ${T.border}`, borderRadius: 10, overflow: "hidden" }}>
+        {filtered.map((s, i) => {
+          const isLast = i === filtered.length - 1;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setActiveScenario(s)}
+              style={{
+                display: "flex", alignItems: "flex-start", gap: 16,
+                padding: "16px 20px", background: T.surface,
+                border: "none", borderBottom: isLast ? "none" : `1px solid ${T.border}`,
+                cursor: "pointer", textAlign: "left",
+                transition: "background 0.12s", outline: "none",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = T.card}
+              onMouseLeave={e => e.currentTarget.style.background = T.surface}
+            >
+              {/* Index */}
+              <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim, paddingTop: 3, flexShrink: 0, minWidth: 22 }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              {/* Content */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 14, fontWeight: 500, color: T.text }}>{s.title}</span>
+                  {s.type === "ai" && (
+                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", color: "#8B5CF6" }}>AI</span>
+                  )}
+                </div>
+                <div style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, marginBottom: 8 }}>{s.mission}</div>
+                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {s.phases.map(p => {
+                    const ph = T.phases[p.key];
+                    return ph ? (
+                      <span key={p.key} style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: `${ph.color}14`, border: `1px solid ${ph.color}30`, color: ph.color }}>{ph.label}</span>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+
+              {/* Arrow */}
+              <span style={{ fontSize: 14, color: T.dim, flexShrink: 0, paddingTop: 2 }}>→</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Drawer */}
+      {activeScenario && (
+        <ScenarioDrawer scenario={activeScenario} onClose={() => setActiveScenario(null)} />
+      )}
+    </div>
+  );
+}
+
+function ScenarioDrawer({ scenario: s, onClose }) {
+  const [copied, setCopied] = useState(false);
+
+  // Close on Escape
+  useEffect(() => {
+    function handleKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  function Section({ label, children }) {
+    return (
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>{label}</div>
+        {children}
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: 0, marginBottom: 24, borderBottom: `1px solid ${T.border}` }}>
-        {[
-          { id: "tools", label: "Tools", count: TOOLS.length },
-          { id: "prompts", label: "Prompts", count: PROMPTS.length },
-        ].map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            padding: "8px 14px", background: "none", border: "none",
-            borderBottom: `2px solid ${tab === t.id ? T.text : "transparent"}`,
-            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.07em", textTransform: "uppercase",
-            color: tab === t.id ? T.text : T.muted,
-            cursor: "pointer", transition: "all 0.15s", marginBottom: -1,
-            display: "flex", alignItems: "center", gap: 6,
-          }}>
-            {t.label}
-            <span style={{ fontSize: 9, background: tab === t.id ? "rgba(255,255,255,0.08)" : T.card, color: tab === t.id ? T.muted : T.dim, padding: "1px 5px", borderRadius: 3 }}>{t.count}</span>
-          </button>
-        ))}
-      </div>
+    <>
+      {/* Backdrop */}
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 100, backdropFilter: "blur(2px)" }} />
 
-      {/* Tools tab */}
-      {tab === "tools" && (() => {
-        const toolPhaseOptions = [
-          { id: "all", label: "All" },
-          { id: "01", label: "Discover" }, { id: "02", label: "Define" },
-          { id: "03", label: "Ideate" }, { id: "04", label: "Prototype" },
-          { id: "05", label: "Validate" }, { id: "06", label: "Deliver" },
-          { id: "cross", label: "Cross-phase" },
-        ];
-        const filteredTools = TOOLS.filter(t =>
-          toolPhaseFilter === "all" ? true :
-          toolPhaseFilter === "cross" ? t.phase === null :
-          t.phase === toolPhaseFilter
-        );
-        return (
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-            <Mono color={T.dim} size={10}>Phase</Mono>
-            <FilterPills options={toolPhaseOptions} active={toolPhaseFilter} onChange={setToolPhaseFilter} />
-          </div>
-          <div style={{ marginBottom: 12 }}><Mono color={T.dim} size={10}>{filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""}</Mono></div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {filteredTools.map(tool => (
-            <div key={tool.id} style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "16px 18px", background: T.surface, borderRadius: 8,
-              border: `1px solid ${T.border}`,
-            }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-                  <Mono color={T.dim}>{tool.number}</Mono>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: T.text }}>{tool.name}</span>
-                  <PhaseTag phaseId={tool.phase} small />
-                </div>
-                <div style={{ fontSize: 12, color: T.muted }}>{tool.subtitle}</div>
-              </div>
-              <button onClick={() => onOpenTool(tool.id)} style={{
-                marginLeft: 20, padding: "7px 16px", borderRadius: 5, flexShrink: 0,
-                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "0.06em", textTransform: "uppercase",
-                background: "transparent", border: `1px solid ${T.border}`,
-                color: T.muted, cursor: "pointer", whiteSpace: "nowrap",
-              }}>Open →</button>
-            </div>
-          ))}
-          </div>
-        </div>
-        );
-      })()}
+      {/* Drawer panel */}
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(520px, 92vw)",
+        background: T.surface,
+        borderLeft: `1px solid ${T.border}`,
+        zIndex: 101,
+        display: "flex", flexDirection: "column",
+        overflowY: "auto",
+        animation: "slideIn 0.22s ease-out",
+      }}>
+        <style>{`@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
 
-      {/* Prompts tab */}
-      {tab === "prompts" && (() => {
-        const filteredPrompts = phaseFilter === "all" ? PROMPTS : PROMPTS.filter(p => p.phase === phaseFilter);
-        return (
-        <div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Mono color={T.dim} size={10}>Phase</Mono>
-              <FilterPills options={PHASE_FILTERS} active={phaseFilter} onChange={setPhaseFilter} />
-            </div>
-          </div>
-          <div style={{ marginBottom: 12 }}><Mono color={T.dim} size={10}>{filteredPrompts.length} prompt{filteredPrompts.length !== 1 ? "s" : ""}</Mono></div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {filteredPrompts.map(prompt => {
-            const phaseColor = T.phases[prompt.phase]?.color || T.muted;
-            return (
-              <div key={prompt.id} style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden" }}>
-                <button
-                  onClick={() => setExpandedPrompt(expandedPrompt === prompt.id ? null : prompt.id)}
-                  style={{
-                    width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-                    padding: "14px 18px", background: expandedPrompt === prompt.id ? T.surface : "transparent",
-                    border: "none", cursor: "pointer", textAlign: "left", gap: 12,
-                  }}
-                >
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3 }}>
-                      <span style={{ fontSize: 13, fontWeight: 500, color: T.text }}>{prompt.name}</span>
-                      <PhaseTag phaseId={prompt.phase} small />
-                    </div>
-                    <Mono color={T.dim} size={10}>{prompt.skill}</Mono>
-                  </div>
-                  <span style={{ fontSize: 11, color: T.dim, transform: expandedPrompt === prompt.id ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
-                </button>
-                {isOpen && (
-                  <div style={{ borderTop: `1px solid ${T.border}`, padding: "16px 18px 18px" }}>
-                    <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 14 }}>
-                      <span style={{ color: T.dim, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>When to use · </span>
-                      {prompt.when}
-                    </div>
-                    <pre style={{
-                      fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-                      color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
-                      background: T.card, border: `1px solid ${T.border}`,
-                      borderRadius: 6, padding: "14px 16px", margin: "0 0 14px",
-                      overflowX: "auto",
-                    }}>{prompt.text}</pre>
-                    <CopyBtn text={prompt.text} />
-                  </div>
+        {/* Drawer header */}
+        <div style={{ padding: "20px 24px 18px", borderBottom: `1px solid ${T.border}`, position: "sticky", top: 0, background: T.surface, zIndex: 1 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                {s.type === "ai" && (
+                  <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", color: "#8B5CF6" }}>AI — specific</span>
                 )}
               </div>
-            );
-          })}
+              <h2 style={{ fontSize: 20, fontFamily: "'DM Serif Display', serif", fontWeight: 400, color: T.text, marginBottom: 6, lineHeight: 1.2 }}>{s.title}</h2>
+              <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>{s.mission}</p>
+            </div>
+            <button onClick={onClose} style={{ background: "none", border: "none", color: T.dim, cursor: "pointer", fontSize: 18, padding: "2px 4px", flexShrink: 0, lineHeight: 1 }}>✕</button>
           </div>
         </div>
-        );
-      })()}
 
-      {/* Skills tab */}
-      {tab === "skills" && (
-        <div>
-          {/* Filters */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Mono color={T.dim} size={10}>Phase</Mono>
-              <FilterPills options={PHASE_FILTERS} active={phaseFilter} onChange={setPhaseFilter} />
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Mono color={T.dim} size={10}>Surface</Mono>
-              <FilterPills options={SURFACE_FILTERS} active={surfaceFilter} onChange={setSurfaceFilter} />
-            </div>
-          </div>
+        {/* Drawer body */}
+        <div style={{ padding: "24px 24px 32px", flex: 1 }}>
 
-          {/* Result count */}
-          <div style={{ marginBottom: 12 }}>
-            <Mono color={T.dim} size={10}>{filteredSkills.length} skill{filteredSkills.length !== 1 ? "s" : ""}</Mono>
-          </div>
-
-          {/* Skill rows */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {filteredSkills.length === 0 ? (
-              <div style={{ padding: "24px 0", textAlign: "center" }}>
-                <Mono color={T.dim}>No skills match these filters</Mono>
-              </div>
-            ) : filteredSkills.map(skill => {
-              const dir = skill.phase ? `${skill.phase}-${T.phases[skill.phase]?.label.toLowerCase()}` : "";
-              const url = dir ? `${RAW}/${dir}/${skill.file}` : `${RAW}/${skill.file}`;
-              return (
-                <div key={skill.file} style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  padding: "12px 16px", background: T.surface, borderRadius: 8,
-                  border: `1px solid ${T.border}`,
-                }}>
-                  <div style={{ flex: 1, marginRight: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                      <Mono color={T.muted} size={11}>{skill.file}</Mono>
-                      <PhaseTag phaseId={skill.phase} small />
-                      <SkillBadge surface={skill.surface} />
-                    </div>
-                    <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
-                  </div>
-                  <a href={url} download style={{
-                    padding: "5px 12px", borderRadius: 5, flexShrink: 0,
-                    fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                    letterSpacing: "0.06em", textTransform: "uppercase",
-                    background: "transparent", border: `1px solid ${T.border}`,
-                    color: T.muted, textDecoration: "none", whiteSpace: "nowrap",
-                  }}>↓ .md</a>
+          {/* 1. When to use this */}
+          <Section label="When to use this">
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {s.when.map((w, i) => (
+                <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                  <span style={{ color: T.dim, fontSize: 11, paddingTop: 2, flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: 13, color: T.muted, lineHeight: 1.55 }}>{w}</span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          </Section>
+
+          {/* 2. Phases and focus */}
+          <Section label="Phases and focus">
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {s.phases.map(p => {
+                const ph = T.phases[p.key];
+                if (!ph) return null;
+                return (
+                  <div key={p.key} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "3px 8px", borderRadius: 3, background: `${ph.color}14`, border: `1px solid ${ph.color}30`, color: ph.color, flexShrink: 0, whiteSpace: "nowrap" }}>{ph.label}</span>
+                    <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, paddingTop: 1 }}>{p.note}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </Section>
+
+          {/* 3. Key deliverables */}
+          <Section label="Key deliverables">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {s.deliverables.map((d, i) => (
+                <span key={i} style={{ fontSize: 11, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 4, padding: "3px 9px" }}>{d}</span>
+              ))}
+            </div>
+          </Section>
+
+          {/* 4. Skills + time side by side */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+            <div>
+              <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Skills to use</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {s.skills.map((sk, i) => (
+                  <span key={i} style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 4, padding: "3px 8px", display: "inline-block" }}>{sk}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Estimated time</div>
+              <span style={{ fontSize: 13, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 6, padding: "6px 12px", display: "inline-block" }}>{s.time}</span>
+            </div>
+          </div>
+
+          {/* 5. Starting prompt */}
+          <div>
+            <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Starting prompt</div>
+            <pre style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+              color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
+              background: T.card, border: `1px solid ${T.border}`,
+              borderRadius: 6, padding: "14px 16px", margin: "0 0 12px",
+              overflowX: "auto",
+            }}>{s.prompt}</pre>
+            <button
+              onClick={() => { navigator.clipboard.writeText(s.prompt); setCopied(true); setTimeout(() => setCopied(false), 1800); }}
+              style={{
+                padding: "8px 16px", borderRadius: 6,
+                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
+                cursor: "pointer", border: `1.5px solid ${copied ? "#22C55E" : T.border}`,
+                background: "transparent", color: copied ? "#22C55E" : T.muted,
+                transition: "all 0.15s",
+              }}
+            >{copied ? "✓ Copied" : "Copy prompt"}</button>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -2974,8 +3211,8 @@ export default function App() {
               id: "ways",
               label: "Ways to Work",
               color: "#8B5CF6",
-              desc: "I know what I need to do. Show me tools, prompts, and guides by method.",
-              cta: "Browse methods →",
+              desc: "I have a mission — a project or challenge I need to run. Show me a path through the framework.",
+              cta: "Browse scenarios →",
             },
             {
               id: "deliverable",
