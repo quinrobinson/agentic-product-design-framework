@@ -1687,7 +1687,7 @@ function PhasePath({ onOpenTool }) {
       </div>
 
       {/* Detail panel */}
-      <div style={{ borderTop: `1px solid ${T.border}`, overflow: "hidden", minHeight: 280 }}>
+      <div style={{ overflow: "hidden", minHeight: 280 }}>
         {!selected ? (
           /* ── Default: How to Use ── */
           <div style={{ padding: "36px 40px 40px" }}>
@@ -2469,7 +2469,7 @@ function DeliverablePath({ onOpenTool }) {
       </div>
 
       {/* Detail panel */}
-      <div style={{ borderTop: `1px solid ${T.border}`, overflow: "hidden", minHeight: 200, marginBottom: 12 }}>
+      <div style={{ overflow: "hidden", minHeight: 200, marginBottom: 12 }}>
         {!selected ? (
           /* Default state */
           <div style={{ padding: "28px 28px 32px" }}>
@@ -2930,7 +2930,7 @@ function SkillsLibraryOverlay({ onBack }) {
         </div>
 
         {/* Phase detail panel */}
-        <div style={{ borderTop: `1px solid ${T.border}`, overflow: "hidden", marginBottom: 20 }}>
+        <div style={{ overflow: "hidden", marginBottom: 20 }}>
           {!selected ? (
             <div style={{ padding: "28px 24px 32px" }}>
               <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.7, margin: 0, maxWidth: 520 }}>
