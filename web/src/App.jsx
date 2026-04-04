@@ -2157,8 +2157,6 @@ First, confirm you can see my open Figma file by telling me its name and any pag
   },
 ];
 
-];
-
 function WaysToWorkPath() {
   const [filter, setFilter] = useState("all");
   const [activeScenario, setActiveScenario] = useState(null);
