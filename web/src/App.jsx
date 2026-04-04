@@ -2459,7 +2459,7 @@ function DeliverablePath({ onOpenTool }) {
             <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 16px", maxWidth: 520 }}>
               Select a phase above to see every deliverable for that stage. Each deliverable is produced by either a Tool or a Prompt.
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div className="deliverable-info-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {[
                 {
                   badge: "Interactive", headline: "Tools",
@@ -3401,6 +3401,7 @@ export default function App() {
           .path-grid-item:last-child { border-bottom: none; }
           .three-ways-badge { display: block; margin-bottom: 6px; }
           .ways-explainer-grid { grid-template-columns: 1fr; gap: 14px; }
+          .deliverable-info-grid { grid-template-columns: 1fr; }
           .three-ways-row { flex-direction: column; gap: 8px; }
           .three-ways-badge-wrap { background: none !important; border: none !important; padding: 0 !important; font-size: 10px !important; color: #666 !important; }
           .figma-callout-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
