@@ -15,6 +15,7 @@ import UXCopyWriter from "./UXCopyWriter";
 import UserFlowMapper from "./UserFlowMapper";
 import ComponentArchitecturePlanner from "./ComponentArchitecturePlanner";
 import ComponentStateSpecifier from "./ComponentStateSpecifier";
+import PrototypeHandoffGenerator from "./PrototypeHandoffGenerator";
 import FindingsSynthesizer from "./FindingsSynthesizer";
 import InsightReportGenerator from "./InsightReportGenerator";
 import ComponentSpecGenerator from "./ComponentSpecGenerator";
@@ -62,6 +63,7 @@ const TOOLS = [
   { id: "user-flow-mapper",     number: "12", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper },
   { id: "component-architecture", number: "13", phase: "04", name: "Component Architecture Planner", subtitle: "Define every component, variant, and token assignment before opening Figma", component: ComponentArchitecturePlanner },
   { id: "component-state",      number: "14", phase: "04", name: "Component State Specifier",    subtitle: "Document every state, transition, and Figma property for one component at a time", component: ComponentStateSpecifier },
+  { id: "proto-handoff",        number: "15", phase: "04", name: "Prototype Handoff Generator",   subtitle: "Document decisions, surface gaps, rank hypotheses, and generate a Findings Synthesizer handoff block", component: PrototypeHandoffGenerator },
   { id: "findings-synthesizer",  number: "13", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer },
   { id: "insight-report",        number: "14", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator },
   { id: "component-spec",        number: "15", phase: "06", name: "Component Spec Generator",     subtitle: "Generate complete component specs — anatomy, all states, behavior, spacing, and edge cases — ready for developer handoff", component: ComponentSpecGenerator },
@@ -1273,6 +1275,7 @@ const DELIVERABLES = [
   { name: "User Flow",               type: "tool",   ref: "user-flow-mapper",         label: "User Flow Mapper"                    },
   { name: "Component Architecture",  type: "tool",   ref: "component-architecture",   label: "Component Architecture Planner"      },
   { name: "Component State Spec",    type: "tool",   ref: "component-state",          label: "Component State Specifier"           },
+  { name: "Prototype Handoff",       type: "tool",   ref: "proto-handoff",            label: "Prototype Handoff Generator"         },
   { name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",   label: "Findings Synthesizer"          },
   { name: "Findings Report",         type: "tool",   ref: "insight-report",         label: "Insight Report Generator"      },
   { name: "Component Spec",          type: "tool",   ref: "component-spec",         label: "Component Spec Generator"      },
