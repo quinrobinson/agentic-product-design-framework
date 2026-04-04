@@ -1577,6 +1577,52 @@ function PromptCard({ prompt, phaseColor }) {
   );
 }
 
+// ── Figma MCP Callout ─────────────────────────────────────────────────────────
+const FIGMA_MCP_PHASES = ["03", "04", "06"];
+
+const FIGMA_MCP_COPY = {
+  "03": "Claude can build concept boards, storyboard frames, and FigJam ideation boards directly in your file.",
+  "04": "Claude can scaffold wireframe frames, organize flows, and apply design system components in your file.",
+  "06": "Claude can generate and place spec annotations, accessibility notes, and decision records directly in your file.",
+};
+
+function FigmaMCPCallout({ phaseId, onOpenSkill }) {
+  if (!FIGMA_MCP_PHASES.includes(phaseId)) return null;
+  const figmaSkill = { file: "figma-playbook.md", phase: null, surface: "code + figma mcp", desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." };
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      gap: 12, padding: "10px 14px", marginBottom: 16,
+      background: "rgba(245,158,11,0.06)",
+      border: "1px solid rgba(245,158,11,0.2)",
+      borderRadius: 8,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
+        <span style={{
+          fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
+          letterSpacing: "0.08em", textTransform: "uppercase",
+          padding: "2px 7px", borderRadius: 3, flexShrink: 0,
+          background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)", color: "#F59E0B",
+        }}>Figma MCP</span>
+        <span style={{ fontSize: 12, color: T.muted, lineHeight: 1.5 }}>{FIGMA_MCP_COPY[phaseId]}</span>
+      </div>
+      <button
+        onClick={() => onOpenSkill(figmaSkill)}
+        style={{
+          padding: "4px 12px", borderRadius: 5, flexShrink: 0,
+          fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+          letterSpacing: "0.06em", textTransform: "uppercase",
+          background: "transparent", border: "1px solid rgba(245,158,11,0.3)",
+          color: "#F59E0B", cursor: "pointer", whiteSpace: "nowrap",
+          transition: "all 0.15s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,158,11,0.1)"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+      >View skill →</button>
+    </div>
+  );
+}
+
 function PhasePath({ onOpenTool }) {
   const [selected, setSelected] = useState(null);
   const [tab, setTab] = useState("prompts");
@@ -1691,6 +1737,9 @@ function PhasePath({ onOpenTool }) {
                 {phase.prompts > 0 && <Mono color={T.dim}>{phase.prompts} prompt{phase.prompts !== 1 ? "s" : ""}</Mono>}
               </div>
             </div>
+
+            {/* Figma MCP callout — Ideate, Prototype, Deliver only */}
+            <FigmaMCPCallout phaseId={selected} onOpenSkill={setActiveSkill} />
 
             {/* Tabs */}
             <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}`, marginBottom: 20 }}>
@@ -2085,6 +2134,29 @@ Start by helping me create a component inventory and token architecture plan.`,
 
 Start by helping me build a responsible AI design scorecard covering transparency, fairness, user control, error recovery, and trust calibration.`,
   },
+  {
+    id: 13, type: "ai",
+    title: "Work directly in Figma with Claude",
+    mission: "Use Claude Code + Figma MCP to build, annotate, and structure design work directly in your Figma file — without copy-pasting between tools.",
+    when: ["You want Claude to build a FigJam board, wireframe frames, or spec annotations directly in your file", "You're working in Ideate, Prototype, or Deliver and want Claude to do the Figma work, not just describe it", "You want to skip the manual step of translating Claude's output into Figma"],
+    phases: [
+      { key: "03", note: "Build concept boards, storyboard frames, and FigJam ideation boards directly in your file" },
+      { key: "04", note: "Scaffold wireframe frames, organize flows, apply design system components" },
+      { key: "06", note: "Generate and place spec annotations, accessibility notes, and design decision records" },
+    ],
+    deliverables: ["FigJam workshop or research board", "Wireframe frame structure", "Component annotations", "Spec overlays", "Journey map visualization", "Design decision records"],
+    skills: ["figma-playbook.md"],
+    time: "Ongoing — replaces manual Figma work across phases",
+    prompt: `I want Claude to work directly in my Figma file using the Figma MCP. Let's do a connection check first, then start working.
+
+My file: [PASTE FIGMA FILE URL OR NAME]
+What I need built: [DESCRIBE — e.g. a FigJam affinity board / wireframe frames for a checkout flow / spec annotations on my components]
+Phase I'm in: [Ideate / Prototype / Deliver]
+
+First, confirm you can see my open Figma file by telling me its name and any pages you can see. Then we'll start building.`,
+  },
+];
+
 ];
 
 function WaysToWorkPath() {
