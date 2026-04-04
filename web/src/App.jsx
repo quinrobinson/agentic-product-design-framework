@@ -1593,8 +1593,8 @@ function FigmaMCPCallout({ phaseId, onOpenSkill }) {
     <div style={{
       display: "flex", alignItems: "center", justifyContent: "space-between",
       gap: 12, padding: "10px 14px", marginBottom: 16,
-      background: "rgba(245,158,11,0.06)",
-      border: "1px solid rgba(245,158,11,0.2)",
+      background: T.surface,
+      border: `1px solid ${T.border}`,
       borderRadius: 8,
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
@@ -1602,9 +1602,9 @@ function FigmaMCPCallout({ phaseId, onOpenSkill }) {
           fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
           letterSpacing: "0.08em", textTransform: "uppercase",
           padding: "2px 7px", borderRadius: 3, flexShrink: 0,
-          background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)", color: "#F59E0B",
+          background: T.card, border: `1px solid ${T.border}`, color: T.muted,
         }}>Figma MCP</span>
-        <span style={{ fontSize: 12, color: T.muted, lineHeight: 1.5 }}>{FIGMA_MCP_COPY[phaseId]}</span>
+        <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5 }}>{FIGMA_MCP_COPY[phaseId]}</span>
       </div>
       <button
         onClick={() => onOpenSkill(figmaSkill)}
@@ -1612,12 +1612,12 @@ function FigmaMCPCallout({ phaseId, onOpenSkill }) {
           padding: "4px 12px", borderRadius: 5, flexShrink: 0,
           fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
           letterSpacing: "0.06em", textTransform: "uppercase",
-          background: "transparent", border: "1px solid rgba(245,158,11,0.3)",
-          color: "#F59E0B", cursor: "pointer", whiteSpace: "nowrap",
+          background: "transparent", border: `1px solid ${T.border}`,
+          color: T.muted, cursor: "pointer", whiteSpace: "nowrap",
           transition: "all 0.15s",
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,158,11,0.1)"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
       >View skill →</button>
     </div>
   );
@@ -2218,7 +2218,7 @@ function WaysToWorkPath() {
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                   <span style={{ fontSize: 14, fontWeight: 500, color: T.text }}>{s.title}</span>
                   {s.type === "ai" && (
-                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", color: "#8B5CF6" }}>AI</span>
+                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted }}>AI</span>
                   )}
                 </div>
                 <div style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, marginBottom: 8 }}>{s.mission}</div>
@@ -2290,7 +2290,7 @@ function ScenarioDrawer({ scenario: s, onClose }) {
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 {s.type === "ai" && (
-                  <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)", color: "#8B5CF6" }}>AI — specific</span>
+                  <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted }}>AI — specific</span>
                 )}
               </div>
               <h2 style={{ fontSize: 20, fontFamily: "'DM Serif Display', serif", fontWeight: 400, color: T.text, marginBottom: 6, lineHeight: 1.2 }}>{s.title}</h2>
