@@ -984,7 +984,7 @@ export default function DesignSystemStudio() {
                     {/* Meta */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontSize: 11, color: C.dim }}>{theme.archetype}</span>
-                      <span style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono', monospace" }}>r{theme.radiusMd}</span>
+                      <span style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono', monospace" }}>radius: {theme.radiusMd}px</span>
                     </div>
                   </div>
                 );
