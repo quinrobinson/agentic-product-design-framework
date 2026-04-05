@@ -30,6 +30,22 @@ function alpha(hex, a) {
   const { r, g, b } = hexToRgb(hex);
   return `rgba(${r},${g},${b},${a})`;
 }
+function luminance(hex) {
+  let { r, g, b } = hexToRgb(hex);
+  [r, g, b] = [r, g, b].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrastRatio(hex1, hex2) {
+  const l1 = luminance(hex1), l2 = luminance(hex2);
+  const lighter = Math.max(l1, l2), darker = Math.min(l1, l2);
+  return Math.round(((lighter + 0.05) / (darker + 0.05)) * 100) / 100;
+}
+function wcagLevel(ratio) {
+  if (ratio >= 7) return { label: "AAA", color: "#16A34A" };
+  if (ratio >= 4.5) return { label: "AA", color: "#16A34A" };
+  if (ratio >= 3) return { label: "AA Large", color: "#D97706" };
+  return { label: "Fail", color: "#DC2626" };
+}
 
 // ── Theme Definitions ────────────────────────────────────────────────────────
 const THEMES = {
@@ -121,20 +137,31 @@ const THEMES = {
 
 // ── Component Categories ─────────────────────────────────────────────────────
 const COMPONENTS = [
-  { id: "button", name: "Button", cat: "Action" },
-  { id: "textinput", name: "Text input", cat: "Input" },
-  { id: "select", name: "Select", cat: "Input" },
-  { id: "checkbox", name: "Checkbox", cat: "Input" },
-  { id: "radio", name: "Radio", cat: "Input" },
-  { id: "toggle", name: "Toggle", cat: "Input" },
-  { id: "card", name: "Card", cat: "Containment" },
-  { id: "modal", name: "Modal", cat: "Overlay" },
-  { id: "toast", name: "Toast", cat: "Feedback" },
-  { id: "alert", name: "Alert", cat: "Feedback" },
-  { id: "badge", name: "Badge", cat: "Data Display" },
-  { id: "tag", name: "Tag / Chip", cat: "Data Display" },
-  { id: "avatar", name: "Avatar", cat: "Data Display" },
-  { id: "tooltip", name: "Tooltip", cat: "Overlay" },
+  // Tier 1 — Core
+  { id: "button", name: "Button", cat: "Action", tier: 1 },
+  { id: "textinput", name: "Text input", cat: "Input", tier: 1 },
+  { id: "select", name: "Select", cat: "Input", tier: 1 },
+  { id: "checkbox", name: "Checkbox", cat: "Input", tier: 1 },
+  { id: "radio", name: "Radio", cat: "Input", tier: 1 },
+  { id: "toggle", name: "Toggle", cat: "Input", tier: 1 },
+  { id: "textarea", name: "Textarea", cat: "Input", tier: 2 },
+  { id: "slider", name: "Slider", cat: "Input", tier: 2 },
+  { id: "card", name: "Card", cat: "Containment", tier: 1 },
+  { id: "accordion", name: "Accordion", cat: "Containment", tier: 2 },
+  { id: "tabs", name: "Tabs", cat: "Navigation", tier: 2 },
+  { id: "breadcrumb", name: "Breadcrumb", cat: "Navigation", tier: 2 },
+  { id: "pagination", name: "Pagination", cat: "Navigation", tier: 2 },
+  { id: "modal", name: "Modal", cat: "Overlay", tier: 1 },
+  { id: "tooltip", name: "Tooltip", cat: "Overlay", tier: 1 },
+  { id: "toast", name: "Toast", cat: "Feedback", tier: 1 },
+  { id: "alert", name: "Alert", cat: "Feedback", tier: 1 },
+  { id: "progressbar", name: "Progress bar", cat: "Feedback", tier: 2 },
+  { id: "skeleton", name: "Skeleton", cat: "Feedback", tier: 2 },
+  { id: "badge", name: "Badge", cat: "Data Display", tier: 1 },
+  { id: "tag", name: "Tag / Chip", cat: "Data Display", tier: 1 },
+  { id: "avatar", name: "Avatar", cat: "Data Display", tier: 1 },
+  { id: "table", name: "Table", cat: "Data Display", tier: 2 },
+  { id: "list", name: "List", cat: "Data Display", tier: 2 },
 ];
 
 const SECTIONS = ["themes", "tokens", "components", "export"];
@@ -446,11 +473,233 @@ function PreviewTooltip({ t }) {
   );
 }
 
+
+function PreviewTextarea({ t }) {
+  return (
+    <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+      {["Default", "Focus", "Disabled"].map(state => (
+        <div key={state} style={{ flex: "1 1 200px" }}>
+          <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: t.textSecondary, marginBottom: 4, fontFamily: t.fontBody }}>{state}</label>
+          <div style={{
+            border: `1.5px solid ${state === "Focus" ? t.primary : t.border}`, borderRadius: t.radiusMd,
+            padding: `${t.spaceUnit * 2}px ${t.spaceUnit * 3}px`, fontSize: t.baseSize, fontFamily: t.fontBody,
+            color: state === "Disabled" ? "#aaa" : t.textPrimary, background: state === "Disabled" ? "#F3F4F6" : t.surface,
+            minHeight: 80, lineHeight: 1.5,
+            boxShadow: state === "Focus" ? `0 0 0 2px ${alpha(t.primary, 0.15)}` : "none",
+          }}>
+            <span style={{ color: state === "Disabled" ? "#bbb" : "#999" }}>Write something...</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewSlider({ t }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {[{ label: "Default", val: 40 }, { label: "Midpoint", val: 50 }, { label: "Disabled", val: 25 }].map(({ label, val }) => (
+        <div key={label} style={{ opacity: label === "Disabled" ? 0.5 : 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontFamily: t.fontBody, color: t.textSecondary, marginBottom: 6 }}>
+            <span>{label}</span><span style={{ fontFamily: t.fontMono }}>{val}%</span>
+          </div>
+          <div style={{ position: "relative", height: 6, borderRadius: 3, background: alpha(t.primary, 0.12) }}>
+            <div style={{ position: "absolute", left: 0, top: 0, height: 6, borderRadius: 3, background: t.primary, width: `${val}%` }} />
+            <div style={{ position: "absolute", top: -5, left: `${val}%`, transform: "translateX(-50%)", width: 16, height: 16, borderRadius: "50%", background: t.primary, border: `2px solid ${t.surface}`, boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewAccordion({ t }) {
+  return (
+    <div style={{ border: `1px solid ${t.border}`, borderRadius: t.radiusMd, overflow: "hidden" }}>
+      {[{ title: "Section one", open: true, content: "Content for the first section. Accordions reveal information progressively." },
+        { title: "Section two", open: false },
+        { title: "Section three", open: false }].map((item, i) => (
+        <div key={i} style={{ borderTop: i > 0 ? `1px solid ${t.border}` : "none" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: `${t.spaceUnit * 3}px ${t.spaceUnit * 4}px`, cursor: "pointer", background: t.surface, fontFamily: t.fontBody, fontSize: t.baseSize, fontWeight: 500, color: t.textPrimary }}>
+            {item.title}
+            <span style={{ fontSize: 12, color: t.textTertiary, transition: `transform ${t.motionFast}`, transform: item.open ? "rotate(180deg)" : "none" }}>▼</span>
+          </div>
+          {item.open && <div style={{ padding: `0 ${t.spaceUnit * 4}px ${t.spaceUnit * 4}px`, fontSize: t.baseSize - 1, color: t.textSecondary, fontFamily: t.fontBody, lineHeight: 1.5, background: t.surface }}>{item.content}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewTabs({ t }) {
+  return (
+    <div>
+      <div style={{ display: "flex", borderBottom: `2px solid ${t.border}` }}>
+        {["Overview", "Details", "Settings", "Disabled"].map((tab, i) => {
+          const isActive = i === 0;
+          const isDisabled = i === 3;
+          return (
+            <div key={tab} style={{
+              padding: `${t.spaceUnit * 2.5}px ${t.spaceUnit * 4}px`, fontSize: t.baseSize - 1, fontFamily: t.fontBody,
+              fontWeight: isActive ? 600 : 400, color: isDisabled ? t.textTertiary : isActive ? t.primary : t.textSecondary,
+              borderBottom: isActive ? `2px solid ${t.primary}` : "2px solid transparent", marginBottom: -2,
+              cursor: isDisabled ? "not-allowed" : "pointer", opacity: isDisabled ? 0.5 : 1,
+            }}>{tab}</div>
+          );
+        })}
+      </div>
+      <div style={{ padding: `${t.spaceUnit * 4}px 0`, fontSize: t.baseSize - 1, color: t.textSecondary, fontFamily: t.fontBody }}>Tab content area for the active tab.</div>
+    </div>
+  );
+}
+
+function PreviewBreadcrumb({ t }) {
+  const items = ["Home", "Products", "Category", "Current page"];
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+      {items.map((item, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{
+            fontSize: t.baseSize - 1, fontFamily: t.fontBody,
+            color: i === items.length - 1 ? t.textPrimary : t.primary,
+            fontWeight: i === items.length - 1 ? 500 : 400,
+            textDecoration: i < items.length - 1 ? "underline" : "none",
+            textUnderlineOffset: 2, cursor: i < items.length - 1 ? "pointer" : "default",
+          }}>{item}</span>
+          {i < items.length - 1 && <span style={{ color: t.textTertiary, fontSize: 10 }}>/</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreviewPagination({ t }) {
+  const pages = [1, 2, 3, "...", 12];
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      <button style={{ padding: `${t.spaceUnit * 1.5}px ${t.spaceUnit * 2.5}px`, borderRadius: t.radiusMd, border: `1px solid ${t.border}`, background: t.surface, color: t.textTertiary, fontSize: t.baseSize - 2, cursor: "pointer", fontFamily: t.fontBody }}>Prev</button>
+      {pages.map((p, i) => (
+        <button key={i} style={{
+          width: 32, height: 32, borderRadius: t.radiusMd, border: p === 1 ? "none" : `1px solid ${t.border}`,
+          background: p === 1 ? t.primary : t.surface, color: p === 1 ? contrastOn(t.primary) : p === "..." ? t.textTertiary : t.textPrimary,
+          fontSize: t.baseSize - 2, fontFamily: t.fontBody, fontWeight: p === 1 ? 600 : 400,
+          cursor: p === "..." ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+        }}>{p}</button>
+      ))}
+      <button style={{ padding: `${t.spaceUnit * 1.5}px ${t.spaceUnit * 2.5}px`, borderRadius: t.radiusMd, border: `1px solid ${t.border}`, background: t.surface, color: t.textPrimary, fontSize: t.baseSize - 2, cursor: "pointer", fontFamily: t.fontBody }}>Next</button>
+    </div>
+  );
+}
+
+function PreviewProgressBar({ t }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {[{ label: "Determinate", pct: 65 }, { label: "Complete", pct: 100 }, { label: "Indeterminate", pct: -1 }].map(({ label, pct }) => (
+        <div key={label}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontFamily: t.fontBody, color: t.textSecondary, marginBottom: 6 }}>
+            <span>{label}</span>{pct >= 0 && <span style={{ fontFamily: t.fontMono }}>{pct}%</span>}
+          </div>
+          <div style={{ height: 6, borderRadius: 3, background: alpha(t.primary, 0.12), overflow: "hidden", position: "relative" }}>
+            {pct >= 0 ? (
+              <div style={{ height: 6, borderRadius: 3, background: pct === 100 ? t.success : t.primary, width: `${pct}%`, transition: `width ${t.motionNormal}` }} />
+            ) : (
+              <div style={{ height: 6, borderRadius: 3, background: t.primary, width: "30%", position: "absolute", animation: "indeterminate 1.5s infinite ease-in-out" }} />
+            )}
+          </div>
+        </div>
+      ))}
+      <style>{"@keyframes indeterminate{0%{left:-30%}100%{left:100%}}"}</style>
+    </div>
+  );
+}
+
+function PreviewSkeleton({ t }) {
+  const shimmer = { background: `linear-gradient(90deg, ${alpha(t.textTertiary, 0.08)} 25%, ${alpha(t.textTertiary, 0.15)} 50%, ${alpha(t.textTertiary, 0.08)} 75%)`, backgroundSize: "200% 100%", animation: "shimmer 1.5s infinite", borderRadius: t.radiusMd };
+  return (
+    <div style={{ display: "flex", gap: 16 }}>
+      <div style={{ flex: "1 1 200px", padding: 16, border: `1px solid ${t.border}`, borderRadius: t.radiusLg, background: t.surface }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+          <div style={{ width: 36, height: 36, borderRadius: "50%", ...shimmer }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ height: 12, width: "60%", marginBottom: 6, ...shimmer }} />
+            <div style={{ height: 10, width: "40%", ...shimmer }} />
+          </div>
+        </div>
+        <div style={{ height: 10, width: "100%", marginBottom: 8, ...shimmer }} />
+        <div style={{ height: 10, width: "90%", marginBottom: 8, ...shimmer }} />
+        <div style={{ height: 10, width: "75%", ...shimmer }} />
+      </div>
+      <style>{"@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}"}</style>
+    </div>
+  );
+}
+
+function PreviewTable({ t }) {
+  const cols = ["Name", "Role", "Status"];
+  const rows = [
+    ["Alex Chen", "Designer", "Active"],
+    ["Jordan Lee", "Engineer", "Active"],
+    ["Sam Patel", "PM", "Away"],
+  ];
+  return (
+    <div style={{ border: `1px solid ${t.border}`, borderRadius: t.radiusMd, overflow: "hidden" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: t.fontBody, fontSize: t.baseSize - 1 }}>
+        <thead>
+          <tr style={{ background: t.surfaceSecondary }}>
+            {cols.map(c => <th key={c} style={{ textAlign: "left", padding: `${t.spaceUnit * 2.5}px ${t.spaceUnit * 4}px`, fontWeight: 600, color: t.textPrimary, borderBottom: `1px solid ${t.border}`, fontSize: t.baseSize - 2 }}>{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i} style={{ borderBottom: i < rows.length - 1 ? `1px solid ${t.border}` : "none" }}>
+              {row.map((cell, j) => (
+                <td key={j} style={{ padding: `${t.spaceUnit * 2.5}px ${t.spaceUnit * 4}px`, color: j === 2 ? (cell === "Active" ? t.success : t.warning) : t.textPrimary }}>
+                  {j === 2 ? <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: "50%", background: cell === "Active" ? t.success : t.warning }} />{cell}</span> : cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function PreviewList({ t }) {
+  const items = [
+    { icon: "◆", title: "Design review", desc: "Scheduled for Friday" },
+    { icon: "●", title: "Sprint planning", desc: "Next Monday at 10am" },
+    { icon: "▲", title: "Component audit", desc: "In progress — 60% complete" },
+  ];
+  return (
+    <div style={{ border: `1px solid ${t.border}`, borderRadius: t.radiusMd, overflow: "hidden" }}>
+      {items.map((item, i) => (
+        <div key={i} style={{
+          display: "flex", alignItems: "center", gap: 12, padding: `${t.spaceUnit * 3}px ${t.spaceUnit * 4}px`,
+          borderTop: i > 0 ? `1px solid ${t.border}` : "none", background: t.surface, cursor: "pointer",
+        }}>
+          <span style={{ color: t.primary, fontSize: 10, flexShrink: 0 }}>{item.icon}</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: t.baseSize - 1, fontWeight: 500, color: t.textPrimary, fontFamily: t.fontBody }}>{item.title}</div>
+            <div style={{ fontSize: t.baseSize - 2, color: t.textSecondary, fontFamily: t.fontBody }}>{item.desc}</div>
+          </div>
+          <span style={{ color: t.textTertiary, fontSize: 12 }}>›</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const PREVIEW_MAP = {
   button: PreviewButton, textinput: PreviewTextInput, select: PreviewSelect,
   checkbox: PreviewCheckbox, radio: PreviewRadio, toggle: PreviewToggle,
-  card: PreviewCard, modal: PreviewModal, toast: PreviewToast, alert: PreviewAlert,
-  badge: PreviewBadge, tag: PreviewTag, avatar: PreviewAvatar, tooltip: PreviewTooltip,
+  textarea: PreviewTextarea, slider: PreviewSlider,
+  card: PreviewCard, accordion: PreviewAccordion,
+  tabs: PreviewTabs, breadcrumb: PreviewBreadcrumb, pagination: PreviewPagination,
+  modal: PreviewModal, tooltip: PreviewTooltip,
+  toast: PreviewToast, alert: PreviewAlert, progressbar: PreviewProgressBar, skeleton: PreviewSkeleton,
+  badge: PreviewBadge, tag: PreviewTag, avatar: PreviewAvatar,
+  table: PreviewTable, list: PreviewList,
 };
 
 // ── CSS Export Generator ─────────────────────────────────────────────────────
@@ -545,6 +794,7 @@ export default function DesignSystemStudio() {
   const [section, setSection] = useState("themes");
   const [activeComponent, setActiveComponent] = useState("button");
   const [copied, setCopied] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   const applyTheme = useCallback((key) => {
     setActiveTheme(key);
@@ -684,6 +934,29 @@ export default function DesignSystemStudio() {
               <ColorInput label="Warning" value={tokens.warning} onChange={v => update("warning", v)} />
               <ColorInput label="Error" value={tokens.error} onChange={v => update("error", v)} />
 
+              {/* WCAG Contrast Checker */}
+              <div style={{ borderTop: `1px solid ${C.border}`, margin: "14px 0", paddingTop: 14 }}>
+                <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: C.dim, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1.5 }}>Contrast check</div>
+                {[
+                  { label: "Primary on surface", fg: tokens.primary, bg: tokens.surface },
+                  { label: "Text on surface", fg: tokens.textPrimary, bg: tokens.surface },
+                  { label: "Secondary text", fg: tokens.textSecondary, bg: tokens.surface },
+                  { label: "On primary", fg: contrastOn(tokens.primary), bg: tokens.primary },
+                ].map(({ label, fg, bg }) => {
+                  const ratio = contrastRatio(fg, bg);
+                  const level = wcagLevel(ratio);
+                  return (
+                    <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                      <span style={{ fontSize: 11, color: C.sub }}>{label}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: C.dim }}>{ratio}:1</span>
+                        <span style={{ fontSize: 9, fontWeight: 600, padding: "1px 6px", borderRadius: 4, background: alpha(level.color, 0.1), color: level.color }}>{level.label}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
               <div style={{ borderTop: `1px solid ${C.border}`, margin: "14px 0", paddingTop: 14 }}>
                 <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: C.dim, marginBottom: 14, textTransform: "uppercase", letterSpacing: 1.5 }}>Typography</div>
                 <SliderInput label="Base size" value={tokens.baseSize} onChange={v => update("baseSize", v)} min={12} max={20} suffix="px" />
@@ -768,15 +1041,27 @@ export default function DesignSystemStudio() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 600, color: C.text }}>{COMPONENTS.find(c => c.id === activeComponent)?.name}</div>
-                    <div style={{ fontSize: 11, color: C.dim }}>{COMPONENTS.find(c => c.id === activeComponent)?.cat} · Tier 1</div>
+                    <div style={{ fontSize: 12, color: C.dim }}>{COMPONENTS.find(c => c.id === activeComponent)?.cat} · Tier {COMPONENTS.find(c => c.id === activeComponent)?.tier}</div>
                   </div>
-                  <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: C.sub, background: alpha(tokens.primary, 0.06), padding: "3px 10px", borderRadius: 99 }}>
-                    {tokens.name}
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    {/* Dark mode toggle */}
+                    <button onClick={() => setDarkMode(!darkMode)} style={{
+                      display: "flex", alignItems: "center", gap: 6, padding: "5px 12px", borderRadius: 99,
+                      border: `1px solid ${C.border}`, background: darkMode ? "#1E293B" : C.bgSub,
+                      color: darkMode ? "#F1F5F9" : C.sub, fontSize: 11, cursor: "pointer",
+                      fontFamily: "'JetBrains Mono', monospace", transition: "all 0.15s",
+                    }}>
+                      <span style={{ fontSize: 12 }}>{darkMode ? "◐" : "○"}</span>
+                      {darkMode ? "Dark" : "Light"}
+                    </button>
+                    <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: C.sub, background: alpha(tokens.primary, 0.06), padding: "3px 10px", borderRadius: 99 }}>
+                      {tokens.name}
+                    </div>
                   </div>
                 </div>
                 {/* Live preview on surface */}
-                <div style={{ background: tokens.surface, borderRadius: tokens.radiusLg, padding: 24, border: `1px solid ${tokens.border}` }}>
-                  {PreviewComp && <PreviewComp t={tokens} />}
+                <div style={{ background: darkMode ? "#1E293B" : tokens.surface, borderRadius: tokens.radiusLg, padding: 24, border: `1px solid ${darkMode ? "#334155" : tokens.border}`, transition: "all 0.2s" }}>
+                  {PreviewComp && <PreviewComp t={darkMode ? { ...tokens, surface: "#1E293B", surfaceSecondary: "#0F172A", textPrimary: "#F1F5F9", textSecondary: "#94A3B8", textTertiary: "#64748B", border: "#334155" } : tokens} />}
                 </div>
               </div>
 
