@@ -46,6 +46,20 @@ function wcagLevel(ratio) {
   if (ratio >= 3) return { label: "AA Large", color: "#D97706" };
   return { label: "Fail", color: "#DC2626" };
 }
+function adaptPrimaryForDark(primary, accent) {
+  // If primary is too dark for a #111111 surface, find a suitable alternative
+  const darkSurface = "#111111";
+  const ratio = contrastRatio(primary, darkSurface);
+  if (ratio >= 4.5) return primary; // already passes AA
+  // Try accent color
+  if (contrastRatio(accent, darkSurface) >= 4.5) return accent;
+  // Lighten primary until it passes
+  for (let amt = 0.3; amt <= 0.8; amt += 0.1) {
+    const lighter = lighten(primary, amt);
+    if (contrastRatio(lighter, darkSurface) >= 4.5) return lighter;
+  }
+  return lighten(primary, 0.7); // fallback
+}
 
 // ── Theme Definitions ────────────────────────────────────────────────────────
 const THEMES = {
@@ -1063,7 +1077,7 @@ export default function DesignSystemStudio() {
                 </div>
                 {/* Live preview on surface */}
                 <div style={{ background: darkMode ? "#111111" : tokens.surface, borderRadius: tokens.radiusLg, padding: 24, border: `1px solid ${darkMode ? "#2A2A2A" : tokens.border}`, transition: "all 0.2s" }}>
-                  {PreviewComp && <PreviewComp t={darkMode ? { ...tokens, surface: "#111111", surfaceSecondary: "#1A1A1A", textPrimary: "#F5F5F5", textSecondary: "#A3A3A3", textTertiary: "#737373", border: "#2A2A2A", disabledBg: "#1A1A1A", disabledText: "#525252", disabledBorder: "#2A2A2A", placeholder: "#737373", toggleOff: "#404040", toggleKnob: "#E5E5E5" } : { ...tokens, disabledBg: "#F3F4F6", disabledText: "#9CA3AF", disabledBorder: "#E5E5E5", placeholder: "#9CA3AF", toggleOff: "#D1D5DB", toggleKnob: "#FFFFFF" }} />}
+                  {PreviewComp && <PreviewComp t={darkMode ? (() => { const dp = adaptPrimaryForDark(tokens.primary, tokens.accent); const ds = adaptPrimaryForDark(tokens.secondary, tokens.accent); return { ...tokens, primary: dp, secondary: ds, surface: "#111111", surfaceSecondary: "#1A1A1A", textPrimary: "#F5F5F5", textSecondary: "#A3A3A3", textTertiary: "#737373", border: "#2A2A2A", disabledBg: "#1A1A1A", disabledText: "#525252", disabledBorder: "#2A2A2A", placeholder: "#737373", toggleOff: "#404040", toggleKnob: "#E5E5E5" }; })() : { ...tokens, disabledBg: "#F3F4F6", disabledText: "#9CA3AF", disabledBorder: "#E5E5E5", placeholder: "#9CA3AF", toggleOff: "#D1D5DB", toggleKnob: "#FFFFFF" }} />}
                 </div>
               </div>
 
