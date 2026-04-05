@@ -892,11 +892,6 @@ export default function DesignSystemStudio() {
         {/* ─── OVERVIEW ─── */}
         {section === "overview" && (
           <div style={{ margin: "-24px -24px -48px", background: "#0F0F0F", padding: "48px 48px 56px", minHeight: "calc(100vh - 120px)" }}>
-            {/* Block 1 — Hero */}
-            <div style={{ textAlign: "center", marginBottom: 40 }}>
-              <p style={{ fontSize: 16, color: "#999999", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>Build a complete design system or audit an existing one. Choose a theme, customize tokens, preview components, and export to Figma.</p>
-            </div>
-
             {/* Block 2 — Two path cards */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 40, maxWidth: 900, margin: "0 auto 40px" }}>
               <div onClick={() => setSection("themes")} style={{ background: "#1A1A1A", borderRadius: 10, padding: "28px", border: "1px solid #2A2A2A", cursor: "pointer", transition: "all 0.15s" }}>
