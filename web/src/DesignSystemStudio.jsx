@@ -839,8 +839,8 @@ export default function DesignSystemStudio() {
 
   // T = dark header/tabs, C = light content area
   const T = {
-    dark: "#000000", card: "#1E293B", border: "#222222",
-    text: "#F8FAFC", dim: "#94A3B8", dimmer: "#64748B",
+    dark: "#000000", card: "#111111", border: "#222222",
+    text: "#F5F5F5", dim: "#888888", dimmer: "#666666",
   };
   const C = {
     bg: "#FFFFFF", bgSub: "#FAFAFA", card: "#FFFFFF",
@@ -851,7 +851,7 @@ export default function DesignSystemStudio() {
   const fontsUrl = `https://fonts.googleapis.com/css2?family=${tokens.fonts}&display=swap`;
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: C.bg, minHeight: "100vh", color: C.text }}>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", background: section === "overview" ? "#000000" : C.bg, minHeight: "100vh", color: C.text }}>
       <link href={fontsUrl} rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
@@ -864,14 +864,15 @@ export default function DesignSystemStudio() {
             </div>
             <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, fontWeight: 400, margin: 0 }}>Design System Studio</h1>
           </div>
-          <div style={{ fontSize: 11, color: T.dimmer, fontFamily: "'JetBrains Mono', monospace" }}>
-            {tokens.name} theme
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>Current theme</div>
+            <div style={{ fontSize: 11, color: T.text, fontFamily: "'JetBrains Mono', monospace", fontWeight: 500, padding: "3px 10px", borderRadius: 6, border: `1px solid ${T.border}`, background: T.card }}>{tokens.name}</div>
           </div>
         </div>
       </div>
 
       {/* Section Nav */}
-      <div style={{ background: T.dark, borderBottom: `1px solid ${C.border}`, padding: "0 24px" }}>
+      <div style={{ background: T.dark, borderBottom: `1px solid ${section === "overview" ? "#222222" : C.border}`, padding: "0 24px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", gap: 0 }}>
           {SECTIONS.map(s => (
             <button key={s} onClick={() => setSection(s)} style={{
