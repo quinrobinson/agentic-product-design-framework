@@ -44,38 +44,48 @@ function CopyBtn({ text }) {
 }
 
 export default function ResearchSynthesizer() {
-  const [researchContext, setResearchContext] = useState("");
-  const [sessionNotes, setSessionNotes] = useState("");
+  const [context, setContext] = useState("");
   const [prompt, setPrompt] = useState("");
 
   function buildPrompt() {
-    return `You are a senior UX researcher helping a design team synthesize qualitative research into actionable insights.
+    return `You are a senior UX researcher helping a designer synthesize user or stakeholder interviews into clear, actionable insights.
 
-Start by understanding the research context. Ask about anything missing:
-- What decisions will this research inform?
-- Who are the participants — what role, background, or context do they represent?
-- Are there any assumptions the team held going in that you want to test?
+Your first job is to collect the research materials — not to synthesize yet.
 
-Then guide the synthesis process:
+**Step 1: Understand what we're working with**
+Start by asking:
+1. Are these user interviews, stakeholder interviews, or a mix of both?
+2. How many sessions do you have?
+3. What decisions will this research inform — what does the team need to know or do differently as a result?
 
-1. **Session Summaries** — For each session or data source, identify: key observations, direct quotes (verbatim), notable moments, and surprises
-2. **Code the Data** — Identify 8–12 thematic codes that appear across multiple sessions. Only include codes present in 3+ sessions.
-3. **Identify Themes** — Group codes into 3–5 overarching themes with insight statements
-4. **Insight Statements** — For each theme, write: "[User] [does/believes/feels X] because [root cause Y], which means [design implication Z]"
-5. **Pain Point Ranking** — Rank the top pain points by frequency and severity
-6. **Recommendations** — What should the design team explore in the Define phase?
+**Step 2: Collect the materials**
+Ask the designer to share everything they have. Be specific:
+- Interview notes or transcripts (paste them or upload the files directly here in Claude.ai)
+- Interview guide or discussion script, if one was used
+- Any screener or participant profiles
+- Previous research or context documents that informed this round
 
-If the researcher has transcripts, recordings, or notes to share, ask them to upload the files — you can review them directly.
+Let them know they can upload multiple files, and encourage them to share raw notes — rough is fine. Collect one session at a time if it's easier.
 
-At the end, produce a complete **Research Brief** in clean markdown:
-## Research Brief
-**Research Question:** ...
-**Method & Participants:** ...
-**Key Themes:** ...
-**Top Insights:** ...
-**Pain Points (ranked):** ...
-**Recommended Next Steps:** ...
-**Handoff to Define Phase:** ...${researchContext ? `\n\n---\nResearch context:\n${researchContext}` : ""}${sessionNotes ? `\n\nSession notes / transcripts:\n${sessionNotes}` : ""}`;
+**Step 3: Align on the output**
+Before synthesizing, confirm what format is most useful:
+- A narrative Research Brief for stakeholders?
+- A structured insight log (themes, quotes, severity ratings)?
+- A handoff doc for the Define phase?
+- Or something else?
+
+Ask: who is the audience for this output, and how will it be used?
+
+**Step 4: Synthesize**
+Once you have the materials and an agreed output format, work through the synthesis:
+- Surface key themes that appear across multiple sessions
+- Anchor every theme with direct quotes (verbatim — never paraphrase)
+- Identify the most critical pain points and unmet needs
+- Note anything that surprised the team or challenged prior assumptions
+- Distinguish between what users said vs. what they did (if observation data exists)
+
+**Step 5: Produce the output**
+Generate the agreed deliverable in clean markdown. Always end with a **Handoff Block** summarizing the top 3 insights and recommended next steps for the Define phase.${context ? `\n\n---\nContext from the designer:\n${context}` : ""}`;
   }
 
   return (
@@ -87,29 +97,18 @@ At the end, produce a complete **Research Brief** in clean markdown:
           </span>
         </div>
         <h1 style={{ margin: "0 0 8px", fontSize: 28, fontWeight: 700, lineHeight: 1.2 }}>Research Synthesizer</h1>
-        <p style={{ margin: "0 0 32px", color: T.muted, fontSize: 16, lineHeight: 1.5 }}>Turn raw interviews into a structured Research Brief</p>
+        <p style={{ margin: "0 0 32px", color: T.muted, fontSize: 16, lineHeight: 1.5 }}>Synthesize user and stakeholder interviews into insights your team can act on</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 28 }}>
           <div>
             <label style={{ display: "block", fontSize: 12, color: T.muted, marginBottom: 6, fontFamily: T.font.mono, letterSpacing: "0.08em" }}>
-              RESEARCH CONTEXT <span style={{ color: T.dim }}>(optional)</span>
+              ANY CONTEXT TO START WITH <span style={{ color: T.dim }}>(optional)</span>
             </label>
             <Textarea
-              value={researchContext}
-              onChange={setResearchContext}
-              placeholder="What's the research question? What method did you use (interviews, surveys, observation)? How many participants?"
+              value={context}
+              onChange={setContext}
+              placeholder="Briefly describe the project and what you were trying to learn. Claude will ask you to share your interview notes and documents once you're in the conversation."
               rows={4}
-            />
-          </div>
-          <div>
-            <label style={{ display: "block", fontSize: 12, color: T.muted, marginBottom: 6, fontFamily: T.font.mono, letterSpacing: "0.08em" }}>
-              SESSION NOTES OR TRANSCRIPTS <span style={{ color: T.dim }}>(optional)</span>
-            </label>
-            <Textarea
-              value={sessionNotes}
-              onChange={setSessionNotes}
-              placeholder="Paste session notes, transcripts, or key quotes here. You can also upload files directly in Claude.ai..."
-              rows={6}
             />
           </div>
         </div>
