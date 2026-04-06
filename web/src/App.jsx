@@ -49,25 +49,25 @@ const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Desi
 
 // ── Tool registry ────────────────────────────────────────────────────────────
 const TOOLS = [
-  { id: "brief",              number: "01", phase: null, name: "Design Brief Generator",      subtitle: "Turn project context into a Claude-ready design brief",                          component: AIBriefGenerator },
-  { id: "deck",               number: "02", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder },
-  { id: "design-system",      number: "03", phase: null, name: "Design System Studio",        subtitle: "Build or audit a complete design system with live previews",                     component: DesignSystemStudio },
-  { id: "research-synthesizer",number:"05", phase: "01", name: "Research Synthesizer",        subtitle: "Turn raw interviews into a structured Research Brief",                           component: ResearchSynthesizer },
-  { id: "service-blueprint",  number: "05", phase: "01", name: "Service Blueprint Generator", subtitle: "Map current and future state experiences across five swim lanes",                component: ServiceBlueprintGenerator },
-  { id: "competitive-snapshot", number: "06", phase: "01", name: "Competitive Snapshot Builder", subtitle: "Map the landscape, audit competitors, and find differentiation opportunities",    component: CompetitiveSnapshotBuilder },
-  { id: "problem-framing",      number: "07", phase: "02", name: "Problem Framing",             subtitle: "Generate, pressure-test, and score problem statements + HMW questions",           component: ProblemFramingTool },
-  { id: "journey-mapping",      number: "08", phase: "02", name: "Journey Mapping",             subtitle: "Generate research-grounded journey maps across six lanes with critical moments",  component: JourneyMappingTool },
-  { id: "concept-generator",    number: "09", phase: "03", name: "Concept Generator",          subtitle: "Generate concepts across 5 angles including outside-the-box thinking from unrelated domains", component: ConceptGenerator },
-  { id: "idea-clustering",      number: "10", phase: "03", name: "Idea Clustering",             subtitle: "Transform raw concepts into a strategic landscape — clusters, tensions, and recommendations", component: IdeaClusteringTool },
-  { id: "ux-copy-writer",       number: "11", phase: "04", name: "UX Copy Writer",              subtitle: "Generate complete interface copy — voice brief, flow copy, error states, and empty states",      component: UXCopyWriter },
-  { id: "user-flow-mapper",     number: "12", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper },
-  { id: "component-architecture", number: "13", phase: "04", name: "Component Architecture Planner", subtitle: "Define every component, variant, and token assignment before opening Figma", component: ComponentArchitecturePlanner },
-  { id: "component-state",      number: "14", phase: "04", name: "Component State Specifier",    subtitle: "Document every state, transition, and Figma property for one component at a time", component: ComponentStateSpecifier },
-  { id: "proto-handoff",        number: "15", phase: "04", name: "Prototype Handoff Generator",   subtitle: "Document decisions, surface gaps, rank hypotheses, and generate a Findings Synthesizer handoff block", component: PrototypeHandoffGenerator },
-  { id: "findings-synthesizer",  number: "13", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer },
-  { id: "insight-report",        number: "14", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator },
-  { id: "component-spec",        number: "15", phase: "06", name: "Component Spec Generator",     subtitle: "Generate complete component specs — anatomy, all states, behavior, spacing, and edge cases — ready for developer handoff", component: ComponentSpecGenerator },
-  { id: "design-qa",             number: "16", phase: "06", name: "Design QA Logger",             subtitle: "Structure QA notes into a severity-rated issue log with launch recommendation and developer sign-off checklist", component: DesignQALogger },
+  { id: "brief",              number: "01", phase: null, name: "Design Brief Generator",      subtitle: "Turn project context into a Claude-ready design brief",                          component: AIBriefGenerator,              skill: "phase-handoff.md" },
+  { id: "deck",               number: "02", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder,              skill: "stakeholder-presentation.md" },
+  { id: "design-system",      number: "03", phase: null, name: "Design System Studio",        subtitle: "Build or audit a complete design system with live previews",                     component: DesignSystemStudio,             skill: "design-systems.md" },
+  { id: "research-synthesizer",number:"05", phase: "01", name: "Research Synthesizer",        subtitle: "Turn raw interviews into a structured Research Brief",                           component: ResearchSynthesizer,            skill: "research-synthesis.md" },
+  { id: "service-blueprint",  number: "05", phase: "01", name: "Service Blueprint Generator", subtitle: "Map current and future state experiences across five swim lanes",                component: ServiceBlueprintGenerator,      skill: "service-blueprint.md" },
+  { id: "competitive-snapshot", number: "06", phase: "01", name: "Competitive Snapshot Builder", subtitle: "Map the landscape, audit competitors, and find differentiation opportunities",    component: CompetitiveSnapshotBuilder,   skill: "competitive-analysis.md" },
+  { id: "problem-framing",      number: "07", phase: "02", name: "Problem Framing",             subtitle: "Generate, pressure-test, and score problem statements + HMW questions",           component: ProblemFramingTool,           skill: "problem-framing.md" },
+  { id: "journey-mapping",      number: "08", phase: "02", name: "Journey Mapping",             subtitle: "Generate research-grounded journey maps across six lanes with critical moments",  component: JourneyMappingTool,           skill: "journey-mapping.md" },
+  { id: "concept-generator",    number: "09", phase: "03", name: "Concept Generator",          subtitle: "Generate concepts across 5 angles including outside-the-box thinking from unrelated domains", component: ConceptGenerator,   skill: "concept-generation.md" },
+  { id: "idea-clustering",      number: "10", phase: "03", name: "Idea Clustering",             subtitle: "Transform raw concepts into a strategic landscape — clusters, tensions, and recommendations", component: IdeaClusteringTool, skill: "idea-clustering.md" },
+  { id: "ux-copy-writer",       number: "11", phase: "04", name: "UX Copy Writer",              subtitle: "Generate complete interface copy — voice brief, flow copy, error states, and empty states",      component: UXCopyWriter,      skill: "ux-copy-writing.md" },
+  { id: "user-flow-mapper",     number: "12", phase: "04", name: "User Flow Mapper",            subtitle: "Map happy paths, branches, and error states — producing a screen inventory and prototype brief", component: UserFlowMapper,    skill: "user-flow-mapping.md" },
+  { id: "component-architecture", number: "13", phase: "04", name: "Component Architecture Planner", subtitle: "Define every component, variant, and token assignment before opening Figma", component: ComponentArchitecturePlanner, skill: "prototyping.md" },
+  { id: "component-state",      number: "14", phase: "04", name: "Component State Specifier",    subtitle: "Document every state, transition, and Figma property for one component at a time", component: ComponentStateSpecifier,    skill: "prototyping.md" },
+  { id: "proto-handoff",        number: "15", phase: "04", name: "Prototype Handoff Generator",   subtitle: "Document decisions, surface gaps, rank hypotheses, and generate a Findings Synthesizer handoff block", component: PrototypeHandoffGenerator, skill: "phase-handoff.md" },
+  { id: "findings-synthesizer",  number: "13", phase: "05", name: "Findings Synthesizer",        subtitle: "Structure session notes, synthesize across participants, rate severity, and generate a go/no-go decision", component: FindingsSynthesizer, skill: "usability-findings-synthesis.md" },
+  { id: "insight-report",        number: "14", phase: "05", name: "Insight Report Generator",     subtitle: "Generate findings reports for four stakeholder audiences plus an iteration brief for the next prototype cycle", component: InsightReportGenerator, skill: "insight-report.md" },
+  { id: "component-spec",        number: "15", phase: "06", name: "Component Spec Generator",     subtitle: "Generate complete component specs — anatomy, all states, behavior, spacing, and edge cases — ready for developer handoff", component: ComponentSpecGenerator, skill: "component-specs.md" },
+  { id: "design-qa",             number: "16", phase: "06", name: "Design QA Logger",             subtitle: "Structure QA notes into a severity-rated issue log with launch recommendation and developer sign-off checklist", component: DesignQALogger,         skill: "design-qa.md" },
 ];
 
 // ── Skill registry ───────────────────────────────────────────────────────────
@@ -1614,6 +1614,29 @@ function PromptCard({ prompt, phaseColor }) {
   );
 }
 
+function ToolPromptCard({ tool, phaseColor, onOpen }) {
+  const color = phaseColor || "#22C55E";
+  return (
+    <div style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden", transition: "border-color 0.15s" }}
+      onMouseEnter={e => e.currentTarget.style.borderColor = color + "44"}
+      onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", gap: 12 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 2 }}>{tool.name}</div>
+          <Mono color={T.dim} size={10}>{tool.skill}</Mono>
+        </div>
+        <button
+          onClick={onOpen}
+          style={{ padding: "5px 12px", borderRadius: 5, flexShrink: 0, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${color}55`, color: color, cursor: "pointer", whiteSpace: "nowrap", transition: "border-color 0.15s" }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = color}
+          onMouseLeave={e => e.currentTarget.style.borderColor = color + "55"}
+        >View Prompt →</button>
+      </div>
+    </div>
+  );
+}
+
 // ── Figma MCP Callout ─────────────────────────────────────────────────────────
 const FIGMA_MCP_PHASES = ["03", "04", "06"];
 
@@ -1716,12 +1739,11 @@ function PhasePath({ onOpenTool }) {
           <div style={{ padding: "28px 0 32px" }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1, marginBottom: 6, whiteSpace: "nowrap" }}>Six phases. Three artifact types. One continuous workflow.</p>
             <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.6, margin: "0 0 20px" }}>Each phase produces artifacts that feed the next. Select any phase above to see its tools, skills, prompts, and how to use it.</p>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Three ways to work with Claude</div>
-            <div className="ways-explainer-grid">
+            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>Two ways to work with Claude</div>
+            <div className="ways-explainer-grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
               {[
-                { label: "Tools", badge: "Interactive", desc: "Guided multi-step tools with real-time AI generation. Run a complete workflow in one session." },
-                { label: "Prompts", badge: "Copy + Paste", desc: "Phase-specific prompts engineered for Claude Chat. Paste into a conversation and provide your context." },
-                { label: "Skills", badge: "Attach to Claude", desc: "Attach .md files to a Claude project or conversation. Claude follows the methodology automatically." },
+                { label: "Prompts", badge: "Copy + Paste", desc: "Phase-specific prompts for Claude Chat or Code. Paste and go — Claude guides the session, asks follow-up questions, and reviews your uploads." },
+                { label: "Skills", badge: "Attach to Claude", desc: "Attach .md files to a Claude project or conversation. Claude follows the methodology automatically across every session." },
               ].map(item => (
                 <div key={item.label} style={{ border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
                   <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim, marginBottom: 6 }}>{item.badge}</div>
@@ -1757,9 +1779,8 @@ function PhasePath({ onOpenTool }) {
             {/* Tabs */}
             <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}`, marginBottom: 20 }}>
               {[
-                { id: "prompts", label: "Prompts", count: phasePrompts.length },
+                { id: "prompts", label: "Prompts", count: phasePrompts.length + phaseTools.length },
                 { id: "skills", label: "Skills", count: phaseSkills.length },
-                { id: "tools", label: "Tools", count: phaseTools.length },
                 { id: "how", label: "How to Use", count: null },
               ].map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)} style={{
@@ -1782,11 +1803,18 @@ function PhasePath({ onOpenTool }) {
             {/* Tab: Prompts */}
             {tab === "prompts" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {phasePrompts.length === 0 ? (
+                {(phasePrompts.length + phaseTools.length) === 0 ? (
                   <div style={{ padding: "20px 0", textAlign: "center" }}><Mono color={T.dim}>No prompts yet for this phase</Mono></div>
-                ) : phasePrompts.map(prompt => (
-                  <PromptCard key={prompt.id} prompt={prompt} phaseColor={p.color} />
-                ))}
+                ) : (
+                  <>
+                    {phasePrompts.map(prompt => (
+                      <PromptCard key={prompt.id} prompt={prompt} phaseColor={p.color} />
+                    ))}
+                    {phaseTools.map(tool => (
+                      <ToolPromptCard key={tool.id} tool={tool} phaseColor={p.color} onOpen={() => onOpenTool(tool.id)} />
+                    ))}
+                  </>
+                )}
               </div>
             )}
 
@@ -1818,25 +1846,6 @@ function PhasePath({ onOpenTool }) {
 
             {activeSkill && <SkillDrawer skill={activeSkill} onClose={() => setActiveSkill(null)} />}
 
-      {/* Tab: Tools */}
-            {tab === "tools" && (
-              <div style={{ display: "grid", gridTemplateColumns: phaseTools.length > 1 ? "1fr 1fr" : "1fr", gap: 8 }}>
-                {phaseTools.length === 0 ? (
-                  <div style={{ padding: "20px 0", textAlign: "center" }}><Mono color={T.dim}>No tools yet for this phase</Mono></div>
-                ) : phaseTools.map(tool => (
-                  <div key={tool.id} className="tool-row" style={{ background: T.card, borderRadius: 8, border: `1px solid ${T.border}` }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 3 }}>{tool.name}</div>
-                      <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.4 }}>{tool.subtitle}</div>
-                    </div>
-                    <button onClick={() => onOpenTool(tool.id)} style={{ padding: "6px 12px", borderRadius: 5, flexShrink: 0, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${p.color}55`, color: p.color, cursor: "pointer", whiteSpace: "nowrap", transition: "border-color 0.15s" }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = p.color}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = p.color + "55"}
-                    >Open →</button>
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* Tab: How to Use */}
             {tab === "how" && phase.howToUse && (
