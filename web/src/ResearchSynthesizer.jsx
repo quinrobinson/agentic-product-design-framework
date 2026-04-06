@@ -41,7 +41,13 @@ async function callClaude(systemPrompt, userMessage, onChunk) {
     }),
   });
 
-  if (!response.ok) { onChunk("⚠️ Error " + response.status + ". Check your API key and try again."); return ""; }
+  if (!response.ok) {
+    const errBody = await response.text().catch(() => "");
+    let errMsg = response.status;
+    try { const j = JSON.parse(errBody); errMsg = j?.error?.message || errBody || response.status; } catch {}
+    onChunk("⚠️ API error: " + errMsg);
+    return "";
+  }
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let fullText = "";
