@@ -203,6 +203,78 @@ Problem frames often fail not because they're wrong, but because they're not com
 
 ---
 
+## Stakeholder Alignment Prototype (Optional — Figma Make)
+
+When words aren't enough, make the problem frame tangible. A stakeholder alignment prototype is a rough Figma Make sketch that illustrates the problem — not a solution, not a concept direction. It exists to create a shared reference point before ideation begins.
+
+**When this is worth doing:**
+- Stakeholders are debating the problem frame itself ("Is this really the problem?")
+- Distributed or cross-functional teams that can't do a live workshop
+- External clients or executives who need something concrete to react to
+- The current-state experience is hard to describe without showing it
+
+**What an alignment prototype is — and isn't:**
+
+| Is | Is not |
+|---|---|
+| A rough illustration of the problem scenario | A design proposal or concept |
+| A shared artifact to align on what's being solved | A commitment to any solution direction |
+| A throwaway sketch (5–10 min in Figma Make) | A prototype to usability test |
+| Input to refine the problem frame | Output from ideation |
+
+---
+
+**Step 1 — Generate the alignment prototype prompt**
+
+**Claude prompt:**
+> "Generate a Figma Make prompt for a stakeholder alignment prototype. This is not a solution — it illustrates the problem scenario so stakeholders can react to the pain point concretely.
+>
+> The prototype should show 2–3 screens of the *current-state experience* at the moment of highest friction — the specific situation where the user encounters the problem we're trying to solve.
+>
+> For each screen:
+> - Show what the user currently sees or does (not an ideal state)
+> - Make the friction point visible — the missing information, the confusing step, the dead end
+> - Use realistic placeholder content from the persona's context
+>
+> Do not show a solution. The last screen should leave the user stuck — that's the problem we're framing.
+>
+> Keep the prompt under 150 words.
+>
+> Problem statement: [paste]
+> Primary persona: [name + context + goal]
+> Key friction point from research: [the specific moment where the problem is most acute]"
+
+---
+
+**Step 2 — Use the prototype in a stakeholder session**
+
+Once generated, the alignment prototype serves as a conversation anchor — not a presentation artifact.
+
+**Questions to ask stakeholders while clicking through:**
+1. "Is this the moment we're trying to fix?" — confirms the problem frame is right
+2. "Is this the user we're designing for?" — validates the persona in context
+3. "What's the most frustrating part of what you just saw?" — surfaces unstated priorities
+4. "What would success look like at this moment?" — extracts implicit success criteria
+
+**Record any updates the session surfaces.** If stakeholders disagree about which screen represents the real problem, the problem frame needs revision before Ideate begins — better to learn this now.
+
+---
+
+**Step 3 — Record the prototype and what it revealed**
+
+```
+Alignment prototype (Figma Make): [URL — or "not generated"]
+Session date: [DATE]
+Attended by: [roles, not names]
+Frame confirmed: [yes / no / revised]
+Key insight from session: [1–2 sentences — what the prototype surfaced that the written frame didn't]
+Frame revision (if any): [what changed after stakeholders reacted to the prototype]
+```
+
+Add this to the Define → Ideate handoff block below.
+
+---
+
 ## Quality Checklist
 
 Before passing to Ideate, verify:
@@ -214,6 +286,7 @@ Before passing to Ideate, verify:
 - [ ] Scope boundaries are explicit — what's in AND what's out
 - [ ] Success criteria are measurable, not descriptive ("reduces time by 30%" not "feels faster")
 - [ ] Constraints are specific to this project — not generic
+- [ ] Stakeholder alignment complete — alignment prototype generated and session run if needed (optional but recommended when frame was contested)
 
 ---
 
@@ -234,6 +307,7 @@ Generate this block at the close of Problem Framing. Paste it as the opening mes
 - Alternative framings considered: [N]
 - HMW questions generated: [N total, top 5 selected]
 - Stakeholder alignment: [complete / pending]
+- Alignment prototype: [URL — or "not generated"] | Frame confirmed by stakeholders: [yes / no / revised]
 
 ### What the next phase needs to know
 - Primary research finding that drove this frame: [one sentence]

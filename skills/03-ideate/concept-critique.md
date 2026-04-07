@@ -184,22 +184,79 @@ What goes wrong — not in edge cases, but in normal use?
 
 ---
 
-## Comparing Multiple Concepts
+## Parallel Concept Proofs for Finalists
 
-When critiquing 2–3 concepts against each other, use this comparative prompt after running individual critiques.
+Before running the comparative ranking, generate a Figma Make proof for each concept finalist. This turns the selection decision from an abstract comparison into a side-by-side interaction review — the team clicks through each option instead of debating written descriptions.
+
+**When to run this:**
+- You have 2–3 concepts that survived individual critique and are genuinely competitive
+- The team is split and needs something tangible to break the tie
+- Stakeholders will be involved in the selection decision
+
+**Step 1 — Generate a proof for each finalist**
+
+Use `concept-proof.md` to generate a Figma Make prompt for each concept. Focus the prompt on the primary interaction pattern — the moment that best demonstrates the concept's core mechanism. Run all proofs before reviewing any of them.
+
+**Step 2 — Run a structured proof comparison**
+
+Once all proofs are generated and published, use this prompt:
 
 **Claude prompt:**
-> "Compare these [N] concepts on four dimensions. For each dimension, rank the concepts from strongest to weakest and explain the ranking.
+> "We have Figma Make proofs for [N] concept finalists. Help us compare them through a structured interaction review.
+>
+> For each concept and its prototype URL:
+> 1. **Core mechanism clarity** — does the primary interaction make the concept's mechanism immediately legible, or does it require explanation?
+> 2. **First friction point** — where does a first-time user stall or hesitate?
+> 3. **Value moment visibility** — is the moment of highest value obvious within the first 2 clicks?
+> 4. **Interaction risk** — which interaction pattern is most likely to confuse [persona] in real conditions?
+>
+> Then: based on the proofs alone, which concept has the most legible core interaction? Which has the most hidden friction?
+>
+> Concepts + prototype URLs:
+> - [Concept A name] — [URL]
+> - [Concept B name] — [URL]
+> - [Concept C name — if applicable] — [URL]
+> Persona: [paste]"
+
+**Step 3 — Record finalist proof URLs**
+
+Before moving to the comparative ranking, capture the proof results:
+
+```
+### Finalist Proofs
+
+| Concept | Prototype URL | Core mechanism legible? | Primary friction point |
+|---|---|---|---|
+| [Name] | [URL] | Yes / No / Partial | [1 sentence] |
+| [Name] | [URL] | Yes / No / Partial | [1 sentence] |
+| [Name] | [URL] | Yes / No / Partial | [1 sentence] |
+
+**Interaction winner:** [Concept name] — [why the proof was most legible]
+**Hidden friction found:** [Concept name] — [what the proof revealed]
+```
+
+Feed this table into the comparative ranking below alongside the written critique findings.
+
+---
+
+## Comparing Multiple Concepts
+
+When critiquing 2–3 concepts against each other, use this comparative prompt after running individual critiques and parallel proofs.
+
+**Claude prompt:**
+> "Compare these [N] concepts on five dimensions. For each dimension, rank the concepts from strongest to weakest and explain the ranking.
 >
 > Dimensions:
 > 1. **User risk** — which has the lowest risk of failing for [persona] in realistic conditions?
 > 2. **Assumption risk** — which makes the fewest unvalidated bets?
 > 3. **Switching cost** — which is easiest for [persona] to adopt given their current behavior?
 > 4. **Recoverable if wrong** — which is easiest to pivot from if the core assumption fails?
+> 5. **Interaction legibility** — based on the Figma Make proofs, which concept's core mechanism was most immediately clear? [include proof findings if generated]
 >
 > Then: which concept would you recommend prototyping first, and why? Consider: the goal of prototyping is to validate the riskiest assumption as quickly as possible — not to build the most polished version.
 >
 > Concepts: [paste all critiqued concepts]
+> Proof comparison results: [paste finalist proof table — if generated]
 > Problem statement: [paste]
 > Persona: [paste]"
 
@@ -250,7 +307,9 @@ Before moving to Storyboarding:
 - [ ] Top 3 critical assumptions identified and documented
 - [ ] At least one adversarial stakeholder perspective genuinely surprised the team
 - [ ] Failure modes analyzed — including "works as designed but user still fails" scenario
-- [ ] Comparative ranking completed if multiple concepts were critiqued
+- [ ] Figma Make proofs generated for all finalists (2–3) — team has clicked all proofs, not just read critique summaries
+- [ ] Parallel proof comparison completed — interaction legibility and friction points documented
+- [ ] Comparative ranking completed across all five dimensions (including interaction legibility from proofs)
 - [ ] Selected concept has been strengthened based on critique findings — not just chosen as-is
 - [ ] Rejected concepts have documented rationale — ready to share with stakeholders
 
@@ -270,7 +329,14 @@ Generate this block at the close of Concept Critique. Paste it when opening Stor
 ### What we completed
 - Concepts critiqued: [N]
 - Critique lenses applied: [list — user reality / assumption audit / adversarial / competitive / failure modes]
+- Finalist proofs generated: [N — or "none"]
 - Concept selected for prototyping: [name]
+
+### Finalist proofs (Figma Make)
+| Concept | Prototype URL | Core mechanism legible? | Primary friction |
+|---|---|---|---|
+| [Name] | [URL] | Yes / No / Partial | [1 sentence] |
+| [Name] | [URL] | Yes / No / Partial | [1 sentence] |
 
 ### Selected concept
 **Name:** [concept name]
