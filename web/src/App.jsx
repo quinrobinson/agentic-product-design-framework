@@ -2686,7 +2686,7 @@ Based on my answers, recommend the most appropriate deliverable and tell me:
 
 // ── Deliverable card ──────────────────────────────────────────────────────────
 function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPrompt }) {
-  const [open, setOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const isStudio = d.ref === "design-system";
 
@@ -2697,34 +2697,32 @@ function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPromp
   }
 
   return (
-    <div style={{
-      background: T.surface,
-      border: `1px solid ${open ? hoverColor : borderColor}`,
-      borderRadius: 8, overflow: "hidden", transition: "border-color 0.12s",
-    }}
-      onMouseEnter={e => { if (!open) e.currentTarget.style.borderColor = hoverColor; }}
-      onMouseLeave={e => { if (!open) e.currentTarget.style.borderColor = borderColor; }}
-    >
-      {/* Card header */}
-      <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
+    <>
+      <div style={{
+        background: T.surface, border: `1px solid ${borderColor}`, borderRadius: 8,
+        padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10,
+        transition: "border-color 0.12s",
+      }}
+        onMouseEnter={e => e.currentTarget.style.borderColor = hoverColor}
+        onMouseLeave={e => e.currentTarget.style.borderColor = borderColor}
+      >
         {/* Name */}
         <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{d.name}</span>
 
         {/* Description */}
         <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0 }}>{d.desc}</p>
 
-        {/* Output — inline text, no pill */}
-        <div style={{ display: "flex", gap: 6, alignItems: "baseline" }}>
+        {/* Output — stacked label + value */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           <span style={{
             fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            color: T.dim, flexShrink: 0,
+            letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim,
           }}>Output</span>
-          <span style={{ fontSize: 11, color: T.muted, lineHeight: 1.45 }}>{d.output}</span>
+          <span style={{ fontSize: 12, color: "#C0C0C0", lineHeight: 1.4, fontWeight: 500 }}>{d.output}</span>
         </div>
 
         {/* Action row */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2, gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginTop: 2 }}>
           <span style={{ fontSize: 11, color: T.dim, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.label}</span>
           {isStudio ? (
             <button onClick={() => onOpenTool(d.ref)} style={{
@@ -2738,46 +2736,81 @@ function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPromp
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
             >Open tool</button>
           ) : (
-            <button onClick={() => setOpen(!open)} style={{
+            <button onClick={() => setPopoverOpen(true)} style={{
               padding: "5px 12px", borderRadius: 5, flexShrink: 0,
               fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: "0.06em", textTransform: "uppercase",
               background: "transparent", border: `1px solid ${T.border}`,
               color: T.muted, cursor: "pointer", transition: "all 0.12s",
-              display: "flex", alignItems: "center", gap: 5,
             }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-            >
-              View prompt
-              <span style={{ fontSize: 9, display: "inline-block", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
-            </button>
+            >View prompt</button>
           )}
         </div>
       </div>
 
-      {/* Prompt drawer */}
-      {!isStudio && open && (
-        <div style={{ borderTop: `1px solid ${T.border}`, padding: "14px 16px 16px", display: "flex", flexDirection: "column", gap: 12 }}>
-          <pre style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-            color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap",
-            background: T.card, border: `1px solid ${T.border}`,
-            borderRadius: 6, padding: "12px 14px", margin: 0,
-            maxHeight: 320, overflowY: "auto",
-          }}>{getDelivPrompt(d)}</pre>
-          <button onClick={handleCopy} style={{
-            alignSelf: "flex-start",
-            padding: "7px 16px", borderRadius: 6,
-            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
-            cursor: "pointer", border: `1.5px solid ${copied ? "#22C55E" : T.border}`,
-            background: "transparent", color: copied ? "#22C55E" : T.muted,
-            transition: "all 0.15s",
-          }}>{copied ? "✓ Copied" : "Copy prompt"}</button>
+      {/* Prompt popover */}
+      {popoverOpen && (
+        <div
+          onClick={() => setPopoverOpen(false)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 9000,
+            background: "rgba(0,0,0,0.65)", backdropFilter: "blur(2px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "24px 16px",
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: T.card, border: `1px solid ${T.border}`, borderRadius: 12,
+              width: "100%", maxWidth: 600, maxHeight: "80vh",
+              display: "flex", flexDirection: "column", overflow: "hidden",
+            }}
+          >
+            {/* Popover header */}
+            <div style={{
+              display: "flex", alignItems: "flex-start", justifyContent: "space-between",
+              padding: "18px 20px 16px", borderBottom: `1px solid ${T.border}`, gap: 12,
+            }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.text, lineHeight: 1.3, marginBottom: 3 }}>{d.name}</div>
+                <div style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.05em" }}>{d.label}</div>
+              </div>
+              <button onClick={() => setPopoverOpen(false)} style={{
+                background: "transparent", border: `1px solid ${T.border}`, borderRadius: 5,
+                color: T.dim, cursor: "pointer", fontSize: 13, lineHeight: 1,
+                padding: "4px 8px", flexShrink: 0, transition: "all 0.12s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.dim; }}
+              >✕</button>
+            </div>
+
+            {/* Prompt text */}
+            <pre style={{
+              flex: 1, overflowY: "auto", margin: 0,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+              color: T.muted, lineHeight: 1.72, whiteSpace: "pre-wrap",
+              padding: "18px 20px",
+            }}>{getDelivPrompt(d)}</pre>
+
+            {/* Footer */}
+            <div style={{ padding: "14px 20px", borderTop: `1px solid ${T.border}` }}>
+              <button onClick={handleCopy} style={{
+                padding: "8px 20px", borderRadius: 6,
+                fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600,
+                cursor: "pointer", border: `1.5px solid ${copied ? "#22C55E" : T.border}`,
+                background: "transparent", color: copied ? "#22C55E" : T.muted,
+                transition: "all 0.15s",
+              }}>{copied ? "✓ Copied" : "Copy prompt"}</button>
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
