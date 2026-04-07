@@ -2064,7 +2064,11 @@ function PhasePath({ onOpenTool }) {
                 <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                   {groupOrder.map(groupLabel => (
                     <div key={groupLabel}>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>{groupLabel}</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                        <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, whiteSpace: "nowrap" }}>{groupLabel}</span>
+                        <div style={{ flex: 1, height: 1, background: T.border }} />
+                        <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim }}>{grouped[groupLabel].length}</span>
+                      </div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 10 }}>
                         {grouped[groupLabel].map(item => <PhasePromptCard key={item.id} item={item} />)}
                       </div>
