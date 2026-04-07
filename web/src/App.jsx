@@ -2007,38 +2007,33 @@ function PhasePath({ onOpenTool }) {
           <div style={{ padding: "24px 0 32px" }}>
 
             {/* Phase header */}
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.color, boxShadow: `0 0 8px ${p.color}` }} />
-                  <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: p.color }}>{phase.id} — {phase.label}</span>
-                </div>
-                <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, maxWidth: 600, margin: 0 }}>{phase.desc}</p>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.color, boxShadow: `0 0 8px ${p.color}` }} />
+                <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: p.color }}>{phase.id} — {phase.label}</span>
               </div>
-              <div className="phase-counts">
-                {phase.tools > 0 && <Mono color={T.dim}>{phase.tools} tool{phase.tools !== 1 ? "s" : ""}</Mono>}
-                {phase.skills > 0 && <Mono color={T.dim}>{phase.skills} skill{phase.skills !== 1 ? "s" : ""}</Mono>}
-                {phase.prompts > 0 && <Mono color={T.dim}>{phase.prompts} prompt{phase.prompts !== 1 ? "s" : ""}</Mono>}
-              </div>
+              <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, maxWidth: 600, margin: 0 }}>{phase.desc}</p>
             </div>
 
             {/* Figma MCP callout — Ideate, Prototype, Deliver only */}
             <FigmaMCPCallout phaseId={selected} onOpenSkill={setActiveSkill} />
 
             {/* Tabs */}
-            <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}`, marginBottom: 20 }}>
+            <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
               {[
                 { id: "prompts", label: "Prompts", count: phasePrompts.length + phaseTools.length },
                 { id: "skills", label: "Skills", count: phaseSkills.length },
                 { id: "how", label: "How to Use", count: null },
               ].map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)} style={{
-                  padding: "8px 14px", background: "none", border: "none",
-                  borderBottom: `2px solid ${tab === t.id ? p.color : "transparent"}`,
+                  padding: "6px 14px",
+                  background: tab === t.id ? p.color + "18" : "transparent",
+                  border: `1px solid ${tab === t.id ? p.color + "40" : T.border}`,
+                  borderRadius: 6,
                   fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
                   letterSpacing: "0.07em", textTransform: "uppercase",
                   color: tab === t.id ? p.color : T.dim,
-                  cursor: "pointer", marginBottom: -1, transition: "all 0.15s",
+                  cursor: "pointer", transition: "all 0.15s",
                   display: "flex", alignItems: "center", gap: 6,
                 }}>
                   {t.label}
@@ -3131,40 +3126,44 @@ function SkillsLibraryOverlay({ onBack }) {
     const phaseColor = skill.phase ? PHASE_META[skill.phase]?.color : T.dim;
     return (
       <div style={{
-        display: "flex", alignItems: "flex-start", justifyContent: "space-between",
+        display: "flex", flexDirection: "column", gap: 10,
         padding: "14px 16px", background: T.surface, borderRadius: 8,
-        border: `1px solid ${T.border}`, gap: 16, transition: "border-color 0.15s",
+        border: `1px solid ${T.border}`, transition: "border-color 0.15s",
       }}
         onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
         onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
       >
-        <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: T.muted }}>{skill.file}</span>
-            {skill.phase && (
-              <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: phaseColor, display: "inline-flex", alignItems: "center", gap: 4 }}>
-                <span style={{ width: 4, height: 4, borderRadius: "50%", background: phaseColor, display: "inline-block" }} />
-                {skill.phase} — {PHASE_META[skill.phase]?.label}
-              </span>
-            )}
-            {!skill.phase && (
-              <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>Cross-phase</span>
-            )}
-            <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color }}>
-              {skill.surface === "chat" ? "Chat" : skill.surface === "chat + code" ? "Chat + Code" : "Figma MCP"}
+        {/* File name + phase badge */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+          <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: T.muted, lineHeight: 1.4, wordBreak: "break-all" }}>{skill.file}</span>
+          {skill.phase ? (
+            <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", color: phaseColor, display: "inline-flex", alignItems: "center", gap: 4, flexShrink: 0, padding: "2px 7px", borderRadius: 99, background: phaseColor + "14", border: `1px solid ${phaseColor}35`, whiteSpace: "nowrap" }}>
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: phaseColor, display: "inline-block" }} />
+              {PHASE_META[skill.phase]?.label}
             </span>
-          </div>
-          <p style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, margin: 0 }}>{skill.desc}</p>
+          ) : (
+            <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", color: T.dim, flexShrink: 0, opacity: 0.5 }}>Cross-phase</span>
+          )}
         </div>
-        <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+
+        {/* Surface badge */}
+        <span style={{ alignSelf: "flex-start", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 99, background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color }}>
+          {skill.surface === "chat" ? "Chat" : skill.surface === "chat + code" ? "Chat + Code" : "Figma MCP"}
+        </span>
+
+        {/* Description */}
+        <p style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, margin: 0, flex: 1 }}>{skill.desc}</p>
+
+        {/* Actions */}
+        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
           <button onClick={() => setActiveSkill(skill)} style={{ padding: "5px 12px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.15s" }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-          >Preview →</button>
-          <a href={url} download style={{ padding: "5px 10px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, textDecoration: "none", whiteSpace: "nowrap", transition: "all 0.15s" }}
+          >Preview</button>
+          <a href={url} download style={{ padding: "5px 12px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, textDecoration: "none", whiteSpace: "nowrap", transition: "all 0.15s" }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-          >↓</a>
+          >↓ Download</a>
         </div>
       </div>
     );
@@ -3274,7 +3273,7 @@ function SkillsLibraryOverlay({ onBack }) {
                   <span style={{ fontSize: 12, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>No skills match this surface filter</span>
                 </div>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
                   {phaseSkills.map(skill => <SkillCard key={skill.file} skill={skill} />)}
                 </div>
               )}
@@ -3289,7 +3288,7 @@ function SkillsLibraryOverlay({ onBack }) {
             <div style={{ flex: 1, height: 1, background: T.border }} />
             <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim }}>{crossSkills.length} skill{crossSkills.length !== 1 ? "s" : ""}</span>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
             {crossSkills.map(skill => <SkillCard key={skill.file} skill={skill} />)}
           </div>
         </div>
