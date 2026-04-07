@@ -1055,7 +1055,7 @@ function generateCSS(t) {
 const APP = {
   topbar: 52,
   sidebar: 220,
-  inspector: 282,
+  inspector: 320,
   sidebarBg: "#111111",
   sidebarBorder: "#232323",
   sidebarText: "#E5E5E5",
@@ -1085,6 +1085,8 @@ export default function DesignSystemStudio() {
   const [promptCopied, setPromptCopied] = useState(null);
   const [figmaPath, setFigmaPath] = useState("export");
   const [previewType, setPreviewType] = useState("website");
+  const [tokenPanelOpen, setTokenPanelOpen] = useState({ color: true, typography: false, spacing: false, shapes: false });
+  const toggleAccordion = (key) => setTokenPanelOpen(prev => ({ ...prev, [key]: !prev[key] }));
 
   const applyTheme = useCallback((key) => {
     setActiveTheme(key);
@@ -1228,55 +1230,145 @@ export default function DesignSystemStudio() {
     );
   }
 
-  // ── Right Inspector ───────────────────────────────────────────────────────
-  function renderInspector() {
-    if (!activeComp) return null;
+  // ── Right Token Panel ─────────────────────────────────────────────────────
+  function renderTokensPanel() {
+    const panelBg = "#F4F4F5";
+    const panelBorder = "#E4E4E7";
+    const labelCol = "#71717A";
+    const textCol = "#18181B";
+
+    const AccordionSection = ({ id, title, children }) => {
+      const isOpen = tokenPanelOpen[id];
+      return (
+        <div style={{ borderBottom: `1px solid ${panelBorder}` }}>
+          <button
+            onClick={() => toggleAccordion(id)}
+            style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}
+          >
+            <span style={{ fontSize: 11, fontFamily: APP.mono, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.3, color: textCol }}>{title}</span>
+            <span style={{ fontSize: 10, color: labelCol, transition: "transform 0.15s", display: "inline-block", transform: isOpen ? "rotate(180deg)" : "none" }}>▼</span>
+          </button>
+          {isOpen && (
+            <div style={{ padding: "4px 16px 16px" }}>
+              {children}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const Swatch = ({ color, label }) => (
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
+        <input type="color" value={color.startsWith("rgba") ? "#888888" : color} onChange={e => {
+          const key = Object.keys(tokens).find(k => tokens[k] === color);
+          if (key) update(key, e.target.value);
+        }} style={{ width: 24, height: 24, border: "none", borderRadius: 4, cursor: "pointer", padding: 0, flexShrink: 0 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 11, color: labelCol, marginBottom: 1 }}>{label}</div>
+          <div style={{ fontSize: 10, fontFamily: APP.mono, color: "#52525B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{color}</div>
+        </div>
+      </div>
+    );
+
+    const sp = n => tokens.spaceUnit * n;
+    const sizes = {};
+    for (let i = -2; i <= 5; i++) sizes[i] = typeScale(tokens.baseSize, tokens.scaleRatio, i);
+
     return (
-      <div style={{ width: APP.inspector, borderLeft: `1px solid ${C.border}`, background: C.bgSub, overflowY: "auto", flexShrink: 0, padding: "24px 20px" }}>
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: C.text, marginBottom: 6 }}>{activeComp.name}</div>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 10, fontFamily: APP.mono, color: C.dim, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 4, padding: "2px 7px" }}>{activeComp.cat}</span>
-            <span style={{ fontSize: 10, fontFamily: APP.mono, color: activeComp.tier === 1 ? tokens.primary : C.dim, background: activeComp.tier === 1 ? alpha(tokens.primary, 0.08) : C.bg, border: `1px solid ${activeComp.tier === 1 ? alpha(tokens.primary, 0.2) : C.border}`, borderRadius: 4, padding: "2px 7px" }}>Tier {activeComp.tier}</span>
+      <div style={{ width: APP.inspector, borderLeft: `1px solid ${panelBorder}`, background: panelBg, overflowY: "auto", flexShrink: 0, display: "flex", flexDirection: "column" }}>
+        {/* Panel header */}
+        <div style={{ padding: "14px 16px 10px", borderBottom: `1px solid ${panelBorder}`, flexShrink: 0 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, fontFamily: APP.mono, color: textCol, textTransform: "uppercase", letterSpacing: 1.5 }}>Tokens</div>
+          <div style={{ fontSize: 11, color: labelCol, marginTop: 2 }}>{tokens.name}</div>
+        </div>
+
+        {/* Color accordion */}
+        <AccordionSection id="color" title="Color">
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 7 }}>Brand</div>
+            <ColorInput label="Primary" value={tokens.primary} onChange={v => update("primary", v)} />
+            <ColorInput label="Secondary" value={tokens.secondary} onChange={v => update("secondary", v)} />
+            <ColorInput label="Accent" value={tokens.accent} onChange={v => update("accent", v)} />
           </div>
-        </div>
-        <p style={{ fontSize: 12, color: C.sub, lineHeight: 1.65, margin: "0 0 18px" }}>{activeComp.desc}</p>
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 9, fontFamily: APP.mono, textTransform: "uppercase", letterSpacing: 1.2, color: C.dim, marginBottom: 8 }}>Use when</div>
-          <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-            {activeComp.use.map((item, i) => (
-              <li key={i} style={{ fontSize: 11, color: C.sub, lineHeight: 1.55, marginBottom: 5, display: "flex", gap: 6, alignItems: "flex-start" }}>
-                <span style={{ color: tokens.primary, flexShrink: 0, marginTop: 2 }}>↳</span>{item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 9, fontFamily: APP.mono, textTransform: "uppercase", letterSpacing: 1.2, color: C.dim, marginBottom: 8 }}>Avoid when</div>
-          <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-            {activeComp.avoid.map((item, i) => (
-              <li key={i} style={{ fontSize: 11, color: C.sub, lineHeight: 1.55, marginBottom: 5, display: "flex", gap: 6, alignItems: "flex-start" }}>
-                <span style={{ color: C.dim, flexShrink: 0, marginTop: 2 }}>—</span>{item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 9, fontFamily: APP.mono, textTransform: "uppercase", letterSpacing: 1.2, color: C.dim, marginBottom: 8 }}>Variants</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-            {activeComp.variants.map((v, i) => (
-              <span key={i} style={{ fontSize: 10, color: C.sub, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 4, padding: "2px 7px", fontFamily: APP.mono }}>{v}</span>
+          <div style={{ borderTop: `1px solid ${panelBorder}`, paddingTop: 10, marginBottom: 10 }}>
+            <div style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 7 }}>Semantic</div>
+            <ColorInput label="Success" value={tokens.success} onChange={v => update("success", v)} />
+            <ColorInput label="Warning" value={tokens.warning} onChange={v => update("warning", v)} />
+            <ColorInput label="Error" value={tokens.error} onChange={v => update("error", v)} />
+          </div>
+          <div style={{ borderTop: `1px solid ${panelBorder}`, paddingTop: 10 }}>
+            <div style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 7 }}>Surface</div>
+            <ColorInput label="Surface" value={tokens.surface} onChange={v => update("surface", v)} />
+            <ColorInput label="Surface 2" value={tokens.surfaceSecondary} onChange={v => update("surfaceSecondary", v)} />
+            <ColorInput label="Text" value={tokens.textPrimary} onChange={v => update("textPrimary", v)} />
+            <ColorInput label="Text dim" value={tokens.textSecondary} onChange={v => update("textSecondary", v)} />
+          </div>
+          {/* Swatch row */}
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 10 }}>
+            {[tokens.primary, tokens.secondary, tokens.accent, tokens.success, tokens.warning, tokens.error].map((c, i) => (
+              <div key={i} style={{ width: 24, height: 24, borderRadius: 5, background: c, border: `1px solid ${panelBorder}` }} title={c} />
             ))}
           </div>
-        </div>
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ fontSize: 9, fontFamily: APP.mono, textTransform: "uppercase", letterSpacing: 1.2, color: C.dim, marginBottom: 8 }}>Accessibility</div>
-          <p style={{ fontSize: 11, color: C.sub, lineHeight: 1.6, margin: 0 }}>{activeComp.a11y}</p>
-        </div>
-        <div style={{ background: C.bg, borderRadius: 6, padding: "10px 12px", border: `1px solid ${C.border}`, fontSize: 10, fontFamily: APP.mono, color: C.dim }}>
-          <span style={{ color: C.sub }}>--apdf-comp-{activeComp.id}-*</span>
-          <span style={{ margin: "0 6px" }}>→</span>
-          <span style={{ color: tokens.primary }}>--apdf-sys-*</span>
+        </AccordionSection>
+
+        {/* Typography accordion */}
+        <AccordionSection id="typography" title="Typography">
+          <SliderInput label="Base size" value={tokens.baseSize} onChange={v => update("baseSize", v)} min={12} max={20} suffix="px" />
+          <SliderInput label="Scale ratio" value={tokens.scaleRatio} onChange={v => update("scaleRatio", v)} min={1.1} max={1.5} step={0.01} />
+          <div style={{ borderTop: `1px solid ${panelBorder}`, paddingTop: 10, marginTop: 4 }}>
+            <div style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 8 }}>Type scale</div>
+            {[
+              { label: "Display", step: 4, weight: tokens.headingWeight, font: tokens.fontHeading },
+              { label: "Headline", step: 3, weight: tokens.headingWeight, font: tokens.fontHeading },
+              { label: "Title", step: 1, weight: tokens.headingWeight, font: tokens.fontHeading },
+              { label: "Body", step: 0, weight: 400, font: tokens.fontBody },
+              { label: "Small", step: -1, weight: 400, font: tokens.fontBody },
+            ].map(({ label, step, weight, font }) => (
+              <div key={label} style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, width: 36, flexShrink: 0 }}>{Math.round(sizes[step])}px</span>
+                <span style={{ fontSize: Math.min(sizes[step], 18), fontWeight: weight, fontFamily: font, color: textCol, lineHeight: 1.2, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{label}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ borderTop: `1px solid ${panelBorder}`, paddingTop: 10, marginTop: 6, fontSize: 11, color: labelCol, lineHeight: 1.8 }}>
+            <div><span style={{ color: "#A1A1AA" }}>Heading:</span> {tokens.fontHeading.split("'")[1] || "System"}</div>
+            <div><span style={{ color: "#A1A1AA" }}>Body:</span> {tokens.fontBody.split("'")[1] || "System"}</div>
+            <div><span style={{ color: "#A1A1AA" }}>Mono:</span> {tokens.fontMono.split("'")[1] || "Monospace"}</div>
+          </div>
+        </AccordionSection>
+
+        {/* Spacing accordion */}
+        <AccordionSection id="spacing" title="Spacing">
+          <div style={{ fontSize: 9, fontFamily: APP.mono, color: labelCol, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 10 }}>Base unit: {tokens.spaceUnit}px</div>
+          <div style={{ display: "flex", gap: 5, alignItems: "flex-end", flexWrap: "wrap", marginBottom: 10 }}>
+            {[1, 2, 3, 4, 6, 8, 12].map(n => (
+              <div key={n} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                <div style={{ width: Math.min(tokens.spaceUnit * n, 40), height: Math.min(tokens.spaceUnit * n, 40), background: alpha(tokens.primary, 0.18), borderRadius: 2 }} />
+                <span style={{ fontSize: 8, fontFamily: APP.mono, color: labelCol }}>{tokens.spaceUnit * n}</span>
+              </div>
+            ))}
+          </div>
+        </AccordionSection>
+
+        {/* Shapes accordion */}
+        <AccordionSection id="shapes" title="Shape">
+          <SliderInput label="Radius sm" value={tokens.radiusSm} onChange={v => update("radiusSm", v)} min={0} max={16} suffix="px" />
+          <SliderInput label="Radius md" value={tokens.radiusMd} onChange={v => update("radiusMd", v)} min={0} max={24} suffix="px" />
+          <SliderInput label="Radius lg" value={tokens.radiusLg} onChange={v => update("radiusLg", v)} min={0} max={32} suffix="px" />
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 10 }}>
+            {[{ label: "sm", radius: tokens.radiusSm }, { label: "md", radius: tokens.radiusMd }, { label: "lg", radius: tokens.radiusLg }].map(({ label, radius }) => (
+              <div key={label} style={{ textAlign: "center" }}>
+                <div style={{ width: 48, height: 30, borderRadius: radius, background: alpha(tokens.primary, 0.1), border: `1.5px solid ${tokens.primary}`, marginBottom: 4 }} />
+                <div style={{ fontSize: 9, color: labelCol, fontFamily: APP.mono }}>{label} · {radius}px</div>
+              </div>
+            ))}
+          </div>
+        </AccordionSection>
+
+        {/* Bottom spacer */}
+        <div style={{ flex: 1 }} />
+        <div style={{ padding: "12px 16px", borderTop: `1px solid ${panelBorder}` }}>
+          <button onClick={() => go("export")} style={{ width: "100%", padding: "8px 0", borderRadius: 6, border: "none", background: "#18181B", color: "#fff", fontSize: 11, cursor: "pointer", fontFamily: APP.mono, fontWeight: 500 }}>Export CSS →</button>
         </div>
       </div>
     );
@@ -1554,19 +1646,74 @@ export default function DesignSystemStudio() {
       const ds = adaptPrimaryForDark(tokens.secondary, tokens.accent);
       return { ...tokens, primary: dp, secondary: ds, surface: "#111111", surfaceSecondary: "#1A1A1A", textPrimary: "#F5F5F5", textSecondary: "#A3A3A3", textTertiary: "#737373", border: "#2A2A2A", disabledBg: "#1A1A1A", disabledText: "#525252", disabledBorder: "#2A2A2A", placeholder: "#737373", toggleOff: "#404040", toggleKnob: "#E5E5E5" };
     })() : { ...tokens, disabledBg: "#F3F4F6", disabledText: "#9CA3AF", disabledBorder: "#E5E5E5", placeholder: "#9CA3AF", toggleOff: "#D1D5DB", toggleKnob: "#FFFFFF" };
+    const labelStyle = { fontSize: 10, fontFamily: APP.mono, textTransform: "uppercase", letterSpacing: 1.4, color: C.dim, marginBottom: 10, fontWeight: 600 };
     return (
-      <div style={{ padding: 28 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22 }}>
+      <div style={{ padding: "32px 36px 56px" }}>
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
           <div>
-            <h2 style={{ fontSize: 17, fontWeight: 600, color: C.text, margin: "0 0 5px" }}>{activeComp.name}</h2>
-            <div style={{ fontSize: 12, color: C.dim }}>{activeComp.cat} · Tier {activeComp.tier}</div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 10, fontFamily: APP.mono, color: C.sub, background: alpha(tokens.primary, 0.06), padding: "3px 10px", borderRadius: 99, border: `1px solid ${alpha(tokens.primary, 0.15)}` }}>{tokens.name}</span>
+            <h2 style={{ fontSize: 26, fontWeight: 700, color: C.text, margin: "0 0 8px", letterSpacing: -0.3 }}>{activeComp.name}</h2>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <span style={{ fontSize: 11, fontFamily: APP.mono, color: C.dim, background: C.bgSub, border: `1px solid ${C.border}`, borderRadius: 4, padding: "2px 8px" }}>{activeComp.cat}</span>
+              <span style={{ fontSize: 11, fontFamily: APP.mono, color: activeComp.tier === 1 ? tokens.primary : C.dim, background: activeComp.tier === 1 ? alpha(tokens.primary, 0.07) : C.bgSub, border: `1px solid ${activeComp.tier === 1 ? alpha(tokens.primary, 0.2) : C.border}`, borderRadius: 4, padding: "2px 8px" }}>Tier {activeComp.tier}</span>
+              <span style={{ fontSize: 11, fontFamily: APP.mono, color: C.sub, background: alpha(tokens.primary, 0.05), padding: "2px 8px", borderRadius: 4, border: `1px solid ${alpha(tokens.primary, 0.12)}` }}>{tokens.name}</span>
+            </div>
           </div>
         </div>
-        <div style={{ background: darkMode ? "#111111" : tokens.surface, borderRadius: tokens.radiusLg, padding: 28, border: `1px solid ${darkMode ? "#2A2A2A" : tokens.border}`, transition: "all 0.2s" }}>
+
+        {/* Live preview */}
+        <div style={{ background: darkMode ? "#111111" : tokens.surface, borderRadius: tokens.radiusLg, padding: "32px 36px", border: `1px solid ${darkMode ? "#2A2A2A" : tokens.border}`, transition: "all 0.2s", marginBottom: 40 }}>
           <PreviewComp t={t} />
+        </div>
+
+        {/* Description */}
+        <p style={{ fontSize: 16, color: C.sub, lineHeight: 1.75, margin: "0 0 40px", maxWidth: 640 }}>{activeComp.desc}</p>
+
+        {/* Use when / Avoid when */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 36 }}>
+          <div>
+            <div style={labelStyle}>Use when</div>
+            <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              {activeComp.use.map((item, i) => (
+                <li key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 10, fontSize: 14, color: C.sub, lineHeight: 1.6 }}>
+                  <span style={{ color: tokens.primary, flexShrink: 0, marginTop: 3, fontSize: 10 }}>↳</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div style={labelStyle}>Avoid when</div>
+            <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              {activeComp.avoid.map((item, i) => (
+                <li key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 10, fontSize: 14, color: C.sub, lineHeight: 1.6 }}>
+                  <span style={{ color: C.dim, flexShrink: 0, marginTop: 3 }}>—</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Variants */}
+        <div style={{ marginBottom: 36 }}>
+          <div style={labelStyle}>Variants</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+            {activeComp.variants.map((v, i) => (
+              <span key={i} style={{ fontSize: 12, color: C.sub, background: C.bgSub, border: `1px solid ${C.border}`, borderRadius: 5, padding: "4px 10px", fontFamily: APP.mono }}>{v}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Accessibility */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={labelStyle}>Accessibility</div>
+          <p style={{ fontSize: 14, color: C.sub, lineHeight: 1.7, margin: 0, maxWidth: 620 }}>{activeComp.a11y}</p>
+        </div>
+
+        {/* Token reference */}
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.bgSub, borderRadius: 7, padding: "10px 14px", border: `1px solid ${C.border}`, fontSize: 11, fontFamily: APP.mono }}>
+          <span style={{ color: C.sub }}>--apdf-comp-{activeComp.id}-*</span>
+          <span style={{ color: C.dim }}>→</span>
+          <span style={{ color: tokens.primary }}>--apdf-sys-*</span>
         </div>
       </div>
     );
@@ -2038,7 +2185,7 @@ and a copy-paste remediation prompt for each finding.`;
           {activeNav.type === "export" && renderExport()}
           {activeNav.type === "figma" && renderFigma()}
         </main>
-        {activeNav.type === "component" && renderInspector()}
+        {activeNav.type !== "overview" && renderTokensPanel()}
       </div>
     </div>
   );
