@@ -3779,9 +3779,9 @@ export default function App() {
         background: `${T.bg}f0`, backdropFilter: "blur(12px)",
       }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 5, justifyContent: "center" }}>
-          <div style={{ display: "flex", gap: 2.5, alignItems: "flex-end" }}>
-            {Object.values(T.phases).map((p, i) => (
-              <div key={p.label} style={{ width: 2, height: 8 + i * 2, borderRadius: 1, background: p.color }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            {Object.values(T.phases).map(p => (
+              <div key={p.label} style={{ width: 20, height: 2, borderRadius: 1, background: p.color }} />
             ))}
           </div>
           <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", color: T.muted }}>
