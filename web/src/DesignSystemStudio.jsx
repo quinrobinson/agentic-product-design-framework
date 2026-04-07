@@ -1677,7 +1677,7 @@ export default function DesignSystemStudio() {
         <div style={{ background: darkMode ? "#111111" : tokens.surface, padding: "32px 36px", transition: "all 0.2s" }}>
           <PreviewComp t={t} />
         </div>
-        <div style={{ height: 1, background: APP.canvasBorder, margin: "0 0 40px" }} />
+        <div style={{ height: 1, background: APP.canvasBorder, margin: "56px 0 56px" }} />
 
         {/* Description */}
         <p style={{ fontSize: 16, color: C.sub, lineHeight: 1.75, margin: "0 0 40px", maxWidth: 640 }}>{activeComp.desc}</p>
