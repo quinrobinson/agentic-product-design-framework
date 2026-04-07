@@ -49,8 +49,8 @@ const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Desi
 
 // ── Tool registry ────────────────────────────────────────────────────────────
 const TOOLS = [
-  { id: "brief",              number: "01", phase: null, name: "Design Brief Generator",      subtitle: "Turn project context into a Claude-ready design brief",                          component: AIBriefGenerator,              skill: "phase-handoff.md" },
-  { id: "deck",               number: "02", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder,              skill: "stakeholder-presentation.md" },
+  { id: "brief",              number: "01", phase: null, name: "Design Brief Generator",      subtitle: "Turn project context into a Claude-ready design brief",                          component: AIBriefGenerator,              skill: "phase-handoff.md", text: `You are a senior UX strategist helping a design team create a comprehensive project brief.\n\nYour job is to guide the designer through building a complete brief by asking targeted questions, then producing a structured document.\n\nStart by asking about anything missing from the context below. Ask only 2-3 focused questions at a time — don't overwhelm. Once you have enough to work with, generate the brief.\n\nThe brief should cover:\n1. Project Overview — what's being built and why\n2. Business Goals — what success looks like for the company\n3. User Goals — what success looks like for the user\n4. Known Constraints — timeline, tech, budget, org\n5. Research Already Done — what's known, what's assumed\n6. Open Questions — what needs to be answered before design begins\n7. Scope — what's in and out of scope for this design effort\n8. Recommended Next Steps — what the design team should do first\n\nIf the designer has documents to share (briefs, PRDs, strategy docs), ask them to upload the files so you can incorporate them.\n\nAt the end, produce the brief as clean markdown.` },
+  { id: "deck",               number: "02", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder,              skill: "stakeholder-presentation.md", text: `You are a senior design strategist and presentation expert helping a designer build a compelling client deck.\n\nStart by understanding what the designer needs to communicate and to whom. Ask:\n- What's the goal of this presentation — inform, align, get sign-off, inspire?\n- What's the audience's background — do they know design, or do they need concepts explained?\n- How much time do you have to present?\n\nThen guide the designer through building the deck slide by slide:\n1. Opening — context and framing\n2. Problem / Opportunity\n3. Research Insights (if applicable)\n4. Design Work / Concepts\n5. Recommendations and Next Steps\n6. Appendix / Supporting Material\n\nFor each section, write the slide headline, supporting points, and speaker notes.\n\nIf the designer has existing materials to incorporate (designs, research, previous decks), ask them to upload or paste them.\n\nProduce the final deck outline as clean markdown with slide-by-slide content.` },
   { id: "design-system",      number: "03", phase: null, name: "Design System Studio",        subtitle: "Build or audit a complete design system with live previews",                     component: DesignSystemStudio,             skill: "design-systems.md" },
   { id: "research-synthesizer", number: "05", phase: "01", group: "Synthesize", name: "Research Synthesizer", subtitle: "Turn raw interviews into a structured Research Brief", component: ResearchSynthesizer, skill: "research-synthesis.md", text: `You are a senior UX researcher helping a designer synthesize user or stakeholder interviews into clear, actionable insights.
 
@@ -1500,33 +1500,33 @@ Touch targets — minimum 44×44px confirmation, spacing between targets (minimu
 // ── Deliverables map ─────────────────────────────────────────────────────────
 const DELIVERABLES = [
   // Discover
-  { phase: "01", name: "Research Brief",          type: "tool",   ref: "research-synthesizer",    label: "Research Synthesizer",           desc: "Turns raw interview notes and surveys into a structured brief with themes, pain points, and unmet needs.", output: "Shareable research brief" },
-  { phase: "01", name: "Service Blueprint",       type: "tool",   ref: "service-blueprint",       label: "Service Blueprint Generator",    desc: "Maps the full experience across five swim lanes — exposing backstage failures invisible in a journey map.", output: "Current and/or future-state blueprint" },
-  { phase: "01", name: "Competitive Analysis",    type: "tool",   ref: "competitive-snapshot",    label: "Competitive Snapshot Builder",   desc: "Audits competitors one by one using real web search, then synthesizes the landscape with differentiation opportunities.", output: "Competitive landscape + opportunity map" },
+  { phase: "01", name: "Research Brief",          type: "prompt", ref: "research-synthesizer",    label: "Research Synthesizer",           desc: "Turns raw interview notes and surveys into a structured brief with themes, pain points, and unmet needs.", output: "Shareable research brief" },
+  { phase: "01", name: "Service Blueprint",       type: "prompt", ref: "service-blueprint",       label: "Service Blueprint Generator",    desc: "Maps the full experience across five swim lanes — exposing backstage failures invisible in a journey map.", output: "Current and/or future-state blueprint" },
+  { phase: "01", name: "Competitive Analysis",    type: "prompt", ref: "competitive-snapshot",    label: "Competitive Snapshot Builder",   desc: "Audits competitors one by one using real web search, then synthesizes the landscape with differentiation opportunities.", output: "Competitive landscape + opportunity map" },
   { phase: "01", name: "Research Plan",           type: "prompt", ref: "plan-research",           label: "Plan Your Research",             desc: "Generates a complete research plan from a project brief — method recommendation, screener, timeline, and success criteria.", output: "Research plan ready to execute" },
   { phase: "01", name: "Interview Guide",         type: "prompt", ref: "interview-guide",         label: "Build an Interview Guide",       desc: "Writes a full discussion guide with warm-up, core questions, probes, and an observer notes template.", output: "Discussion guide + observer template" },
   { phase: "01", name: "HMW Statements",          type: "prompt", ref: "hmw-statements",          label: "Generate HMW Statements",        desc: "Converts research findings into ranked How Might We statements across five angles — ready to brief ideation.", output: "Prioritised HMW statement set" },
   // Define
-  { phase: "02", name: "Problem Statement",       type: "tool",   ref: "problem-framing",         label: "Problem Framing",                desc: "Generates three framings (HMW / JTBD / User+Need+Insight), pressure-tests each, and recommends the strongest.", output: "Chosen, tested problem statement" },
-  { phase: "02", name: "Journey Map",             type: "tool",   ref: "journey-mapping",         label: "Journey Mapping",                desc: "Produces a six-lane research-grounded journey map — actions, thoughts, emotions, pain points, workarounds, opportunities.", output: "Journey map with critical moments flagged" },
+  { phase: "02", name: "Problem Statement",       type: "prompt", ref: "problem-framing",         label: "Problem Framing",                desc: "Generates three framings (HMW / JTBD / User+Need+Insight), pressure-tests each, and recommends the strongest.", output: "Chosen, tested problem statement" },
+  { phase: "02", name: "Journey Map",             type: "prompt", ref: "journey-mapping",         label: "Journey Mapping",                desc: "Produces a six-lane research-grounded journey map — actions, thoughts, emotions, pain points, workarounds, opportunities.", output: "Journey map with critical moments flagged" },
   // Ideate
-  { phase: "03", name: "Concept Set",             type: "tool",   ref: "concept-generator",       label: "Concept Generator",              desc: "Generates concepts across five thinking angles including First Principles, Analogous, and Worst Idea First — breaking out of obvious directions.", output: "Named concept cards with strengths and risks" },
-  { phase: "03", name: "Cluster Map",             type: "tool",   ref: "idea-clustering",         label: "Idea Clustering",                desc: "Groups a raw concept set by underlying strategic mechanism — not surface similarity — and maps tensions and gaps.", output: "Strategic landscape with recommended directions" },
+  { phase: "03", name: "Concept Set",             type: "prompt", ref: "concept-generator",       label: "Concept Generator",              desc: "Generates concepts across five thinking angles including First Principles, Analogous, and Worst Idea First — breaking out of obvious directions.", output: "Named concept cards with strengths and risks" },
+  { phase: "03", name: "Cluster Map",             type: "prompt", ref: "idea-clustering",         label: "Idea Clustering",                desc: "Groups a raw concept set by underlying strategic mechanism — not surface similarity — and maps tensions and gaps.", output: "Strategic landscape with recommended directions" },
   { phase: null, name: "Design System",           type: "tool",   ref: "design-system",           label: "Design System Studio",           desc: "Choose a theme, customize tokens, preview 14 core components live — export CSS with --apdf-* naming ready for Figma.", output: "Complete design system tokens + component previews" },
   // Prototype
-  { phase: "04", name: "UX Copy",                 type: "tool",   ref: "ux-copy-writer",          label: "UX Copy Writer",                 desc: "Locks voice and tone first, then writes all flow copy, error states, empty states, and confirmations — grounded in the brief.", output: "Complete copy document for prototyping" },
-  { phase: "04", name: "User Flow",               type: "tool",   ref: "user-flow-mapper",        label: "User Flow Mapper",               desc: "Maps the happy path, every branch, and every error state — producing a screen inventory and scoped prototype brief.", output: "Screen inventory + prototype brief" },
-  { phase: "04", name: "Component Architecture",  type: "tool",   ref: "component-architecture",  label: "Component Architecture Planner", desc: "Takes your screen inventory and identifies every component, defines the variant matrix, and assigns design tokens before Figma opens.", output: "Ordered build list + token assignments" },
-  { phase: "04", name: "Component State Spec",    type: "tool",   ref: "component-state",         label: "Component State Specifier",      desc: "Documents every state for one component — triggers, token deltas, transition timing, and Figma property setup.", output: "State spec + Figma property configuration" },
-  { phase: "04", name: "Prototype Handoff",       type: "tool",   ref: "proto-handoff",           label: "Prototype Handoff Generator",    desc: "Documents decisions, surfaces gaps testers need to know about, ranks hypotheses by risk, and generates a Findings Synthesizer handoff block.", output: "Validate handoff block + ranked hypotheses" },
+  { phase: "04", name: "UX Copy",                 type: "prompt", ref: "ux-copy-writer",          label: "UX Copy Writer",                 desc: "Locks voice and tone first, then writes all flow copy, error states, empty states, and confirmations — grounded in the brief.", output: "Complete copy document for prototyping" },
+  { phase: "04", name: "User Flow",               type: "prompt", ref: "user-flow-mapper",        label: "User Flow Mapper",               desc: "Maps the happy path, every branch, and every error state — producing a screen inventory and scoped prototype brief.", output: "Screen inventory + prototype brief" },
+  { phase: "04", name: "Component Architecture",  type: "prompt", ref: "component-architecture",  label: "Component Architecture Planner", desc: "Takes your screen inventory and identifies every component, defines the variant matrix, and assigns design tokens before Figma opens.", output: "Ordered build list + token assignments" },
+  { phase: "04", name: "Component State Spec",    type: "prompt", ref: "component-state",         label: "Component State Specifier",      desc: "Documents every state for one component — triggers, token deltas, transition timing, and Figma property setup.", output: "State spec + Figma property configuration" },
+  { phase: "04", name: "Prototype Handoff",       type: "prompt", ref: "proto-handoff",           label: "Prototype Handoff Generator",    desc: "Documents decisions, surfaces gaps testers need to know about, ranks hypotheses by risk, and generates a Findings Synthesizer handoff block.", output: "Validate handoff block + ranked hypotheses" },
   // Validate
-  { phase: "05", name: "Test Findings",           type: "tool",   ref: "findings-synthesizer",    label: "Findings Synthesizer",           desc: "Structures raw session notes, synthesizes patterns across participants, rates severity, and produces a Go/No-Go decision.", output: "Severity-rated issue list + Go/No-Go" },
-  { phase: "05", name: "Findings Report",         type: "tool",   ref: "insight-report",          label: "Insight Report Generator",       desc: "Generates audience-specific versions of findings — engineering, executive, design team — plus an iteration brief for the next cycle.", output: "Three stakeholder reports + iteration brief" },
+  { phase: "05", name: "Test Findings",           type: "prompt", ref: "findings-synthesizer",    label: "Findings Synthesizer",           desc: "Structures raw session notes, synthesizes patterns across participants, rates severity, and produces a Go/No-Go decision.", output: "Severity-rated issue list + Go/No-Go" },
+  { phase: "05", name: "Findings Report",         type: "prompt", ref: "insight-report",          label: "Insight Report Generator",       desc: "Generates audience-specific versions of findings — engineering, executive, design team — plus an iteration brief for the next cycle.", output: "Three stakeholder reports + iteration brief" },
   // Deliver
-  { phase: null, name: "Design Brief",            type: "tool",   ref: "brief",                   label: "Design Brief Generator",         desc: "Answers a few questions about your project and generates a Claude-ready brief — problem statement, phase roadmap, skill files, and a first prompt.", output: "Claude-ready project brief" },
-  { phase: null, name: "Client Deck",             type: "tool",   ref: "deck",                    label: "Client Deck Builder",            desc: "Identifies the right deck type for your situation, then writes slide-by-slide structure with speaker notes and opening hook.", output: "Slide structure + speaker notes" },
-  { phase: "06", name: "Component Spec",          type: "tool",   ref: "component-spec",          label: "Component Spec Generator",       desc: "Documents component anatomy, all interactive states, behavior, spacing, edge cases — complete enough for a developer to build without questions.", output: "Full component spec document" },
-  { phase: "06", name: "QA Issue Log",            type: "tool",   ref: "design-qa",               label: "Design QA Logger",               desc: "Structures implementation review notes into a P0–P3 severity-rated issue log with an explicit launch recommendation.", output: "QA report + launch sign-off decision" },
+  { phase: null, name: "Design Brief",            type: "prompt", ref: "brief",                   label: "Design Brief Generator",         desc: "Answers a few questions about your project and generates a Claude-ready brief — problem statement, phase roadmap, skill files, and a first prompt.", output: "Claude-ready project brief" },
+  { phase: null, name: "Client Deck",             type: "prompt", ref: "deck",                    label: "Client Deck Builder",            desc: "Identifies the right deck type for your situation, then writes slide-by-slide structure with speaker notes and opening hook.", output: "Slide structure + speaker notes" },
+  { phase: "06", name: "Component Spec",          type: "prompt", ref: "component-spec",          label: "Component Spec Generator",       desc: "Documents component anatomy, all interactive states, behavior, spacing, edge cases — complete enough for a developer to build without questions.", output: "Full component spec document" },
+  { phase: "06", name: "QA Issue Log",            type: "prompt", ref: "design-qa",               label: "Design QA Logger",               desc: "Structures implementation review notes into a P0–P3 severity-rated issue log with an explicit launch recommendation.", output: "QA report + launch sign-off decision" },
 ];
 
 // ── Phase data ────────────────────────────────────────────────────────────────
@@ -2684,6 +2684,79 @@ Based on my answers, recommend the most appropriate deliverable and tell me:
 - The exact name of the tool, prompt, or skill to use
 - One sentence on why this is the right choice for my situation`;
 
+// ── Deliverable card ──────────────────────────────────────────────────────────
+function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPrompt }) {
+  const [copied, setCopied] = useState(false);
+  const isStudio = d.ref === "design-system";
+
+  function handleCopy() {
+    navigator.clipboard.writeText(getDelivPrompt(d));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  }
+
+  return (
+    <div style={{
+      background: T.surface, border: `1px solid ${borderColor}`, borderRadius: 8,
+      padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
+      transition: "border-color 0.12s",
+    }}
+      onMouseEnter={e => e.currentTarget.style.borderColor = hoverColor}
+      onMouseLeave={e => e.currentTarget.style.borderColor = borderColor}
+    >
+      {/* Name */}
+      <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{d.name}</span>
+
+      {/* Description */}
+      <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0 }}>{d.desc}</p>
+
+      {/* Output pill */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        <span style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>Output</span>
+        <span style={{ fontSize: 11, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "2px 9px" }}>{d.output}</span>
+      </div>
+
+      {/* Action row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2, gap: 8 }}>
+        <span style={{ fontSize: 11, color: T.dim, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.label}</span>
+        {isStudio ? (
+          <button onClick={() => onOpenTool(d.ref)} style={{
+            padding: "5px 14px", borderRadius: 5, flexShrink: 0,
+            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+            letterSpacing: "0.06em", textTransform: "uppercase",
+            background: "transparent", border: `1px solid ${T.border}`,
+            color: T.muted, cursor: "pointer", transition: "all 0.12s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+          >Open tool</button>
+        ) : (
+          <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+            <button onClick={handleCopy} style={{
+              padding: "5px 12px", borderRadius: 5,
+              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.06em", textTransform: "uppercase",
+              background: "transparent", border: `1.5px solid ${copied ? "#22C55E" : T.border}`,
+              color: copied ? "#22C55E" : T.muted, cursor: "pointer", transition: "all 0.15s",
+            }}>{copied ? "✓ Copied" : "Copy prompt"}</button>
+            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style={{
+              padding: "5px 10px", borderRadius: 5,
+              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: "0.06em", textTransform: "uppercase",
+              background: "transparent", border: `1px solid ${T.border}`,
+              color: T.dim, cursor: "pointer", textDecoration: "none",
+              transition: "all 0.12s", display: "inline-flex", alignItems: "center",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.dim; }}
+            >↗</a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function DeliverablePath({ onOpenTool }) {
   const PHASE_META = {
     "01": { label: "Discover",   color: "#22C55E", dim: "rgba(34,197,94,0.12)",  border: "rgba(34,197,94,0.25)"  },
@@ -2696,14 +2769,21 @@ function DeliverablePath({ onOpenTool }) {
   const PHASES_ORDER = ["01","02","03","04","05","06"];
 
   const [selected, setSelected] = useState(null);
-  const [typeFilter, setTypeFilter] = useState("all");
   const [guideCopied, setGuideCopied] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
 
   const typeColor = { tool: "#22C55E", prompt: "#8B5CF6" };
 
+  // Look up prompt text — checks TOOLS first, then PROMPTS
+  function getDelivPrompt(d) {
+    const tool = TOOLS.find(t => t.id === d.ref);
+    if (tool?.text) return tool.text;
+    const prompt = PROMPTS.find(p => p.id === d.ref);
+    return prompt?.text || "";
+  }
+
   const phaseItems = selected
-    ? DELIVERABLES.filter(d => d.phase === selected && (typeFilter === "all" || d.type === typeFilter))
+    ? DELIVERABLES.filter(d => d.phase === selected)
     : [];
 
   const meta = selected ? PHASE_META[selected] : null;
@@ -2753,14 +2833,14 @@ function DeliverablePath({ onOpenTool }) {
             <div className="deliverable-info-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {[
                 {
-                  badge: "Interactive", headline: "Tools",
-                  desc: "Guided multi-step workflows with real-time AI generation. Walk through structured steps — Claude produces each output as you go.",
-                  when: "When you want a full workflow in one session",
+                  badge: "Prompt", headline: "Most deliverables",
+                  desc: "Copy the prompt, open Claude.ai, and paste your context. Claude guides you through the rest — asking questions and producing the output in one session.",
+                  when: "All phase deliverables work this way",
                 },
                 {
-                  badge: "Copy + Paste", headline: "Prompts",
-                  desc: "Pre-engineered prompts for Claude Chat. Copy, paste your context, and get a targeted output. Best when you need something fast or want to stay in an existing Claude conversation.",
-                  when: "When you need something fast or want to stay in chat",
+                  badge: "Interactive tool", headline: "Design System Studio",
+                  desc: "The one interactive tool in this section. Build and preview a live design system — customize tokens, preview components, and export CSS. No prompt needed.",
+                  when: "Cross-phase — available any time",
                 },
               ].map(item => (
                 <div key={item.headline} style={{ border: `1px solid ${T.border}`, borderRadius: 8, padding: "12px 14px" }}>
@@ -2775,93 +2855,24 @@ function DeliverablePath({ onOpenTool }) {
         ) : (
           /* Phase deliverable cards */
           <div style={{ padding: "20px 0 24px" }}>
-            {/* Phase header + type filter inline */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: meta.color, boxShadow: `0 0 7px ${meta.color}` }} />
-                <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: meta.color }}>{selected} — {meta.label}</span>
-                <span style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>
-                  {phaseItems.length} deliverable{phaseItems.length !== 1 ? "s" : ""}
-                </span>
-              </div>
-              {/* Type filter */}
-              <div style={{ display: "flex", gap: 5 }}>
-                {[{ id: "all", label: "All" }, { id: "tool", label: "Tool" }, { id: "prompt", label: "Prompt" }].map(f => {
-                  const isActive = typeFilter === f.id;
-                  const accent = f.id === "tool" ? typeColor.tool : f.id === "prompt" ? typeColor.prompt : null;
-                  return (
-                    <button key={f.id} onClick={() => setTypeFilter(f.id)} style={{
-                      padding: "3px 11px", borderRadius: 20, cursor: "pointer",
-                      fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-                      letterSpacing: "0.07em", textTransform: "uppercase",
-                      border: `1px solid ${isActive ? (accent || T.borderHover) : T.border}`,
-                      background: isActive ? (accent ? `${accent}18` : T.card) : "transparent",
-                      color: isActive ? (accent || T.text) : T.dim,
-                      transition: "all 0.12s",
-                    }}>{f.label}</button>
-                  );
-                })}
-              </div>
+            {/* Phase header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <div style={{ width: 7, height: 7, borderRadius: "50%", background: meta.color, boxShadow: `0 0 7px ${meta.color}` }} />
+              <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: meta.color }}>{selected} — {meta.label}</span>
+              <span style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace" }}>
+                {phaseItems.length} deliverable{phaseItems.length !== 1 ? "s" : ""}
+              </span>
             </div>
 
             {/* Cards */}
             {phaseItems.length === 0 ? (
               <div style={{ padding: "24px 0", textAlign: "center" }}>
-                <Mono color={T.dim} size={11}>No {typeFilter} deliverables in this phase</Mono>
+                <Mono color={T.dim} size={11}>No deliverables in this phase</Mono>
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 10 }}>
                 {phaseItems.map(d => (
-                  <div key={d.ref} style={{
-                    background: T.surface, border: `1px solid ${meta.border}`, borderRadius: 8,
-                    padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
-                    transition: "border-color 0.12s",
-                  }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = meta.color + "60"}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = meta.border}
-                  >
-                    {/* Name + type badge */}
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{d.name}</span>
-                      <span style={{
-                        fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-                        letterSpacing: "0.08em", textTransform: "uppercase",
-                        padding: "2px 7px", borderRadius: 3, flexShrink: 0,
-                        background: "rgba(255,255,255,0.06)",
-                        border: `1px solid ${T.border}`,
-                        color: T.muted,
-                      }}>{d.type}</span>
-                    </div>
-
-                    {/* Description */}
-                    <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0 }}>{d.desc}</p>
-
-                    {/* Output pill */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>Output</span>
-                      <span style={{ fontSize: 11, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "2px 9px" }}>{d.output}</span>
-                    </div>
-
-                    {/* Tool name + action */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
-                      <span style={{ fontSize: 11, color: T.dim }}>{d.label}</span>
-                      {d.type === "tool" && (
-                        <button onClick={() => onOpenTool(d.ref)} style={{
-                          padding: "5px 14px", borderRadius: 5, flexShrink: 0,
-                          fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                          letterSpacing: "0.06em", textTransform: "uppercase",
-                          background: "transparent", border: `1px solid ${T.border}`,
-                          color: T.muted, cursor: "pointer", transition: "all 0.12s",
-                        }}
-                          onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
-                          onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-                        >Open tool</button>
-                      )}
-                      {d.type === "prompt" && (
-                        <CopyBtn text={PROMPTS.find(p => p.id === d.ref)?.text || ""} label="Copy prompt" />
-                      )}
-                    </div>
-                  </div>
+                  <DeliverableCard key={d.ref} d={d} borderColor={meta.border} hoverColor={meta.color + "60"} onOpenTool={onOpenTool} getDelivPrompt={getDelivPrompt} />
                 ))}
               </div>
             )}
@@ -2869,36 +2880,16 @@ function DeliverablePath({ onOpenTool }) {
         )}
       </div>
 
-      {/* Cross-phase tools — always visible */}
+      {/* Cross-phase — always visible */}
       <div style={{ marginBottom: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
           <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim }}>Cross-phase</span>
           <div style={{ flex: 1, height: 1, background: T.border }} />
-          <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim }}>{DELIVERABLES.filter(d => d.phase === null && (typeFilter === "all" || d.type === typeFilter)).length} tool{DELIVERABLES.filter(d => d.phase === null && (typeFilter === "all" || d.type === typeFilter)).length !== 1 ? "s" : ""}</span>
+          <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim }}>{DELIVERABLES.filter(d => d.phase === null).length} deliverable{DELIVERABLES.filter(d => d.phase === null).length !== 1 ? "s" : ""}</span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 10 }}>
-          {DELIVERABLES.filter(d => d.phase === null && (typeFilter === "all" || d.type === typeFilter)).map(d => (
-            <div key={d.ref} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 8, padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8, transition: "border-color 0.12s" }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
-              onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
-            >
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{d.name}</span>
-                <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, flexShrink: 0, background: "rgba(255,255,255,0.06)", border: `1px solid ${T.border}`, color: T.muted }}>{d.type}</span>
-              </div>
-              <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0 }}>{d.desc}</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 10, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", flexShrink: 0 }}>Output</span>
-                <span style={{ fontSize: 11, color: T.muted, background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "2px 9px" }}>{d.output}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
-                <span style={{ fontSize: 11, color: T.dim }}>{d.label}</span>
-                <button onClick={() => onOpenTool(d.ref)} style={{ padding: "5px 14px", borderRadius: 5, flexShrink: 0, fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, cursor: "pointer", transition: "all 0.12s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-                >Open tool</button>
-              </div>
-            </div>
+          {DELIVERABLES.filter(d => d.phase === null).map(d => (
+            <DeliverableCard key={d.ref} d={d} borderColor={T.border} hoverColor={T.borderHover} onOpenTool={onOpenTool} getDelivPrompt={getDelivPrompt} />
           ))}
         </div>
       </div>
