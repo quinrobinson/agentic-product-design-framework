@@ -1826,55 +1826,74 @@ function SetupBlock({ onOpenFigmaGuide }) {
 }
 
 // ── Path: Phase ───────────────────────────────────────────────────────────────
-function PromptCard({ prompt, phaseColor }) {
-  const [open, setOpen] = useState(false);
-  const color = phaseColor || "#22C55E";
-  return (
-    <div style={{ border: `1px solid ${open ? color + "44" : T.border}`, borderRadius: 8, overflow: "hidden", transition: "border-color 0.15s" }}>
-      <button onClick={() => setOpen(!open)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: open ? T.surface : "transparent", border: "none", cursor: "pointer", textAlign: "left", gap: 12 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 2 }}>{prompt.name}</div>
-          <Mono color={T.dim} size={10}>{prompt.skill}</Mono>
-        </div>
-        <span style={{ fontSize: 11, color: T.dim, transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
-      </button>
-      {open && (
-        <div style={{ borderTop: `1px solid ${T.border}`, padding: "14px 16px 16px" }}>
-          <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 12 }}>
-            <span style={{ color: T.dim, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>When · </span>
-            {prompt.when}
-          </div>
-          <pre style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap", background: T.card, border: `1px solid ${T.border}`, borderRadius: 6, padding: "12px 14px", margin: "0 0 12px", overflowX: "auto" }}>{prompt.text}</pre>
-          <CopyBtn text={prompt.text} />
-        </div>
-      )}
-    </div>
-  );
-}
+function PhasePromptCard({ item }) {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const text = item.text || "";
+  const desc = item.when || item.subtitle || "";
 
-function ToolPromptCard({ tool, phaseColor }) {
-  const [open, setOpen] = useState(false);
-  const color = phaseColor || "#22C55E";
+  function handleCopy() {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  }
+
   return (
-    <div style={{ border: `1px solid ${open ? color + "44" : T.border}`, borderRadius: 8, overflow: "hidden", transition: "border-color 0.15s" }}>
-      <button onClick={() => setOpen(!open)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: open ? T.surface : "transparent", border: "none", cursor: "pointer", textAlign: "left", gap: 12 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 13, fontWeight: 500, color: T.text, marginBottom: 2 }}>{tool.name}</div>
-          <Mono color={T.dim} size={10}>{tool.skill}</Mono>
+    <>
+      <div style={{
+        background: T.surface, border: `1px solid ${T.border}`, borderRadius: 8,
+        padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
+        transition: "border-color 0.12s",
+      }}
+        onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
+        onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+      >
+        <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{item.name}</span>
+        <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0, flex: 1 }}>{desc}</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginTop: 4 }}>
+          <Mono color={T.dim} size={9}>{item.skill || ""}</Mono>
+          <button onClick={() => setPopoverOpen(true)} style={{
+            padding: "5px 12px", borderRadius: 5, flexShrink: 0,
+            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+            letterSpacing: "0.06em", textTransform: "uppercase",
+            background: "transparent", border: `1px solid ${T.border}`,
+            color: T.muted, cursor: "pointer", transition: "all 0.12s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+          >View prompt</button>
         </div>
-        <span style={{ fontSize: 11, color: T.dim, transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>▾</span>
-      </button>
-      {open && (
-        <div style={{ borderTop: `1px solid ${T.border}`, padding: "14px 16px 16px" }}>
-          <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, marginBottom: 12 }}>
-            <span style={{ color: T.dim, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>When · </span>
-            {tool.subtitle}
+      </div>
+
+      {popoverOpen && (
+        <div onClick={() => setPopoverOpen(false)} style={{
+          position: "fixed", inset: 0, zIndex: 9000,
+          background: "rgba(0,0,0,0.65)", backdropFilter: "blur(2px)",
+          display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px",
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: T.card, border: `1px solid ${T.border}`, borderRadius: 12,
+            width: "100%", maxWidth: 600, maxHeight: "80vh",
+            display: "flex", flexDirection: "column", overflow: "hidden",
+          }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "18px 20px 16px", borderBottom: `1px solid ${T.border}`, gap: 12 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.text, lineHeight: 1.3, marginBottom: 3 }}>{item.name}</div>
+                <div style={{ fontSize: 11, color: T.dim, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.05em" }}>{item.skill || item.group || ""}</div>
+              </div>
+              <button onClick={() => setPopoverOpen(false)} style={{ background: "transparent", border: `1px solid ${T.border}`, borderRadius: 5, color: T.dim, cursor: "pointer", fontSize: 13, lineHeight: 1, padding: "4px 8px", flexShrink: 0, transition: "all 0.12s" }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.dim; }}
+              >✕</button>
+            </div>
+            <pre style={{ flex: 1, overflowY: "auto", margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.muted, lineHeight: 1.72, whiteSpace: "pre-wrap", padding: "18px 20px" }}>{text}</pre>
+            <div style={{ padding: "14px 20px", borderTop: `1px solid ${T.border}` }}>
+              <button onClick={handleCopy} style={{ padding: "8px 20px", borderRadius: 6, fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 600, cursor: "pointer", border: `1.5px solid ${copied ? "#22C55E" : T.border}`, background: "transparent", color: copied ? "#22C55E" : T.muted, transition: "all 0.15s" }}>{copied ? "✓ Copied" : "Copy prompt"}</button>
+            </div>
           </div>
-          <pre style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.muted, lineHeight: 1.7, whiteSpace: "pre-wrap", background: T.card, border: `1px solid ${T.border}`, borderRadius: 6, padding: "12px 14px", margin: "0 0 12px", overflowX: "auto" }}>{tool.text}</pre>
-          <CopyBtn text={tool.text} />
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -2047,16 +2066,12 @@ function PhasePath({ onOpenTool }) {
                 grouped[g].push(item);
               });
               return (
-                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                   {groupOrder.map(groupLabel => (
                     <div key={groupLabel}>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 8 }}>{groupLabel}</div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        {grouped[groupLabel].map(item =>
-                          item._type === "tool"
-                            ? <ToolPromptCard key={item.id} tool={item} phaseColor={p.color} />
-                            : <PromptCard key={item.id} prompt={item} phaseColor={p.color} />
-                        )}
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: T.dim, marginBottom: 10 }}>{groupLabel}</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 10 }}>
+                        {grouped[groupLabel].map(item => <PhasePromptCard key={item.id} item={item} />)}
                       </div>
                     </div>
                   ))}
@@ -2066,28 +2081,45 @@ function PhasePath({ onOpenTool }) {
 
             {/* Tab: Skills */}
             {tab === "skills" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {phaseSkills.length === 0 ? (
-                  <div style={{ padding: "20px 0", textAlign: "center" }}><Mono color={T.dim}>No skills yet for this phase</Mono></div>
-                ) : phaseSkills.map(skill => (
-                  <div key={skill.file} className="skill-row" style={{ background: T.card, borderRadius: 6, border: `1px solid ${T.border}` }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+              phaseSkills.length === 0 ? (
+                <div style={{ padding: "20px 0", textAlign: "center" }}><Mono color={T.dim}>No skills yet for this phase</Mono></div>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 10 }}>
+                  {phaseSkills.map(skill => (
+                    <div key={skill.file} style={{
+                      background: T.surface, border: `1px solid ${T.border}`, borderRadius: 8,
+                      padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
+                      transition: "border-color 0.12s",
+                    }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                         <Mono color={T.muted} size={11}>{skill.file}</Mono>
                         <SkillBadge surface={skill.surface} />
                       </div>
-                      <div style={{ fontSize: 11, color: T.dim, lineHeight: 1.5 }}>{skill.desc}</div>
+                      <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0, flex: 1 }}>{skill.desc}</p>
+                      <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                        <button onClick={() => setActiveSkill(skill)} style={{
+                          padding: "5px 12px", borderRadius: 5, fontSize: 11,
+                          fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase",
+                          background: "transparent", border: `1px solid ${T.border}`, color: T.muted,
+                          cursor: "pointer", transition: "all 0.15s",
+                        }}
+                          onMouseEnter={e => { e.currentTarget.style.borderColor = p.color + "55"; e.currentTarget.style.color = p.color; }}
+                          onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+                        >Preview</button>
+                        <a href={skillUrl(skill)} download style={{
+                          padding: "5px 12px", borderRadius: 5, fontSize: 11,
+                          fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase",
+                          background: "transparent", border: `1px solid ${T.border}`, color: T.muted, textDecoration: "none",
+                          transition: "all 0.15s",
+                        }}>↓ Download</a>
+                      </div>
                     </div>
-                    <div className="skill-actions">
-                      <button onClick={() => setActiveSkill(skill)} style={{ padding: "5px 10px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.15s" }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = p.color + "55"; e.currentTarget.style.color = p.color; }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-                      >Preview →</button>
-                      <a href={skillUrl(skill)} download style={{ padding: "5px 10px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, textDecoration: "none", whiteSpace: "nowrap" }}>↓</a>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )
             )}
 
             {activeSkill && <SkillDrawer skill={activeSkill} onClose={() => setActiveSkill(null)} />}
@@ -2458,53 +2490,46 @@ function WaysToWorkPath() {
         <Mono color={T.dim} size={10}>{filtered.length} scenario{filtered.length !== 1 ? "s" : ""}</Mono>
       </div>
 
-      {/* Scenario list */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 1, border: `1px solid ${T.border}`, borderRadius: 10, overflow: "hidden" }}>
-        {filtered.map((s, i) => {
-          const isLast = i === filtered.length - 1;
-          return (
-            <button
-              key={s.id}
-              onClick={() => setActiveScenario(s)}
-              style={{
-                display: "flex", alignItems: "flex-start", gap: 16,
-                padding: "16px 20px", background: T.surface,
-                border: "none", borderBottom: isLast ? "none" : `1px solid ${T.border}`,
-                cursor: "pointer", textAlign: "left",
-                transition: "background 0.12s", outline: "none",
+      {/* Scenario cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
+        {filtered.map((s) => (
+          <div key={s.id} style={{
+            background: T.surface, border: `1px solid ${T.border}`, borderRadius: 8,
+            padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8,
+            transition: "border-color 0.12s",
+          }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = T.borderHover}
+            onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{s.title}</span>
+              {s.type === "ai" && (
+                <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, flexShrink: 0 }}>AI</span>
+              )}
+            </div>
+            <p style={{ fontSize: 12, color: T.muted, lineHeight: 1.55, margin: 0, flex: 1 }}>{s.mission}</p>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              {s.phases.map(ph => {
+                const meta = T.phases[ph.key];
+                return meta ? (
+                  <span key={ph.key} style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: `${meta.color}14`, border: `1px solid ${meta.color}30`, color: meta.color }}>{meta.label}</span>
+                ) : null;
+              })}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 2 }}>
+              <Mono color={T.dim} size={9}>{s.time}</Mono>
+              <button onClick={() => setActiveScenario(s)} style={{
+                padding: "5px 12px", borderRadius: 5, fontSize: 11,
+                fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase",
+                background: "transparent", border: `1px solid ${T.border}`, color: T.muted,
+                cursor: "pointer", transition: "all 0.12s",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = T.card}
-              onMouseLeave={e => e.currentTarget.style.background = T.surface}
-            >
-              {/* Index */}
-              <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: T.dim, paddingTop: 3, flexShrink: 0, minWidth: 22 }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
-              {/* Content */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: T.text }}>{s.title}</span>
-                  {s.type === "ai" && (
-                    <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted }}>AI</span>
-                  )}
-                </div>
-                <div style={{ fontSize: 12, color: T.dim, lineHeight: 1.55, marginBottom: 8 }}>{s.mission}</div>
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {s.phases.map(p => {
-                    const ph = T.phases[p.key];
-                    return ph ? (
-                      <span key={p.key} style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.07em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 3, background: `${ph.color}14`, border: `1px solid ${ph.color}30`, color: ph.color }}>{ph.label}</span>
-                    ) : null;
-                  })}
-                </div>
-              </div>
-
-              {/* Arrow */}
-              <span style={{ fontSize: 14, color: T.dim, flexShrink: 0, paddingTop: 2 }}>→</span>
-            </button>
-          );
-        })}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+              >View scenario</button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Drawer */}

@@ -268,87 +268,73 @@ export default function SkillsLibrary({ onBack }) {
           })}
         </div>
 
-        {/* Skills table */}
-        <div style={{ background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-          {filteredSkills.map((row, i) => {
+        {/* Skills card grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
+          {filteredSkills.flatMap(row => {
             const p = row.phase ? DS.phases[row.phase] : null;
-            const isLast = i === filteredSkills.length - 1;
-            return (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: isLast ? "none" : `1px solid ${DS.lightBorder}` }}>
-                {/* Phase label col */}
-                <div style={{ padding: "24px 20px", borderRight: `1px solid ${DS.lightBorder}`, display: "flex", alignItems: "flex-start", background: "#FAFAF8" }}>
-                  {p ? (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "transparent", border: `1px solid ${p.color}55`, borderRadius: 999, padding: "3px 10px", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 500, color: p.color, whiteSpace: "nowrap" }}>
-                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
-                      {row.phase} — {p.label}
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.4, letterSpacing: 1 }}>Cross-phase</span>
-                  )}
-                </div>
+            return row.files.map(file => {
+              const meta = SKILL_META[file];
+              const sState = skillStates[file] || "idle";
+              const surfaceColor = meta?.surface?.includes("figma") ? "#F59E0B" : meta?.surface?.includes("code") ? "#3B82F6" : "#22C55E";
+              return (
+                <div key={file} style={{
+                  background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 12,
+                  padding: "16px 18px", display: "flex", flexDirection: "column", gap: 10,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04)", transition: "border-color 0.15s",
+                }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "#CBD5E1"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = DS.lightBorder}
+                >
+                  {/* File name + phase badge */}
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+                    <a
+                      href={`${REPO}/tree/main/skills/${row.dir ? row.dir + "/" : ""}${file}`}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, color: "#0F172A", textDecoration: "none", lineHeight: 1.4, wordBreak: "break-all" }}
+                    >{file}</a>
+                    {p ? (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, flexShrink: 0, fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 999, background: `${p.color}12`, border: `1px solid ${p.color}40`, color: p.color, whiteSpace: "nowrap" }}>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: p.color }} />
+                        {p.label}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", color: DS.bodyDark, opacity: 0.4, flexShrink: 0 }}>Cross-phase</span>
+                    )}
+                  </div>
 
-                {/* Files col */}
-                <div style={{ padding: "20px 28px" }}>
-                  {row.files.map((file, fi) => {
-                    const meta = SKILL_META[file];
-                    const fileColor = p ? p.color : DS.bodyDark;
-                    const sState = skillStates[file] || "idle";
-                    return (
-                      <div key={file} style={{ marginBottom: fi < row.files.length - 1 ? 22 : 0 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                          <a
-                            href={`${REPO}/tree/main/skills/${row.dir ? row.dir + "/" : ""}${file}`}
-                            target="_blank" rel="noopener noreferrer"
-                            style={{ fontSize: 11, padding: "3px 11px", borderRadius: 7, background: "transparent", color: fileColor, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", border: `1px solid ${fileColor}44`, whiteSpace: "nowrap", fontWeight: 500 }}
-                          >
-                            {file}
-                          </a>
-                          <button
-                            onClick={() => downloadSingleSkill(file, row.dir)}
-                            disabled={sState === "loading"}
-                            aria-label={`Download ${file.replace(".md", "")} as zip`}
-                            title={`Download ${file.replace(".md", "")}.zip`}
-                            style={{
-                              display: "inline-flex", alignItems: "center", gap: 5,
-                              fontSize: 10, padding: "3px 10px", borderRadius: 7,
-                              fontFamily: "'JetBrains Mono', monospace", fontWeight: 500,
-                              cursor: sState === "loading" ? "default" : "pointer",
-                              border: `1px solid ${sState === "done" ? "#22C55E88" : sState === "error" ? "#EF444488" : DS.lightBorder}`,
-                              background: sState === "done" ? "#22C55E12" : sState === "error" ? "#EF444412" : "transparent",
-                              color: sState === "done" ? "#22C55E" : sState === "error" ? "#EF4444" : DS.bodyDark,
-                              opacity: sState === "loading" ? 0.5 : 1,
-                              transition: "all 0.2s", whiteSpace: "nowrap",
-                            }}
-                          >
-                            {sState === "loading" ? "⟳" : sState === "done" ? "✓" : sState === "error" ? "✕" : "↓"} .zip
-                          </button>
-                          {meta?.leverage && (
-                            <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: DS.bodyDark, opacity: 0.6 }}>
-                              {meta.leverage === "high" ? "AI accelerated" : "AI assisted"}
-                            </span>
-                          )}
-                          {meta?.surface && (
-                            <span style={{
-                              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
-                              padding: "2px 8px", borderRadius: 999,
-                              background: meta.surface.includes("figma") ? "#F59E0B12" : meta.surface.includes("code") ? "#3B82F612" : "#22C55E12",
-                              color: meta.surface.includes("figma") ? "#F59E0B" : meta.surface.includes("code") ? "#3B82F6" : "#22C55E",
-                              border: `1px solid ${meta.surface.includes("figma") ? "#F59E0B40" : meta.surface.includes("code") ? "#3B82F640" : "#22C55E40"}`,
-                              whiteSpace: "nowrap",
-                            }}>
-                              {meta.surface}
-                            </span>
-                          )}
-                        </div>
-                        {meta?.desc && (
-                          <p style={{ fontSize: 12, color: DS.bodyDark, lineHeight: 1.7, margin: 0, maxWidth: 700 }}>{meta.desc}</p>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {/* Surface badge */}
+                  {meta?.surface && (
+                    <span style={{ alignSelf: "flex-start", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", padding: "2px 8px", borderRadius: 999, background: `${surfaceColor}12`, color: surfaceColor, border: `1px solid ${surfaceColor}40`, whiteSpace: "nowrap" }}>
+                      {meta.surface}
+                    </span>
+                  )}
+
+                  {/* Description */}
+                  {meta?.desc && (
+                    <p style={{ fontSize: 12, color: DS.bodyDark, lineHeight: 1.65, margin: 0, flex: 1 }}>{meta.desc}</p>
+                  )}
+
+                  {/* Download */}
+                  <button
+                    onClick={() => downloadSingleSkill(file, row.dir)}
+                    disabled={sState === "loading"}
+                    style={{
+                      alignSelf: "flex-start", marginTop: 4,
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      fontSize: 11, padding: "6px 14px", borderRadius: 8,
+                      fontFamily: "'JetBrains Mono', monospace", fontWeight: 500,
+                      cursor: sState === "loading" ? "default" : "pointer",
+                      border: `1px solid ${sState === "done" ? "#22C55E88" : sState === "error" ? "#EF444488" : DS.lightBorder}`,
+                      background: sState === "done" ? "#22C55E12" : sState === "error" ? "#EF444412" : "transparent",
+                      color: sState === "done" ? "#22C55E" : sState === "error" ? "#EF4444" : DS.bodyDark,
+                      opacity: sState === "loading" ? 0.5 : 1, transition: "all 0.2s",
+                    }}
+                  >
+                    {sState === "loading" ? "⟳" : sState === "done" ? "✓" : sState === "error" ? "✕" : "↓"} Download .zip
+                  </button>
                 </div>
-              </div>
-            );
+              );
+            });
           })}
         </div>
 
