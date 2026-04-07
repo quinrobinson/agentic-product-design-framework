@@ -1561,7 +1561,7 @@ const PHASES = [
       comesIn: "Locked problem statement, persona, and HMW questions from Define.",
       sequence: ["Concept Generator → 5 angles of concepts", "Idea Clustering → Strategic landscape", "Concept Critique → Adversarial review", "Storyboard → Scenes before screens"],
       handoff: "Selected concept with storyboard and critique findings ready for Prototype.",
-      figma: "Use Figma MCP to build concept boards and storyboard frames.",
+      figma: "Claude can build concept boards, storyboard frames, and FigJam ideation boards directly in your file via Figma MCP.",
     },
   },
   {
@@ -1572,7 +1572,7 @@ const PHASES = [
       comesIn: "Selected concept, storyboard, and critique findings from Ideate.",
       sequence: ["Prototype scoping → 3 questions + fidelity decision", "User flow mapping → Screen inventory", "UX copy writing → Voice brief + all states", "Heuristic review → Fix critical issues", "Test script drafting → Ready for Validate"],
       handoff: "Prototype file, copy document, heuristic fix list, and test script ready for Validate.",
-      figma: "Wireframing and prototyping happen in Figma. Use Figma MCP to organize frames and apply your design system.",
+      figma: "Wireframing and prototyping live in Figma. Claude can scaffold frames, organize flows, and apply design system components directly in your file via MCP.",
     },
   },
   {
@@ -1594,7 +1594,7 @@ const PHASES = [
       comesIn: "Validated, approved designs from the Prototype/Validate cycle.",
       sequence: ["Component specs → States, behavior, spacing, edge cases", "Handoff annotations → Screen-by-screen behavior notes", "Accessibility annotations → ARIA, keyboard, focus", "Design decision record → Why, not what", "Design QA → After engineering builds, before launch"],
       handoff: "Spec document, QA report, and sign-off checklist. The design phase is complete.",
-      figma: "Most Deliver work lives in Figma — annotations, specs, and asset export. Use MCP to generate and place spec content.",
+      figma: "Most Deliver work lives in Figma. Claude can generate and place spec annotations, accessibility notes, and decision records directly in your file via MCP.",
     },
   },
 ];
@@ -1925,52 +1925,6 @@ function PhasePromptCard({ item }) {
   );
 }
 
-// ── Figma MCP Callout ─────────────────────────────────────────────────────────
-const FIGMA_MCP_PHASES = ["03", "04", "06"];
-
-const FIGMA_MCP_COPY = {
-  "03": "Claude can build concept boards, storyboard frames, and FigJam ideation boards directly in your file.",
-  "04": "Claude can scaffold wireframe frames, organize flows, and apply design system components in your file.",
-  "06": "Claude can generate and place spec annotations, accessibility notes, and decision records directly in your file.",
-};
-
-function FigmaMCPCallout({ phaseId, onOpenSkill }) {
-  if (!FIGMA_MCP_PHASES.includes(phaseId)) return null;
-  const figmaSkill = { file: "figma-playbook.md", phase: null, surface: "code + figma mcp", desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." };
-  return (
-    <div style={{
-      padding: "10px 14px", marginBottom: 16,
-      background: T.surface,
-      border: `1px solid ${T.border}`,
-      borderRadius: 8,
-    }}>
-      <span style={{
-        fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-        letterSpacing: "0.08em", textTransform: "uppercase",
-        padding: "2px 7px", borderRadius: 3,
-        background: T.card, border: `1px solid ${T.border}`, color: T.muted,
-        display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 8,
-      }}><FigmaIcon size={9} />Figma MCP</span>
-      <div className="figma-callout-inner">
-        <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5, flex: 1 }}>{FIGMA_MCP_COPY[phaseId]}</span>
-        <button
-          onClick={() => onOpenSkill(figmaSkill)}
-          style={{
-            padding: "4px 12px", borderRadius: 5, flexShrink: 0,
-            fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.06em", textTransform: "uppercase",
-            background: "transparent", border: `1px solid ${T.border}`,
-            color: T.muted, cursor: "pointer", whiteSpace: "nowrap",
-            transition: "all 0.15s",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-        >View skill →</button>
-      </div>
-    </div>
-  );
-}
-
 function PhasePath({ onOpenTool }) {
   const [selected, setSelected] = useState(null);
   const [tab, setTab] = useState("prompts");
@@ -2042,9 +1996,6 @@ function PhasePath({ onOpenTool }) {
               </div>
               <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, maxWidth: 600, margin: 0 }}>{phase.desc}</p>
             </div>
-
-            {/* Figma MCP callout — Ideate, Prototype, Deliver only */}
-            <FigmaMCPCallout phaseId={selected} onOpenSkill={setActiveSkill} />
 
             {/* Tabs */}
             <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
