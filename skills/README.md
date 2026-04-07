@@ -19,7 +19,8 @@ A collection of Claude skills for every phase of the product design process. Eac
 | Skill | File | Surface | Description |
 |-------|------|---------|-------------|
 | Concept Generation | `03-ideate/concept-generation.md` | Chat | Five-Direction concepts, UI patterns, visual system directions, chart type selection |
-| Visual Design Execution | `03-ideate/visual-design-execution.md` | Chat | Style selection, semantic color tokens, typography, spacing, motion, icon standards |
+| Concept Proof | `03-ideate/concept-proof.md` | Chat | Figma Make prompts that turn concept cards into throwaway interactive prototypes for tangible concept selection |
+| Visual Design Execution | `03-ideate/visual-design-execution.md` | Chat | Style selection, semantic color tokens, typography, spacing, motion, icon standards, design system instantiation via Figma Make + MCP |
 
 ### 04 — Prototype
 | Skill | File | Surface | Description |
@@ -112,7 +113,8 @@ skills/
 │   └── problem-framing.md
 ├── 03-ideate/
 │   ├── concept-generation.md
-│   └── visual-design-execution.md  ← NEW
+│   ├── concept-proof.md            ← NEW
+│   └── visual-design-execution.md
 ├── 04-prototype/
 │   ├── prototyping.md
 │   └── accessibility-audit.md      ← NEW
