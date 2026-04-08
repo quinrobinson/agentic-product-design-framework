@@ -70,10 +70,10 @@ a six-phase system (Discover → Define → Ideate → Prototype → Validate �
 with structured skill files, Figma templates, and AI-ready prompts for each phase.
 
 The six phases and their skill files are:
-- Discover → user-research.md, competitive-analysis.md
+- Discover → research-planning.md, research-synthesis.md, insight-framing.md, competitive-analysis.md, service-blueprint.md
 - Define → problem-framing.md
 - Ideate → concept-generation.md, visual-design-execution.md
-- Prototype → prototyping.md, accessibility-audit.md
+- Prototype → user-flow-mapping.md, wireframing.md, prototype-scoping.md, ux-copy-writing.md, accessibility-audit.md
 - Validate → usability-testing.md
 - Deliver → design-delivery.md
 - Cross-phase → design-systems.md, figma-playbook.md

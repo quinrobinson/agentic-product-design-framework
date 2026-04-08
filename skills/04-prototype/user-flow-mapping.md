@@ -1,7 +1,7 @@
 ---
 name: user-flow-mapping
 phase: 04 — Prototype
-description: Map the complete step-by-step path a user takes to accomplish a goal — including decision points, branches, error paths, and edge cases — before any wireframes are built. Use at the start of Prototype to define the full scope of what needs to be designed. Claude generates flows that are more complete than most designers produce solo, surfacing edge cases and error branches that typically get deferred. Depends on outputs from storyboarding.md and concept-critique.md. Outputs feed into ux-copy.md, prototype-scoping.md, and wireframing.
+description: Map the complete step-by-step path a user takes to accomplish a goal — including decision points, branches, error paths, and edge cases — before any wireframes are built. Use at the start of Prototype to define the full scope of what needs to be designed. Claude generates flows that are more complete than most designers produce solo, surfacing edge cases and error branches that typically get deferred. Depends on outputs from storyboarding.md and concept-critique.md. Outputs feed into ux-copy-writing.md, prototype-scoping.md, and wireframing.
 ai_leverage: high
 claude_surface: chat
 ---
