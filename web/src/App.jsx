@@ -21,7 +21,7 @@ import InsightReportGenerator from "./InsightReportGenerator";
 import ComponentSpecGenerator from "./ComponentSpecGenerator";
 import DesignQALogger from "./DesignQALogger";
 import AgentsPage from "./AgentsPage";
-import { IconTimeline, IconRoute, IconPackage } from "@tabler/icons-react";
+import { IconStairsUp, IconStack3, IconPackage } from "@tabler/icons-react";
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
 const T = {
@@ -4031,8 +4031,8 @@ export default function App() {
                   color: "#22C55E",
                   desc: "I know where I am in the project. Show me tools and guides for that phase.",
                   cta: "Choose a phase →",
-                  Icon: IconTimeline,
-                  iconSize: 190, iconPos: { bottom: -60, right: -55 },
+                  Icon: IconStairsUp,
+                  iconSize: 190, iconPos: { bottom: -20, right: -24 },
                 },
                 {
                   id: "ways",
@@ -4040,8 +4040,8 @@ export default function App() {
                   color: "#8B5CF6",
                   desc: "I have a mission — a project or challenge I need to run. Show me a path through the framework.",
                   cta: "Browse scenarios →",
-                  Icon: IconRoute,
-                  iconSize: 190, iconPos: { top: "50%", right: -24, transform: "translateY(-50%)" },
+                  Icon: IconStack3,
+                  iconSize: 190, iconPos: { bottom: -20, right: -24 },
                 },
                 {
                   id: "deliverable",
