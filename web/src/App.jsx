@@ -4032,7 +4032,7 @@ export default function App() {
                   desc: "I know where I am in the project. Show me tools and guides for that phase.",
                   cta: "Choose a phase →",
                   Icon: IconTimeline,
-                  iconSize: 238, iconRight: -32, iconBottom: -60,
+                  iconSize: 238, iconRight: -55, iconBottom: -60,
                 },
                 {
                   id: "ways",
