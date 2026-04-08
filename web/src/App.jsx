@@ -21,7 +21,52 @@ import InsightReportGenerator from "./InsightReportGenerator";
 import ComponentSpecGenerator from "./ComponentSpecGenerator";
 import DesignQALogger from "./DesignQALogger";
 import AgentsPage from "./AgentsPage";
-import { IconStack3, IconHexagons, IconPackage } from "@tabler/icons-react";
+import { IconStack3, IconPackage } from "@tabler/icons-react";
+
+function IconHexPrisms({ size = 24, strokeWidth = 0.3, style }) {
+  // Three isometric hexagonal prisms side by side, touching
+  // Each prism: flat-top hexagon face + left face + right face
+  // Hex radius ~3.5 units, prism height ~5 units
+  // Centers at x=4, x=11, x=18 in a 24x24 viewbox
+  const prisms = [
+    { cx: 4,  cy: 13 },
+    { cx: 11, cy: 13 },
+    { cx: 18, cy: 13 },
+  ];
+  const r = 3.5;   // hex radius
+  const h = 5;     // prism height
+  // Flat-top hexagon points (angles 0, 60, 120, 180, 240, 300)
+  const hex = (cx, cy) => {
+    const pts = [];
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 180) * (60 * i);
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    return pts;
+  };
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+      strokeLinecap="round" strokeLinejoin="round" style={style}>
+      {prisms.map(({ cx, cy }, i) => {
+        const pts = hex(cx, cy);
+        // Top face (full hexagon)
+        const top = pts.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+        // Front-left face: pts[3], pts[4], pts[4] shifted down, pts[3] shifted down
+        const [x3, y3] = pts[3]; const [x4, y4] = pts[4];
+        // Front-right face: pts[4], pts[5], pts[5] shifted down, pts[4] shifted down
+        const [x5, y5] = pts[5];
+        return (
+          <g key={i}>
+            <polygon points={top} />
+            <polygon points={`${x3.toFixed(2)},${y3.toFixed(2)} ${x4.toFixed(2)},${y4.toFixed(2)} ${x4.toFixed(2)},${(y4+h).toFixed(2)} ${x3.toFixed(2)},${(y3+h).toFixed(2)}`} />
+            <polygon points={`${x4.toFixed(2)},${y4.toFixed(2)} ${x5.toFixed(2)},${y5.toFixed(2)} ${x5.toFixed(2)},${(y5+h).toFixed(2)} ${x4.toFixed(2)},${(y4+h).toFixed(2)}`} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
 
 function IconIsometricStairs({ size = 24, strokeWidth = 0.3, style }) {
   return (
@@ -4065,7 +4110,7 @@ export default function App() {
                   color: "#8B5CF6",
                   desc: "I have a mission — a project or challenge I need to run. Show me a path through the framework.",
                   cta: "Browse scenarios →",
-                  Icon: IconHexagons,
+                  Icon: IconHexPrisms,
                   iconSize: 190, iconPos: { bottom: -20, right: -24 },
                 },
                 {
@@ -4075,7 +4120,7 @@ export default function App() {
                   desc: "I know what I need to hand off. Find the fastest path to that output.",
                   cta: "Find a deliverable →",
                   Icon: IconPackage,
-                  iconSize: 190, iconPos: { bottom: -20, right: -24 },
+                  iconSize: 190, iconPos: { bottom: -48, right: -24 },
                 },
               ].map((item) => (
                 <button
