@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { IconCircleFilled, IconCircleHalf } from "@tabler/icons-react";
 
 const T = {
@@ -474,6 +474,127 @@ function Drawer({ content, onClose }) {
   );
 }
 
+// ── Commands Section ─────────────────────────────────────────────────────────
+const COMMAND_GROUPS = [
+  {
+    agent: "Researcher",
+    commands: [
+      { name: "/synthesize-research", desc: "Synthesize sessions into themes, insights, directions", inputs: ["research_question", "session_notes"] },
+      { name: "/competitive-snapshot", desc: "Map the competitive landscape and surface opportunities", inputs: ["product", "design_question"] },
+      { name: "/synthesize-findings", desc: "Consolidate usability test notes into structured findings", inputs: ["tasks_tested", "session_notes"] },
+      { name: "/insight-report", desc: "Generate a stakeholder-ready insight report", inputs: ["prototype_name", "synthesis", "decision_needed"] },
+    ],
+  },
+  {
+    agent: "Strategist",
+    commands: [
+      { name: "/frame-problem", desc: "Transform research into problem statements and HMW questions", inputs: ["research_data", "persona"] },
+      { name: "/map-journey", desc: "Build a journey map across stages, emotions, and opportunities", inputs: ["persona", "goal"] },
+      { name: "/service-blueprint", desc: "Generate a service blueprint across all swim lanes", inputs: ["persona", "goal"] },
+      { name: "/client-deck", desc: "Build a structured client presentation with speaker notes", inputs: ["project_name", "deck_goal", "desired_outcome"] },
+    ],
+  },
+  {
+    agent: "Designer",
+    commands: [
+      { name: "/generate-concepts", desc: "Generate meaningfully distinct design concepts", inputs: ["problem_statement", "persona"] },
+      { name: "/cluster-ideas", desc: "Cluster raw ideas into strategic themes", inputs: ["concepts", "problem_statement"] },
+      { name: "/concept-proof", desc: "Generate a Figma Make prompt for a clickable concept proof", inputs: ["concept_name", "user_perspective", "key_mechanism", "key_assumption"] },
+      { name: "/map-flow", desc: "Map a user flow including decision points and error states", inputs: ["entry_point", "goal"] },
+      { name: "/ux-copy", desc: "Define voice and generate copy for a product flow", inputs: ["product", "persona", "flow"] },
+    ],
+  },
+  {
+    agent: "Systems Designer",
+    commands: [
+      { name: "/component-architecture", desc: "Analyze screens and produce a component breakdown", inputs: ["screen_inventory"] },
+      { name: "/component-states", desc: "Generate a complete state inventory for a component", inputs: ["component_name", "component_type"] },
+      { name: "/component-spec", desc: "Generate full component documentation for handoff", inputs: ["component_name", "description"] },
+    ],
+  },
+  {
+    agent: "Design Engineer",
+    commands: [
+      { name: "/handoff", desc: "Generate a prototype handoff document for engineering", inputs: ["screens_built", "flows_covered", "problem_statement"] },
+      { name: "/design-qa", desc: "Structure QA notes into a severity-rated issue log", inputs: ["feature", "raw_notes"] },
+    ],
+  },
+  {
+    agent: "Orchestrator",
+    commands: [
+      { name: "/handoff-block", desc: "Generate a Phase Handoff Block for the next phase session", inputs: ["current_phase", "summary"] },
+      { name: "/route", desc: "Read project context and recommend which agent and command to run next", inputs: [] },
+    ],
+    divider: true,
+  },
+];
+
+function CommandsSection() {
+  const [copiedCmd, setCopiedCmd] = useState(null);
+
+  function copyCmd(name) {
+    navigator.clipboard.writeText(name).then(() => {
+      setCopiedCmd(name);
+      setTimeout(() => setCopiedCmd(null), 1500);
+    });
+  }
+
+  return (
+    <section style={{ marginTop: 80 }}>
+      <div style={{ marginBottom: 28 }}>
+        <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 600, color: T.text, marginBottom: 12, letterSpacing: "-0.2px" }}>Commands</h2>
+        <p style={{ fontSize: 15, color: T.muted, lineHeight: 1.7, maxWidth: 600 }}>
+          20 slash commands for Claude Code. Type the command name to invoke — the right agent activates, collects any missing inputs, then runs the tool.
+        </p>
+        <p style={{ marginTop: 8, fontSize: 12, color: T.dim, lineHeight: 1.6 }}>
+          Requires Claude Code with the APDF MCP server running. Place command files in .claude/commands/ — discovered automatically.
+        </p>
+      </div>
+
+      {COMMAND_GROUPS.map((group, i) => (
+        <React.Fragment key={group.agent}>
+          {group.divider && (
+            <div style={{ display: "flex", alignItems: "center", gap: 16, margin: "36px 0 28px" }}>
+              <div style={{ flex: 1, borderTop: `1px solid ${T.border}`, opacity: 0.4 }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", color: T.dim, whiteSpace: "nowrap" }}>Orchestration layer</span>
+              <div style={{ flex: 1, borderTop: `1px solid ${T.border}`, opacity: 0.4 }} />
+            </div>
+          )}
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", color: T.dim, marginBottom: 8, marginTop: i === 0 || group.divider ? 0 : 24 }}>
+            {group.agent}
+          </div>
+          {group.commands.map(cmd => (
+            <div
+              key={cmd.name}
+              style={{ display: "flex", alignItems: "center", gap: 16, padding: "10px 0", borderBottom: `1px solid ${T.border}`, flexWrap: "wrap" }}
+            >
+              <button
+                onClick={() => copyCmd(cmd.name)}
+                style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, background: "transparent", border: "none", cursor: "pointer", color: copiedCmd === cmd.name ? T.muted : T.text, padding: 0, minWidth: 220, textAlign: "left", transition: "color 0.15s", flexShrink: 0 }}
+              >
+                {copiedCmd === cmd.name ? "Copied!" : cmd.name}
+              </button>
+              <span style={{ fontSize: 13, color: T.muted, flex: 1, minWidth: 200 }}>{cmd.desc}</span>
+              {cmd.inputs.length > 0 && (
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", flexShrink: 0 }}>
+                  {cmd.inputs.map(inp => (
+                    <span
+                      key={inp}
+                      style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 99, background: T.card, border: `1px solid ${T.border}`, color: T.dim }}
+                    >
+                      {inp}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </React.Fragment>
+      ))}
+    </section>
+  );
+}
+
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function AgentsPage({ onBack }) {
   const [drawer, setDrawer] = useState(null);
@@ -536,6 +657,9 @@ export default function AgentsPage({ onBack }) {
             onSetupClick={() => setDrawer({ type: "setup" })}
           />
         </section>
+
+        {/* ── Commands ── */}
+        <CommandsSection />
 
       </div>
     </div>
