@@ -4137,7 +4137,7 @@ export default function App() {
         {/* Page header — shown when a path is active */}
         {activePath && (() => {
           const pages = {
-            phase:       { title: "Start with a Phase",       desc: "Six phases. Four artifact types. One continuous workflow. Each phase produces artifacts that feed the next." },
+            phase:       { title: "Start with a Phase",       desc: "Six phases. Three artifact types. One continuous workflow. Each phase produces artifacts that feed the next." },
             ways:        { title: "Ways to Work",             desc: "Each scenario maps a full design challenge — from a design sprint to a complete design system build — to a path through the framework." },
             deliverable: { title: "Start with a Deliverable", desc: "Know what you need to produce. Find the right prompt for that deliverable — or open the Design System Studio if that's your output." },
           };
