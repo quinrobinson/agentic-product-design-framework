@@ -4066,7 +4066,7 @@ export default function App() {
                   onMouseEnter={e => e.currentTarget.style.background = T.card}
                   onMouseLeave={e => e.currentTarget.style.background = T.surface}
                 >
-                  <item.Icon size={150} strokeWidth={0.3} style={{ position: "absolute", bottom: -16, right: -16, color: "#ffffff", opacity: 0.075, pointerEvents: "none" }} />
+                  <item.Icon size={190} strokeWidth={0.3} style={{ position: "absolute", bottom: -20, right: -24, color: "#ffffff", opacity: 0.075, pointerEvents: "none" }} />
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
                     <div style={{ width: 6, height: 6, borderRadius: "50%", background: T.dim }} />
                     <span style={{
@@ -4084,34 +4084,6 @@ export default function App() {
               ))}
             </div>
 
-            {/* Design System Studio callout */}
-            <div style={{
-              marginTop: 10,
-              border: `1px solid ${T.border}`,
-              borderRadius: 10,
-              background: T.surface,
-              padding: "14px 20px",
-              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.text, background: T.card, border: `1px solid ${T.border}`, padding: "2px 8px", borderRadius: 3 }}>Interactive Tool</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>Design System Studio</span>
-                <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5 }}>Build, audit, and export a complete token-based design system with live component previews.</span>
-              </div>
-              <button
-                onClick={() => setActiveTool("design-system")}
-                style={{
-                  padding: "7px 16px", borderRadius: 7, flexShrink: 0,
-                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "0.07em", textTransform: "uppercase",
-                  background: "transparent", border: `1px solid ${T.border}`,
-                  color: T.muted, cursor: "pointer", transition: "all 0.15s", whiteSpace: "nowrap",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-              >Open Studio →</button>
-            </div>
-
             {/* Agents callout */}
             <div style={{
               marginTop: 10,
@@ -4122,7 +4094,6 @@ export default function App() {
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: T.text, background: T.card, border: `1px solid ${T.border}`, padding: "2px 8px", borderRadius: 3 }}>New</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>Agents</span>
                 <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5 }}>Six role-based Claude agents — Researcher, Strategist, Designer, and more — each pre-configured with skills and MCP tools.</span>
               </div>
@@ -4138,6 +4109,33 @@ export default function App() {
                 onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
               >Meet the team →</button>
+            </div>
+
+            {/* Design System Studio callout */}
+            <div style={{
+              marginTop: 10,
+              border: `1px solid ${T.border}`,
+              borderRadius: 10,
+              background: T.surface,
+              padding: "14px 20px",
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: T.text, fontFamily: "'DM Sans', sans-serif" }}>Design System Studio</span>
+                <span style={{ fontSize: 12, color: T.dim, lineHeight: 1.5 }}>Build, audit, and export a complete token-based design system with live component previews.</span>
+              </div>
+              <button
+                onClick={() => setActiveTool("design-system")}
+                style={{
+                  padding: "7px 16px", borderRadius: 7, flexShrink: 0,
+                  fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.07em", textTransform: "uppercase",
+                  background: "transparent", border: `1px solid ${T.border}`,
+                  color: T.muted, cursor: "pointer", transition: "all 0.15s", whiteSpace: "nowrap",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
+              >Open Studio →</button>
             </div>
           </>
         )}
