@@ -142,38 +142,47 @@ const AGENTS = [
 ];
 
 // ── Map Cell ─────────────────────────────────────────────────────────────────
-function MapCell({ cell, surfaceKey }) {
-  const s = SURFACES[surfaceKey];
+function MapCell({ cell }) {
   if (cell.type === "empty") {
     return (
       <div style={{ borderRadius: 6, padding: 20, minHeight: 120, background: "#1a1a1a", border: "1px dashed #2C2C2C", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, opacity: 0.5 }}>not applicable</span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, opacity: 0.4 }}>—</span>
       </div>
     );
   }
+
+  const isPrimary = cell.type === "primary";
+  const cellBg     = isPrimary ? "rgba(255,255,255,0.05)" : "transparent";
+  const cellBorder = isPrimary ? "rgba(255,255,255,0.12)" : T.border;
+  const labelColor = isPrimary ? T.muted : T.dim;
+  const dotColor   = isPrimary ? T.muted : T.dim;
+  const contentOpacity = isPrimary ? 1 : 0.5;
+
   return (
-    <div style={{ borderRadius: 6, padding: 20, minHeight: 120, background: s.bg, border: `1px solid ${s.border}`, display: "flex", flexDirection: "column", gap: 10, opacity: cell.type === "occasional" ? 0.6 : 1 }}>
-      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, color: s.color }}>
-        {cell.type === "primary" ? "Primary Surface" : "Occasional"}
+    <div style={{ borderRadius: 6, padding: 20, minHeight: 120, background: cellBg, border: `1px solid ${cellBorder}`, display: "flex", flexDirection: "column", gap: 10 }}>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, color: labelColor }}>
+        {isPrimary ? "Primary" : "Occasional"}
       </span>
-      {cell.tools && cell.tools.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {cell.tools.map(tool => (
-            <div key={tool} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: s.color, flexShrink: 0 }} />
-              {tool}
-            </div>
-          ))}
-        </div>
-      )}
-      {cell.skills && cell.skills.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-          {cell.skills.map(sk => (
-            <span key={sk} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 7px", borderRadius: 3, background: "rgba(255,255,255,0.05)", color: T.dim, border: `1px solid ${T.border}` }}>{sk}</span>
-          ))}
-        </div>
-      )}
-      {cell.note && <p style={{ fontSize: 11, color: T.dim, lineHeight: 1.5, fontStyle: "italic", margin: 0 }}>{cell.note}</p>}
+      <div style={{ opacity: contentOpacity, display: "flex", flexDirection: "column", gap: 10 }}>
+        {cell.tools && cell.tools.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {cell.tools.map(tool => (
+              <div key={tool} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, paddingBottom: 3, borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                <span style={{ width: 4, height: 4, borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
+                {tool}
+              </div>
+            ))}
+          </div>
+        )}
+        {cell.skills && cell.skills.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+            {cell.skills.map(sk => (
+              <span key={sk} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 7px", borderRadius: 3, background: "rgba(255,255,255,0.04)", color: T.dim, border: `1px solid ${T.border}` }}>{sk}</span>
+            ))}
+          </div>
+        )}
+        {cell.note && <p style={{ fontSize: 11, color: T.dim, lineHeight: 1.5, fontStyle: "italic", margin: 0 }}>{cell.note}</p>}
+      </div>
     </div>
   );
 }
@@ -187,14 +196,11 @@ function AgentSurfaceMap({ onAgentClick, onSetupClick }) {
       {/* Column headers */}
       <div style={{ ...colStyle, marginBottom: 2, minWidth: 700 }}>
         <div style={{ padding: "14px 20px" }} />
-        {["chat", "code", "cowork"].map(sk => {
-          const s = SURFACES[sk];
-          return (
-            <div key={sk} style={{ padding: "14px 20px", borderRadius: "6px 6px 0 0", background: s.bg, border: `1px solid ${s.border}`, borderBottom: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: s.color }}>
-              {s.label}
-            </div>
-          );
-        })}
+        {["chat", "code", "cowork"].map(sk => (
+          <div key={sk} style={{ padding: "14px 20px", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: T.dim }}>
+            {SURFACES[sk].label}
+          </div>
+        ))}
       </div>
 
       {/* Agent rows */}
@@ -224,7 +230,7 @@ function AgentSurfaceMap({ onAgentClick, onSetupClick }) {
                   <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, marginTop: "auto", opacity: 0.5 }}>View →</span>
                 </div>
                 {["chat", "code", "cowork"].map(sk => (
-                  <MapCell key={sk} cell={agent.mapCells[sk]} surfaceKey={sk} />
+                  <MapCell key={sk} cell={agent.mapCells[sk]} />
                 ))}
               </div>
             </div>
