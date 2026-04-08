@@ -609,6 +609,66 @@ export default function AgentsPage({ onBack }) {
           />
         </section>
 
+        {/* ── Hooks ── */}
+        <section style={{ marginTop: 80 }}>
+          <div style={{ marginBottom: 28 }}>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 600, color: T.text, marginBottom: 12, letterSpacing: "-0.2px" }}>Hooks</h2>
+            <p style={{ fontSize: 15, color: T.muted, lineHeight: 1.7, maxWidth: 600 }}>
+              Three deterministic triggers. Fire every time — no prompting required.
+            </p>
+            <p style={{ marginTop: 8, fontSize: 12, color: T.dim, lineHeight: 1.6, maxWidth: 600 }}>
+              Unlike agents and commands, hooks don't rely on Claude choosing to act. They fire automatically every time the matching event occurs.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 2 }}>
+            {[
+              {
+                name: "Auto-persist",
+                event: "PostToolUse",
+                settings: "settings.json",
+                settingsNote: "shared",
+                script: ".claude/hooks/persist-artifact.sh",
+                desc: "Every time an APDF MCP tool completes, its output is written automatically to .apdf/artifacts/ as a timestamped markdown file. An index.md tracks every artifact generated across the project lifecycle — a complete audit trail without any manual saving.",
+              },
+              {
+                name: "Auto-inject context",
+                event: "PreToolUse",
+                settings: "settings.json",
+                settingsNote: "shared",
+                script: ".claude/hooks/inject-context.sh",
+                desc: "Before any APDF MCP tool runs, this hook checks for a .apdf/context.json file in the project root. If found, it reads the current persona, problem statement, phase, and constraints and injects them as additional context. Tools run richer without the designer assembling context by hand each session.",
+              },
+              {
+                name: "Session awareness",
+                event: "Stop",
+                settings: "settings.local.json",
+                settingsNote: "personal — opt-in",
+                script: ".claude/hooks/session-awareness.sh",
+                desc: "When Claude finishes responding, this hook checks whether phase-level work was completed during the session. If yes and no handoff block was generated, it reminds the designer to run /handoff-block before closing. Fires once per session, then clears. Personal preference — opt in by copying settings.local.json.example and removing .example.",
+              },
+            ].map(hook => (
+              <div key={hook.name} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>{hook.name}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, letterSpacing: "0.04em" }}>{hook.event}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.dim, letterSpacing: "0.04em" }}>{hook.settings} — {hook.settingsNote}</span>
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, letterSpacing: "0.04em" }}>{hook.script}</div>
+                <p style={{ fontSize: 13, color: T.dim, lineHeight: 1.65, margin: 0 }}>{hook.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 16, background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: "12px 16px" }}>
+            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, lineHeight: 1.7, margin: 0 }}>
+              Make hook scripts executable after placing them: <span style={{ color: T.muted }}>chmod +x .claude/hooks/*.sh</span>
+              <br />
+              Copy <span style={{ color: T.muted }}>settings.local.json.example</span> to <span style={{ color: T.muted }}>settings.local.json</span> to activate the session awareness hook.
+            </p>
+          </div>
+        </section>
+
       </div>
     </div>
   );
