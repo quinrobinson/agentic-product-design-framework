@@ -89,11 +89,11 @@ const AGENTS = [
     occasionalSurfaces: ["code", "cowork"],
     description: "Generates concepts, clusters ideas, maps flows, writes UX copy, and builds concept proofs. Invoke when moving from a defined problem into design exploration, or when generating and evaluating design directions.",
     howToUse: "Open Claude Chat and paste the activation prompt. Share the problem statement and HMW questions from the Strategist's handoff block. Upload concept-generation.md or user-flow-mapping.md from the Skills Library to extend its toolkit.",
-    skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy"],
+    skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy-writing"],
     mcpTools: ["generate_concepts", "cluster_ideas", "generate_concept_proof", "map_user_flow", "write_ux_copy"],
     activationPrompt: "You are the Designer agent from the Agentic Product Design Framework. Your role is a senior product designer. You generate concepts, cluster ideas, map flows, write UX copy, and build concept proofs. Ask me what problem we're designing for and what's already been defined.",
     mapCells: {
-      chat:   { type: "primary",    tools: ["generate_concepts", "cluster_ideas", "generate_concept_proof", "map_user_flow", "write_ux_copy"], skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy"] },
+      chat:   { type: "primary",    tools: ["generate_concepts", "cluster_ideas", "generate_concept_proof", "map_user_flow", "write_ux_copy"], skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy-writing"] },
       code:   { type: "occasional", note: "Build wireframes and concept frames directly in Figma via MCP. Generate Figma Make prompts from session context." },
       cowork: { type: "occasional", note: "Review live prototypes in Figma or staging. Navigate complex design tools with Claude watching alongside." },
     },
@@ -700,7 +700,7 @@ export default function AgentsPage({ onBack }) {
           <div style={{ marginBottom: 28 }}>
             <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 600, color: T.text, marginBottom: 12, letterSpacing: "-0.2px" }}>Skills</h2>
             <p style={{ fontSize: 15, color: T.muted, lineHeight: 1.7, maxWidth: 600 }}>
-              44 structured skill files — one per workflow. Upload a skill to Claude to activate phase-specific templates, quality checklists, and AI-ready prompts.
+              43 structured skill files — one per workflow. Upload a skill to Claude to activate phase-specific templates, quality checklists, and AI-ready prompts.
             </p>
             <p style={{ marginTop: 8, fontSize: 12, color: T.dim, lineHeight: 1.6 }}>
               Skills are plain .md files. Upload to Claude Chat to extend any conversation, or place in your project for Claude Code access. Download all skills from the Skills Library.

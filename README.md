@@ -73,7 +73,7 @@ The six phases and their skill files are:
 - Discover → research-planning.md, research-synthesis.md, insight-framing.md, competitive-analysis.md, service-blueprint.md
 - Define → problem-framing.md
 - Ideate → concept-generation.md, visual-design-execution.md
-- Prototype → user-flow-mapping.md, wireframing.md, prototype-scoping.md, ux-copy-writing.md, accessibility-audit.md
+- Prototype → user-flow-mapping.md, prototype-scoping.md, ux-copy-writing.md, prototyping.md, accessibility-audit.md
 - Validate → usability-testing.md
 - Deliver → design-delivery.md
 - Cross-phase → design-systems.md, figma-playbook.md
