@@ -26,7 +26,7 @@ const SKILL_META = {
   "concept-generation.md": { phase: "03", leverage: "high", surface: "chat", desc: "Generates five concept directions from conventional to moonshot, with chart type recommendations, UI pattern suggestions, and visual system scaffolding ready to paste into the Brand Style Builder." },
   "concept-proof.md": { phase: "03", leverage: "high", surface: "chat", desc: "Generates Figma Make prompts that turn written concept cards into throwaway interactive prototypes — so concept selection is grounded in tangible artifacts, not text descriptions." },
   "visual-design-execution.md": { phase: "03", leverage: "high", surface: "chat", desc: "Selects a visual style, builds a semantic color token architecture with light/dark pairing, defines type scale and spacing, and specifies motion timing and icon standards." },
-  "prototyping.md": { phase: "04", leverage: "high", surface: "chat + code", desc: "Builds functional React or HTML prototypes with correct touch targets, interaction timing, gesture safety, UX copy, and a pre-delivery QA checklist across iOS, Android, and web." },
+  "prototyping.md": { phase: "04", leverage: "high", surface: "chat + cursor", desc: "Builds functional React or HTML prototypes with correct touch targets, interaction timing, gesture safety, UX copy, and a pre-delivery QA checklist across iOS, Android, and web." },
   "accessibility-audit.md": { phase: "04", leverage: "high", surface: "chat", desc: "Runs a systematic WCAG 2.1 AA audit — color contrast, keyboard navigation, focus management, screen reader behavior, and touch targets — with severity-ranked issues and specific fixes." },
   "usability-testing.md": { phase: "05", leverage: "high", surface: "chat", desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations." },
   "design-delivery.md": { phase: "06", leverage: "high", surface: "chat + code", desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right." },
@@ -277,7 +277,7 @@ export default function SkillsLibrary({ onBack }) {
             return row.files.map(file => {
               const meta = SKILL_META[file];
               const sState = skillStates[file] || "idle";
-              const surfaceColor = meta?.surface?.includes("figma") ? "#F59E0B" : meta?.surface?.includes("code") ? "#3B82F6" : "#22C55E";
+              const surfaceColor = meta?.surface?.includes("figma") ? "#F59E0B" : meta?.surface?.includes("code") ? "#3B82F6" : meta?.surface?.includes("cursor") ? "#64748B" : "#22C55E";
               return (
                 <div key={file} style={{
                   background: DS.white, border: `1px solid ${DS.lightBorder}`, borderRadius: 12,

@@ -698,7 +698,7 @@ const SKILL_FILES = [
   { file: "prototype-scoping.md",     phase: "04", leverage: "high",      surface: "chat",         desc: "Define what to build and what to leave out — translate concept risks into prototype questions and scope the minimum viable prototype." },
   { file: "heuristic-review.md",      phase: "04", leverage: "high",      surface: "chat",         desc: "Evaluate a prototype against Nielsen's 10 usability heuristics before user testing — with severity ratings and specific fixes." },
   { file: "test-script-drafting.md",  phase: "04", leverage: "high",      surface: "chat",         desc: "Write a complete usability test script — tasks, probing questions, and debrief — that directly tests the prototype's highest-risk assumptions." },
-  { file: "prototyping.md",           phase: "04", leverage: "high",      surface: "chat + code",  desc: "Builds functional React or HTML prototypes with correct touch targets, timing, and a QA checklist." },
+  { file: "prototyping.md",           phase: "04", leverage: "high",      surface: "chat + cursor",  desc: "Builds functional React or HTML prototypes with correct touch targets, timing, and a QA checklist." },
   { file: "accessibility-audit.md",    phase: "04", leverage: "high", surface: "chat",           desc: "Runs a WCAG 2.1 AA audit — contrast, keyboard nav, focus management, screen reader behavior." },
   { file: "usability-findings-synthesis.md", phase: "05", leverage: "high", surface: "chat",   desc: "Synthesize raw usability test session notes into themes, frequency counts, severity ratings, and design recommendations across 5+ sessions." },
   { file: "insight-report.md",         phase: "05", leverage: "high",   surface: "chat",           desc: "Generate a complete usability test findings report — specific observations, direct quotes, recommendations, and a go/no-go decision." },
@@ -1744,6 +1744,7 @@ function SkillBadge({ surface }) {
   const labels = {
     "chat":             "Chat",
     "chat + code":      "Chat + Code",
+    "chat + cursor":    "Chat + Cursor",
     "code + figma mcp": "Figma MCP",
   };
   const label = labels[surface] || "Chat";
@@ -3158,12 +3159,14 @@ function SkillsLibraryOverlay({ onBack }) {
     { id: "all",              label: "All" },
     { id: "chat",             label: "Chat" },
     { id: "chat + code",      label: "Chat + Code" },
+    { id: "chat + cursor",    label: "Chat + Cursor" },
     { id: "code + figma mcp", label: "Figma MCP" },
   ];
 
   const surfaceColors = {
     "chat":             { color: T.muted, bg: T.surface, border: T.border },
     "chat + code":      { color: T.muted, bg: T.surface, border: T.border },
+    "chat + cursor":    { color: T.muted, bg: T.surface, border: T.border },
     "code + figma mcp": { color: T.muted, bg: T.surface, border: T.border },
   };
 
@@ -3208,7 +3211,7 @@ function SkillsLibraryOverlay({ onBack }) {
         {/* Surface badge */}
         <span style={{ alignSelf: "flex-start", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 99, background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color, display: "inline-flex", alignItems: "center", gap: 4 }}>
           {skill.surface === "code + figma mcp" ? <FigmaIcon size={9} /> : <ClaudeSparkIcon size={8} />}
-          {skill.surface === "chat" ? "Chat" : skill.surface === "chat + code" ? "Chat + Code" : "Figma MCP"}
+          {skill.surface === "chat" ? "Chat" : skill.surface === "chat + code" ? "Chat + Code" : skill.surface === "chat + cursor" ? "Chat + Cursor" : "Figma MCP"}
         </span>
 
         {/* Description */}
@@ -4071,11 +4074,11 @@ export default function App() {
               fontSize: "clamp(40px, 5vw, 72px)", fontWeight: 600, lineHeight: 1.05,
               color: T.text, marginBottom: 16, letterSpacing: "-0.3px",
             }}>
-              A system for using <span style={{ color: "#D97706" }}>Claude</span> <span style={{ fontSize: "0.45em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#9B59F7" }}>Figma</span><br />
+              A system for using <span style={{ color: "#D97706" }}>Claude</span> <span style={{ fontSize: "0.45em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#9B59F7" }}>Figma</span> <span style={{ fontSize: "0.45em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#94A3B8" }}>Cursor</span><br />
               <em style={{ fontStyle: "italic", color: T.muted }}>across every phase of product design.</em>
             </h1>
             <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.7, maxWidth: 600, marginBottom: 0 }}>
-              From research through delivery — skills, tools, prompts, and agents built around Claude and Figma working together.
+              From research through delivery — skills, tools, prompts, and agents built around Claude, Figma, and Cursor working together.
             </p>
           </div>
         )}
