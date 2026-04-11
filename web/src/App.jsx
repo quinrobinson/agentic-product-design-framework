@@ -4166,14 +4166,14 @@ export default function App() {
             </div>
             <h1 style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "clamp(40px, 5vw, 72px)", fontWeight: 600, lineHeight: 1.05,
+              fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 600, lineHeight: 1.1,
               color: T.text, marginBottom: 16, letterSpacing: "-0.3px",
             }}>
-              A system for using <span style={{ color: "#D97706" }}>Claude</span> <span style={{ fontSize: "0.45em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#9B59F7" }}>Figma</span> <span style={{ fontSize: "0.45em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#94A3B8" }}>Cursor</span><br />
+              A system for using <span style={{ color: "#D97706" }}>Claude</span> <span style={{ fontSize: "0.55em", verticalAlign: "middle", color: T.dim }}>+</span> <span style={{ color: "#9B59F7" }}>Figma</span><br />
               <em style={{ fontStyle: "italic", color: T.muted }}>across every phase of product design.</em>
             </h1>
             <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.7, maxWidth: 600, marginBottom: 0 }}>
-              From research through delivery — skills, tools, prompts, and agents built around Claude, Figma, and Cursor working together.
+              From research through delivery — skills, tools, prompts, and agents built around Claude and Figma working together.
             </p>
           </div>
         )}
