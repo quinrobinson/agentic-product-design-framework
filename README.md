@@ -6,7 +6,7 @@ A scalable, AI-integrated framework for product and UX design — from research 
 
 The interactive tools are deployed as a website via GitHub Pages:
 
-**[quinrobinson.github.io/Agentic-Product-Design-Framework](https://quinrobinson.github.io/Agentic-Product-Design-Framework)**
+**[quinrobinson.github.io/Agentic-Product-Design-Framework](https://quinrobinson.github.io/agentic-product-design-framework)**
 
 No install needed — open in any browser and share the URL with your team.
 
@@ -21,7 +21,7 @@ The framework is built around six phases — **Discover → Define → Ideate �
 3. **Do the work** — Claude follows structured outputs; you review, direct, and decide
 4. **Start designing** — Open any phase and create. Research, concepts, wireframes, specs — the framework meets you where you are. Use the Phase Handoff Block at the end of each phase to carry full context into the next conversation.
 
-The [live site](https://quinrobinson.github.io/Agentic-Product-Design-Framework) has interactive tools for exploring the system, previewing design tokens, and auditing design systems. The [Figma template](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE) gives you a dedicated workspace per project.
+The [live site](https://quinrobinson.github.io/agentic-product-design-framework) has interactive tools for exploring the system, previewing design tokens, and auditing design systems. The [Figma template](https://www.figma.com/design/mrHuD7sY7h6uKSVndTSIQE) gives you a dedicated workspace per project.
 
 ---
 
@@ -123,7 +123,7 @@ Based on my answers, respond with:
 
 ### `/skills` — Claude Skill Files
 
-43 structured `.md` skill files — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/Agentic-Product-Design-Framework) on the live site.
+43 structured `.md` skill files — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/agentic-product-design-framework) on the live site.
 
 | Phase | Skills | Files |
 |-------|--------|-------|
