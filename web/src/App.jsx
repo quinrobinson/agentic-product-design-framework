@@ -118,7 +118,7 @@ const T = {
 
 const REPO = "https://github.com/quinrobinson/Agentic-Product-Design-Framework";
 const PPTX_URL = `${REPO}/raw/main/artifacts/onboarding-deck.pptx`;
-const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/skills";
+const RAW = `${import.meta.env.BASE_URL}skills`;
 
 // ── Tool registry ────────────────────────────────────────────────────────────
 const TOOLS = [

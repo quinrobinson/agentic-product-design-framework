@@ -156,7 +156,7 @@ const PHASE_FILTERS = [
   { id: "cross", label: "Cross-phase" },
 ];
 
-const RAW = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/skills";
+const RAW = `${import.meta.env.BASE_URL}skills`;
 
 const ALL_SKILL_FILES = [
   { path: "01-discover/research-planning.md",      zipPath: "research-planning/SKILL.md" },

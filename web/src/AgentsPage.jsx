@@ -13,7 +13,7 @@ const T = {
   dim: "#787878",
 };
 
-const RAW_AGENTS = "https://raw.githubusercontent.com/quinrobinson/Agentic-Product-Design-Framework/main/.claude/agents";
+const RAW_AGENTS = `${import.meta.env.BASE_URL}agents`;
 
 const SURFACES = {
   chat:   { color: "#4ADE80", bg: "rgba(74,222,128,0.07)",  border: "rgba(74,222,128,0.15)",  label: "Claude Chat" },
