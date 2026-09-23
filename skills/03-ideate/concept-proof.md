@@ -13,6 +13,14 @@ claude_surface: chat
 
 # Concept Proof
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Increase decision quality and option diversity per unit of design time — fewer mid-build pivots, stronger final selection.
+**Design KPI this phase improves:** Solutions explored per opportunity (target: 3–5 distinct paths); decision velocity (decisions per week).
+**Risk this phase burns down:** Value risk — exploring enough of the solution space to find one that actually moves the outcome.
+
+---
+
 Turn written concept cards into clickable Figma Make prototypes — so concept selection is grounded in tangible artifacts, not text descriptions.
 
 ## When to Use

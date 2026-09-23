@@ -8,6 +8,14 @@ ai_leverage: high
 
 # Usability Testing & Validation
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert assumptions into evidence with the shortest validated-learning cycle — fewer post-launch surprises.
+**Design KPI this phase improves:** Validation cycle time (target: days, not weeks); assumption hit-rate (% of hypotheses validated).
+**Risk this phase burns down:** Usability and Value risk — confirming the design works and produces the predicted behavior change.
+
+---
+
 Test designs with real people and evaluate against established heuristics to find and fix problems before launch.
 
 

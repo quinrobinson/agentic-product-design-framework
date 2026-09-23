@@ -99,6 +99,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 - Add `project_id` to `project_memories`, `intervention_log`, `project_artifacts`. Backfill existing rows from `file_id`.
 - All tools accept `project_id` or `file_id` (resolve `file_id` to project). Keep `file_id` working so the Figma plugin does not break.
 - New tools: `create_project`, `list_projects`, `link_artifact` (Figma file, repo, doc URL).
+- Switch the Phase 01 `get_skill_doc` mapping from `user-research` (retired in 5.1) to `research-planning` and `research-synthesis`.
 - Add `brief` to `memory_type` enum. This is the engagement brief input; ASPF's Master Client Brief or any other upstream brief lands here.
 - Acceptance: from Chat, create a project with no Figma file, write a memory, read it back from Code. Existing Figma-keyed projects still resolve.
 
@@ -192,4 +193,5 @@ Adds scope. Not scheduled; revisit after dogfood (Phase 3) unless noted.
 
 - **`framework_signals` table.** Cross-project tally of custom artifacts flagged as candidates for framework promotion. Overlaps Phase 3's `pattern` memories; decide whether it adds anything beyond them. *Source: `apdf-agent-evolution-plan.md`, Part 3.*
 - **Outcome Hill skill.** New Define skill binding user, behavior, business outcome, signal, and time horizon in one sentence. Candidate to trial on Courtside IQ during dogfood. *Source: `apdf-outcome-orientation-handoff.md`, Task 1.*
+- **UI pattern recommendations.** Watch for need during Courtside IQ dogfood. Previously only in the retired installed `concept-generation`. *Source: 5.1 skill review.*
 - **System visualization.** Redraw the animated system diagram from the section 4 target architecture after Phase 2; the archived version shows the old `context.json` / local-MCP design. *Source: `apdf-system-viz.html`.*

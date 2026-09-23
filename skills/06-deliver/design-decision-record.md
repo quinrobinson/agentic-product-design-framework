@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Design Decision Record
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Document why you designed it this way — so you never have to explain it again, and so the next designer doesn't accidentally undo it.
 
 ## When to Use

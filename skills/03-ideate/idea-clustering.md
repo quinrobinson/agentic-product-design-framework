@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Idea Clustering
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Increase decision quality and option diversity per unit of design time — fewer mid-build pivots, stronger final selection.
+**Design KPI this phase improves:** Solutions explored per opportunity (target: 3–5 distinct paths); decision velocity (decisions per week).
+**Risk this phase burns down:** Value risk — exploring enough of the solution space to find one that actually moves the outcome.
+
+---
+
 Turn a sprawling list of raw concepts into a clear landscape of strategic directions — so the team can make a real decision about what to bet on.
 
 ## When to Use

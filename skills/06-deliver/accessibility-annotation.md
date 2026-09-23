@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Accessibility Annotation
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Generate the accessibility specifications developers need to build inclusively — ARIA roles, keyboard navigation, focus management, and screen reader behavior — before the feature ships.
 
 ## When to Use

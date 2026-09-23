@@ -8,6 +8,14 @@ claude_surface: chat
 
 # User Flow Mapping
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Burn down the largest product risk per dollar of build effort — less code thrown away, faster engineering handoff.
+**Design KPI this phase improves:** Time-to-first-clickable-prototype; cost-per-assumption-tested.
+**Risk this phase burns down:** Usability and Feasibility risk — confirming users can actually use it and engineering can actually build it.
+
+---
+
 Define every path a user can take before drawing a single screen — including the paths where things go wrong.
 
 ## When to Use

@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Component Specifications
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Generate complete developer-ready specs for every component — states, variants, spacing, interactions, accessibility — in the time it used to take to document one.
 
 ## When to Use

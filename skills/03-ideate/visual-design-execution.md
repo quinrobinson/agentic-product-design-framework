@@ -16,6 +16,14 @@ ai_leverage: high
 
 # Visual Design Execution
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Increase decision quality and option diversity per unit of design time — fewer mid-build pivots, stronger final selection.
+**Design KPI this phase improves:** Solutions explored per opportunity (target: 3–5 distinct paths); decision velocity (decisions per week).
+**Risk this phase burns down:** Value risk — exploring enough of the solution space to find one that actually moves the outcome.
+
+---
+
 Translate a product brief into a cohesive visual system — style, color, typography, spacing,
 motion, and icons — then apply it consistently across every screen and component.
 
@@ -375,25 +383,6 @@ After the reference page generates and tokens are pushed, do a quick visual vali
 > Token set: [paste]"
 
 Fix any issues in the token set before moving to Prototype. The Prototype phase opens with a validated, populated Figma component library — not a blank file.
-
----
-
-## Pre-Delivery Visual QA
-
-- [ ] One style system applied throughout (no mixing)
-- [ ] All colors reference semantic tokens — no raw hex in components
-- [ ] Light and dark mode both tested (not assumed from one mode)
-- [ ] Body text ≥ 4.5:1 contrast in both modes
-- [ ] Secondary text meets minimum contrast in dark mode
-- [ ] Body text ≥ 16px web / 14sp Android
-- [ ] All spacing is a multiple of 4
-- [ ] No horizontal scroll at 375px (mobile breakpoint)
-- [ ] Fixed elements respect safe areas (notch, gesture bar)
-- [ ] Animations ≤ 300ms, transform/opacity only
-- [ ] `prefers-reduced-motion` handled
-- [ ] Single icon library, consistent stroke width
-- [ ] Touch targets ≥ 44pt / 48dp
-- [ ] No emoji as icons
 
 ---
 

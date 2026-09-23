@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Handoff Annotation
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Write the notes developers need to build correctly — before they ask, before they guess, before they ship something wrong.
 
 ## When to Use

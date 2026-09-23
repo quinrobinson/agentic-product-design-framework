@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Insight Report
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert assumptions into evidence with the shortest validated-learning cycle — fewer post-launch surprises.
+**Design KPI this phase improves:** Validation cycle time (target: days, not weeks); assumption hit-rate (% of hypotheses validated).
+**Risk this phase burns down:** Usability and Value risk — confirming the design works and produces the predicted behavior change.
+
+---
+
 Turn usability test findings into a structured document that drives design decisions — not just documents what happened.
 
 ## When to Use

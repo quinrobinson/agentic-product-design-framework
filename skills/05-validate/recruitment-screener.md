@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Recruitment Screener
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert assumptions into evidence with the shortest validated-learning cycle — fewer post-launch surprises.
+**Design KPI this phase improves:** Validation cycle time (target: days, not weeks); assumption hit-rate (% of hypotheses validated).
+**Risk this phase burns down:** Usability and Value risk — confirming the design works and produces the predicted behavior change.
+
+---
+
 Define who qualifies to test your prototype — and write the screening questions that find them accurately.
 
 ## When to Use

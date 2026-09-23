@@ -8,6 +8,14 @@ claude_surface: chat
 
 # UX Copy Writing
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Burn down the largest product risk per dollar of build effort — less code thrown away, faster engineering handoff.
+**Design KPI this phase improves:** Time-to-first-clickable-prototype; cost-per-assumption-tested.
+**Risk this phase burns down:** Usability and Feasibility risk — confirming users can actually use it and engineering can actually build it.
+
+---
+
 Write every word a user reads — labels, actions, errors, empty states, onboarding, and confirmations — grounded in the user's mental model and the product's voice.
 
 ## When to Use

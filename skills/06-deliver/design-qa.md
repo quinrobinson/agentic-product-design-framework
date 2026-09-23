@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Design QA
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Compare what was built against what was designed — systematically, with a severity-rated issue log developers can act on immediately.
 
 ## When to Use

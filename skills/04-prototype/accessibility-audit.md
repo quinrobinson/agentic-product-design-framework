@@ -15,6 +15,14 @@ ai_leverage: high
 
 # Accessibility Audit
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Burn down the largest product risk per dollar of build effort — less code thrown away, faster engineering handoff.
+**Design KPI this phase improves:** Time-to-first-clickable-prototype; cost-per-assumption-tested.
+**Risk this phase burns down:** Usability and Feasibility risk — confirming users can actually use it and engineering can actually build it.
+
+---
+
 Systematically evaluate and fix accessibility issues before they ship. Covers WCAG 2.1 AA
 for web and platform-specific standards for iOS (Apple HIG / VoiceOver) and Android (Material / TalkBack).
 

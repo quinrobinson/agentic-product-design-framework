@@ -8,6 +8,14 @@ claude_surface: chat
 
 # Iteration Brief
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert assumptions into evidence with the shortest validated-learning cycle — fewer post-launch surprises.
+**Design KPI this phase improves:** Validation cycle time (target: days, not weeks); assumption hit-rate (% of hypotheses validated).
+**Risk this phase burns down:** Usability and Value risk — confirming the design works and produces the predicted behavior change.
+
+---
+
 Define exactly what to change, why, and in what order — so the next prototype starts with a scope, not a blank page.
 
 ## When to Use

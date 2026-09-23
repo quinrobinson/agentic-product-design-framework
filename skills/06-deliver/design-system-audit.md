@@ -18,6 +18,14 @@ when_to_use: >
 
 # Design System Audit
 
+## Outcomes & KPIs
+
+**Business outcome this phase moves:** Convert design intent into shipped product behavior change — close the loop from outcome contract to evidence.
+**Design KPI this phase improves:** Time from final design to production; design-system reuse rate.
+**Risk this phase burns down:** Feasibility and Viability risk — confirming the design ships as intended and the business can sustain it.
+
+---
+
 Validate your design system is complete, accessible, and documented before it ships.
 Run this checklist when you are preparing for engineering handoff or a design system release.
 
