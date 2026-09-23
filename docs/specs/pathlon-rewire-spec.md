@@ -16,7 +16,13 @@ Decisions and changes made Sept 23, 2026, that this spec depends on:
 - **Site is now local-only.** Commit `7705fbc` stopped GitHub Pages auto-deploy; the site runs locally at `http://localhost:3456/agentic-product-design-framework/` and serves skill and agent files from the local repo. Reason: keep the repo public while viewing the framework visually on Quin's Mac.
 - **Local repo path:** `~/Documents/Claude/Projects/agentic-product-design-framework`.
 - **Uncommitted planning files exist** in the repo root: `apdf-agent-evolution-plan.md`, `apdf-outcome-orientation-handoff.md`, `apdf-system-viz.html`, plus an edited `.claude/settings.json`. Before starting Phase 1, summarize each, flag anything that conflicts with or should be folded into this spec, and wait for Quin's decision. This spec is the governing plan.
-- **Working split:** Claude Code executes. Claude Chat (Pathlon project) reviews and decides. Stop for review at the end of each numbered step.
+- **Working split:** Claude Code executes. Claude Chat (Pathlon project) reviews and decides. When to stop is set by the working rules below.
+
+### Working rules (added Sept 23, 2026, after Phase 1)
+
+- Execute steps back-to-back. After each step, run the `spec-reviewer` agent (`.claude/agents/spec-reviewer.md`) and fix any failures before continuing.
+- Stop for Quin only when: (a) about to do something destructive or hard to undo (production database changes, deleting files, force pushes, changing repo visibility), (b) a decision changes scope or conflicts with the spec, or (c) a phase is complete.
+- At each stop, give a short summary: what was done, what the reviewer flagged, and what decision is needed.
 
 ---
 
