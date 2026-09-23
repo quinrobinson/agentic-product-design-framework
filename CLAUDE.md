@@ -45,6 +45,7 @@ cd web && npm install
 npm run dev      # syncs skills/agents into web/public, then serves
 npm run build    # production build check
 npm run lint
+npm run chat-skills   # build/chat-skills/<name>.zip for upload to Claude Chat (generated from pathlon/skills)
 ```
 
 Open **http://localhost:3456/agentic-product-design-framework/** (port set in `.claude/launch.json`; the base path is required).
