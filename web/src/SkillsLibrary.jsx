@@ -314,7 +314,7 @@ export default function SkillsLibrary({ onBack }) {
           >
             {allLabel}
           </button>
-          <a href={`${REPO}/tree/main/skills`} target="_blank" rel="noopener noreferrer"
+          <a href={`${REPO}/tree/main/pathlon/skills`} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: 11, color: DS.bodyLight, textDecoration: "none", fontFamily: "'JetBrains Mono', monospace", opacity: 0.5 }}>
             View on GitHub ↗
           </a>
@@ -442,7 +442,7 @@ export default function SkillsLibrary({ onBack }) {
                   {/* File name + phase badge */}
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
                     <a
-                      href={`${REPO}/tree/main/skills/${row.dir ? row.dir + "/" : ""}${file}`}
+                      href={`${REPO}/tree/main/pathlon/skills/${file.replace(/\.md$/, "")}/SKILL.md`}
                       target="_blank" rel="noopener noreferrer"
                       style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, color: "#0F172A", textDecoration: "none", lineHeight: 1.4, wordBreak: "break-all" }}
                     >{file}</a>

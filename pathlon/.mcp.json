@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pathlon": {
+      "type": "http",
+      "url": "https://mcp.pathlon.io/mcp"
+    }
+  }
+}

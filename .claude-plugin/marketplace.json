@@ -1,0 +1,16 @@
+{
+  "name": "pathlon",
+  "owner": {
+    "name": "Quin Robinson"
+  },
+  "metadata": {
+    "description": "Pathlon, an agentic product design framework for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "pathlon",
+      "source": "./pathlon",
+      "description": "Pathlon for Claude Code: skills, agents, and commands for the six-phase product design framework, wired to Pathlon MCP."
+    }
+  ]
+}

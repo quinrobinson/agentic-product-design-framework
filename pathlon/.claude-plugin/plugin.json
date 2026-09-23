@@ -1,0 +1,10 @@
+{
+  "name": "pathlon",
+  "version": "0.1.0",
+  "description": "Pathlon: an agentic product design framework. Six phases (Discover, Define, Ideate, Prototype, Validate, Deliver) as skills, agents, and commands, with project state in Pathlon MCP.",
+  "author": {
+    "name": "Quin Robinson"
+  },
+  "repository": "https://github.com/quinrobinson/agentic-product-design-framework",
+  "keywords": ["product-design", "ux", "design-process", "figma"]
+}
