@@ -11,7 +11,9 @@ claude_surface: chat
 ## Outcomes & KPIs
 
 **Business outcome this phase moves:** Reduce ambiguity about which problem is worth solving — fewer wrong-problem rebuilds, faster time-to-strategic-clarity.
+
 **Design KPI this phase improves:** Customer signals collected per week; ratio of validated to assumed insights in the brief.
+
 **Risk this phase burns down:** Value risk — confirming users actually have the problem we think they do.
 
 ---

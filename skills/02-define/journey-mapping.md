@@ -11,7 +11,9 @@ claude_surface: chat
 ## Outcomes & KPIs
 
 **Business outcome this phase moves:** A single shared, measurable mission the team commits to — reduces scope creep, mid-build pivots, and stakeholder misalignment.
+
 **Design KPI this phase improves:** Time from kickoff to signed problem statement; % of build-phase work traceable to a Hill or hypothesis.
+
 **Risk this phase burns down:** Value and Viability risk — confirming we are solving the right problem in a way the business can sustain.
 
 ---

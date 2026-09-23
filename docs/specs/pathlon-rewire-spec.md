@@ -84,9 +84,8 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 - Resolve `user-research` vs `research-planning`: one name, one file.
 - Acceptance: every Phase skill exists once, in the repo, and Pathlon's `get_skill_doc` for phases 01 to 06 returns content that matches the repo after `refresh_methodology`.
 
-**5.2 Remove duplicates from installed skills**
-- Consolidate: `frontend-design` (keep one), `user-research` family, design-system family, `phase-handoff` + `skill-chaining` (merge into one).
-- Acceptance: no two installed skills share a primary trigger. Quin confirms by removing the extras in Settings.
+**5.2 Remove duplicates from installed skills** *(folded into 5.5 and 5.8, Sept 23, 2026)*
+- Duplicate installed skills are removed when they are replaced: Claude Code copies in 5.5, Chat account copies in 5.8.
 
 **5.3 Refresh `CLAUDE.md`**
 - Rewrite to describe the target architecture: Pathlon MCP as state, repo as methodology, local `apdf` MCP deprecated.
@@ -117,6 +116,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
   ```
 - Port the 6 agents and prune the 21 commands to the ones that map to real work. Target 8 or fewer to start.
 - Hooks: replace `inject-context.sh` (reads `context.json`) with a session-start step that calls `get_project_context`.
+- When the plugin is installed, remove the old copies in `~/.claude/skills/` so they don't conflict.
 - Acceptance: in a fresh repo, installing the plugin gives Code the skills, commands, and Pathlon MCP with no manual setup.
 
 **5.6 `/pathlon:start` intake command**
@@ -129,6 +129,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 
 **5.8 Chat parity**
 - Build script that zips each canonical skill for upload to Claude Chat, so Chat skills are generated from the repo.
+- Regenerate all Chat skills from the repo, then remove outdated account copies in Settings, including `user-research`.
 - Acceptance: one command regenerates all Chat skill zips from the repo.
 
 ### Phase 3: Dogfood (2 to 3 weeks)
