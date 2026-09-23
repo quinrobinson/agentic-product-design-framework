@@ -76,6 +76,12 @@ Project state lives in Pathlon MCP, never in local files.
 - Component specs include: component name, purpose, anatomy diagram (text description), props table, token references, state matrix, accessibility notes, usage do/don't
 - Token exports follow the W3C Design Token format (JSON) or CSS custom properties with semantic naming
 - Component architecture diagrams use indented tree format: parent → children → variants
+- Component architecture from a screen inventory includes, using the actual screen and feature names:
+  - **Component inventory** by atomic level — atoms (variants, props/states), molecules and organisms (composed of, screen uses), and page-level templates
+  - **Reuse analysis** — highest-reuse components (3+ screens), look-alikes likely to diverge (watch list), and screen-specific components that should not be generalized
+  - **Design token needs** — the color roles, spacing, typography, elevation, and motion tokens the inventory implies
+  - **Implementation priority** — foundation tokens first, then an ordered component build list with rationale
+  - **Open questions** — decisions that need alignment before building
 - Audit reports score: coverage (%), consistency (%), accessibility pass rate, and list specific gaps
 
 ## Handoff
