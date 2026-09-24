@@ -132,13 +132,14 @@ const AGENTS = [
     file: "systems-designer.md",
     primarySurfaces: ["code"],
     occasionalSurfaces: ["chat"],
-    description: "Plans component architecture, specifies states and variants, generates component specs, and manages design tokens. Primary work — pushing token files, Figma MCP operations, Git — happens in Claude Code. Chat is for token strategy and audit analysis.",
-    howToUse: "Open Claude Code with the Pathlon plugin installed and invoke the pathlon:systems-designer agent. For token strategy or audit analysis without file operations, use Claude Chat with the activation prompt. Upload design-systems.md or figma-playbook.md from the Skills Library.",
-    skills: ["design-systems", "design-system-audit", "figma-ds-audit", "figma-ds-export", "figma-playbook", "component-specs"],
-    primaryGoal: "Produce a token system and component architecture that a design engineer can build from without ambiguity — every component specified, every state defined, every token named for intent.",
+    description: "Works from the team's existing design system — a Figma library or Claude Design. Reads it, maps screens to its components, plans component architecture, specifies states, and routes gaps back to the system's owner. Reads Figma through the Figma MCP in Claude Code; mapping, specs, and gap analysis work in Chat too.",
+    howToUse: "Open Claude Code with the Pathlon plugin installed and invoke the pathlon:systems-designer agent. For mapping, specs, or gap analysis without file operations, use Claude Chat with the activation prompt and the design-system skill.",
+    skills: ["design-system", "component-specs", "figma-playbook"],
+    primaryGoal: "Ground every screen in the team's existing design system — so a design engineer can build without ambiguity, every component maps to the system or is a named gap, and nothing is reinvented locally.",
     definitionOfDone: [
-      "Token layer is established before any component specs are written",
-      "All tokens follow semantic naming convention (intent, not appearance)",
+      "The design system's source (Figma library, Claude Design, or code) is identified and recorded in Pathlon",
+      "A system summary is saved to Pathlon before any component work",
+      "Every component in scope maps to a system component and variant, or is listed as a gap with a proposal for the system's owner",
       "Every component in scope has a full spec: anatomy, props, states, token references, accessibility notes",
       "No interactive component is missing hover, focus, active, or disabled states",
       "No data component is missing loading, empty, error, or populated states",
@@ -146,11 +147,11 @@ const AGENTS = [
       "Phase Handoff Block is saved to Pathlon and ready for the Design Engineer",
     ],
     mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
-    activationPrompt: "You are the Systems Designer agent from the Agentic Product Design Framework. Your role is a senior design systems engineer. You plan component architecture, specify states, generate specs, and manage design tokens. Ask me what system we're building or auditing.",
+    activationPrompt: "You are the Systems Designer agent from the Agentic Product Design Framework. Your role is a senior design systems designer. You work from our existing design system in Figma or Claude Design: map screens to it, plan component architecture, specify states, and report gaps to its owner. Ask me where our design system lives.",
     mapCells: {
-      chat:   { type: "occasional", note: "Token strategy, naming conventions, component architecture decisions. Audit analysis and recommendations.", skills: ["design-systems", "design-system-audit", "figma-ds-audit"] },
-      code:   { type: "primary",    skills: ["figma-ds-export", "figma-playbook", "component-specs"], note: "Push tokens.css / tokens.json to repo. Scaffold components in Figma via MCP. Sync design tokens." },
-      cowork: { type: "occasional", skills: ["design-systems", "figma-ds-audit"], note: "Review a live design system implementation alongside a developer. Spot token drift and component divergence in real time across a browser-based design tool." },
+      chat:   { type: "occasional", note: "Mapping screens to the design system, component architecture decisions, specs, and gap analysis.", skills: ["design-system", "component-specs"] },
+      code:   { type: "primary",    skills: ["design-system", "figma-playbook", "component-specs"], note: "Read the Figma library through the Figma MCP. Check designs and implementations against the system. Update the library only when asked, in its own conventions." },
+      cowork: { type: "occasional", skills: ["design-system"], note: "Review a live design system implementation alongside a developer. Spot token drift and component divergence in real time across a browser-based design tool." },
     },
     commands: [
     ],
@@ -691,16 +692,13 @@ const SKILL_PHASES = [
       { name: "Accessibility Annotation",   desc: "Generate WCAG 2.1 AA accessibility annotations for design handoff — ARIA roles, focus order, and screen reader support.", leverage: "high" },
       { name: "Handoff Annotation",         desc: "Generate screen-by-screen annotation text for developer handoff — behaviors, edge cases, and interaction notes.",     leverage: "high" },
       { name: "Design Decision Record",     desc: "Document why specific design choices were made — context, alternatives considered, and rationale.",                   leverage: "high" },
-      { name: "Design System Audit",        desc: "Audit a design system before handoff against Material, Atlassian, Carbon, and Apple HIG standards.",                  leverage: "high" },
     ],
   },
   {
     phase: "Cross-phase",
     skills: [
-      { name: "Design Systems",             desc: "Audit a product against industry-leading design systems with token documentation and Figma variable setup.",           leverage: "high" },
+      { name: "Design System",             desc: "Work from your existing design system in Figma or Claude Design — map screens to it, check work against it, report gaps.",           leverage: "high" },
       { name: "Figma Playbook",             desc: "Execute design work directly in Figma using the Figma MCP — frames, components, variables, and annotations.",         leverage: "high" },
-      { name: "Figma DS Audit",             desc: "Audit an existing Figma design system by reading variables, styles, and components for gaps.",                        leverage: "high" },
-      { name: "Figma DS Export",            desc: "Export a design system built in the Design System Studio to Figma as variables and text styles.",                     leverage: "high" },
       { name: "Phase Handoff",              desc: "Generate and use Phase Handoff Blocks to chain the six design phases into one continuous workflow.",                   leverage: "high" },
       { name: "Skill Chaining",             desc: "Connect design phases so outputs become inputs — structured handoff across all six phases.",                          leverage: "high" },
       { name: "Which Claude",               desc: "Route every design task to the right Claude surface — Chat, Cowork, or Code — based on task type and requirements.", leverage: "high" },
@@ -903,7 +901,7 @@ export default function AgentsPage({ currentPage = "agents", onNavigate, initial
         {/* ── Skills (collapsible) ── */}
         <Disclosure
           title="Skills"
-          count="43 across all phases"
+          count={`${SKILL_PHASES.reduce((n, g) => n + g.skills.length, 0)} across all phases`}
           summary="Structured skill files — one per workflow. Upload a skill to Claude to activate phase-specific templates, quality checklists, and AI-ready prompts."
         >
           <p style={{ marginTop: 0, marginBottom: 24, fontSize: 12, color: T.dim, lineHeight: 1.6 }}>

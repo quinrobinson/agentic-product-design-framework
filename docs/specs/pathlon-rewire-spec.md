@@ -194,6 +194,8 @@ Resolved Sept 23, 2026. This spec governs; where an earlier plan conflicts with 
 - **5.1: extra evidence of skill drift.** The outcome-orientation plan targets `skills/01-discover/user-research.md`, which does not exist in the repo (the repo has `research-planning.md`). This confirms the `user-research` vs `research-planning` split to resolve in 5.1. *Source: `apdf-outcome-orientation-handoff.md`, Task 2.*
 - **5.1: add Outcomes & KPIs headers to every canonical phase skill.** Per-phase business outcome, design KPI, and risk (Cagan's four risks), using the locked per-phase wording in the source file. Inserted after the H1 and before the first section, followed by `---`. Applied once, to the canonical versions chosen in 5.1. Cross-phase skills are excluded. This completes an earlier approved decision; it is not new scope. *Source: `apdf-outcome-orientation-handoff.md`, Task 2.*
 
+- **Design systems: bring your own (decided Sept 23, 2026).** Pathlon no longer builds design systems. The system lives in a Figma library or Claude Design; Pathlon reads it, maps work to it, checks work against it, and proposes gaps back to its owner. `design-systems`, `design-system-audit`, `figma-ds-audit`, and `figma-ds-export` merge into one cross-phase `design-system` skill; the Systems Designer agent is reworked around it. The site's Design System Studio, Design System Builder, and the token/checklist/M3 artifacts are removed. This is consolidation (four skills into one), not new scope. *Source: Quin, during Phase 2.*
+
 ### Parking lot
 
 Adds scope. Not scheduled; revisit after dogfood (Phase 3) unless noted.

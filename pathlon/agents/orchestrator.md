@@ -111,7 +111,7 @@ Compensating actions for downstream agents: [what agents should do differently a
 | Planning research, synthesizing interviews | Researcher | Claude Chat |
 | Framing problems, mapping journeys | Strategist | Claude Chat |
 | Generating concepts, mapping flows | Designer | Claude Chat |
-| Building component architecture, syncing tokens | Systems Designer | Claude Code |
+| Mapping screens to the design system, component architecture | Systems Designer | Claude Code |
 | Handoff, QA, accessibility annotation | Design Engineer | Claude Code + Cowork |
 | Observing live sessions | Researcher | Claude Cowork |
 | Reviewing live implementations | Design Engineer | Claude Cowork |

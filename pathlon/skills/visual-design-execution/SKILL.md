@@ -9,7 +9,7 @@ description: >
   about how a product looks, feels, or moves. Also triggers when a UI looks "not professional
   enough," when visual consistency needs fixing, or when building any page, component, or screen
   across React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, or HTML/CSS. Always use
-  alongside concept-generation and design-systems for full ideation-to-delivery coverage.
+  alongside concept-generation and design-system for full ideation-to-delivery coverage.
 claude_surface: chat
 ai_leverage: high
 ---
@@ -292,6 +292,8 @@ Use a 4pt base unit. All values are multiples of 4.
 ---
 
 ## Step 8 — Design System Instantiation (Figma Make + Claude Code MCP)
+
+> **Only when the team has no design system yet.** If one exists in a Figma library or Claude Design, skip this step and work from it with the `design-system` skill — don't create a parallel system. When there is none and the designer chooses to create one, create it in Figma (below) so it lives where the team designs, then treat that library as the source of truth.
 
 After the full token set is defined (Steps 1–7), generate a living design system reference using Figma Make — with both token values *and* components rendered against them. This closes the manual copy-paste loop and validates the visual language as a working system before any screen is built.
 

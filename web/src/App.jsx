@@ -4,7 +4,6 @@ import ClientDeckBuilder from "./ClientDeckBuilder";
 import FigmaSetupGuide from "./FigmaSetupGuide";
 // SkillsLibrary.jsx is a standalone deployable version — not used in this render path.
 // App.jsx uses SkillsLibraryOverlay (defined inline). If you update skill data, sync BOTH files.
-import DesignSystemStudio from "./DesignSystemStudio";
 import ResearchSynthesizer from "./ResearchSynthesizer";
 import ServiceBlueprintGenerator from "./ServiceBlueprintGenerator";
 import CompetitiveSnapshotBuilder from "./CompetitiveSnapshotBuilder";
@@ -124,7 +123,6 @@ const RAW = `${import.meta.env.BASE_URL}skills`;
 const TOOLS = [
   { id: "brief",              number: "01", phase: null, name: "Design Brief Generator",      subtitle: "Turn project context into a Claude-ready design brief",                          component: AIBriefGenerator,              skill: "phase-handoff.md", text: `You are a senior UX strategist helping a design team create a comprehensive project brief.\n\nYour job is to guide the designer through building a complete brief by asking targeted questions, then producing a structured document.\n\nStart by asking about anything missing from the context below. Ask only 2-3 focused questions at a time — don't overwhelm. Once you have enough to work with, generate the brief.\n\nThe brief should cover:\n1. Project Overview — what's being built and why\n2. Business Goals — what success looks like for the company\n3. User Goals — what success looks like for the user\n4. Known Constraints — timeline, tech, budget, org\n5. Research Already Done — what's known, what's assumed\n6. Open Questions — what needs to be answered before design begins\n7. Scope — what's in and out of scope for this design effort\n8. Recommended Next Steps — what the design team should do first\n\nIf the designer has documents to share (briefs, PRDs, strategy docs), ask them to upload the files so you can incorporate them.\n\nAt the end, produce the brief as clean markdown.` },
   { id: "deck",               number: "02", phase: null, name: "Client Deck Builder",          subtitle: "Build the right presentation for any stage of a project",                        component: ClientDeckBuilder,              skill: "stakeholder-presentation.md", text: `You are a senior design strategist and presentation expert helping a designer build a compelling client deck.\n\nStart by understanding what the designer needs to communicate and to whom. Ask:\n- What's the goal of this presentation — inform, align, get sign-off, inspire?\n- What's the audience's background — do they know design, or do they need concepts explained?\n- How much time do you have to present?\n\nThen guide the designer through building the deck slide by slide:\n1. Opening — context and framing\n2. Problem / Opportunity\n3. Research Insights (if applicable)\n4. Design Work / Concepts\n5. Recommendations and Next Steps\n6. Appendix / Supporting Material\n\nFor each section, write the slide headline, supporting points, and speaker notes.\n\nIf the designer has existing materials to incorporate (designs, research, previous decks), ask them to upload or paste them.\n\nProduce the final deck outline as clean markdown with slide-by-slide content.` },
-  { id: "design-system",      number: "03", phase: null, name: "Design System Studio",        subtitle: "Build or audit a complete design system with live previews",                     component: DesignSystemStudio,             skill: "design-systems.md" },
   { id: "research-synthesizer", number: "05", phase: "01", group: "Synthesize", name: "Research Synthesizer", subtitle: "Turn raw interviews into a structured Research Brief", component: ResearchSynthesizer, skill: "research-synthesis.md", text: `You are a senior UX researcher helping a designer synthesize user or stakeholder interviews into clear, actionable insights.
 
 Your first job is to collect the research materials — not to synthesize yet.
@@ -713,13 +711,10 @@ const SKILL_FILES = [
   { file: "design-decision-record.md",  phase: "06", leverage: "high", surface: "chat",           desc: "Document why specific design choices were made — context, alternatives, rationale, and tradeoffs — as a permanent record that prevents relitigating decisions." },
   { file: "accessibility-annotation.md",phase: "06", leverage: "high", surface: "chat",           desc: "Generate ARIA roles, keyboard navigation, focus management, and screen reader behavior specs for WCAG 2.1 AA compliant developer handoff." },
   { file: "design-delivery.md",        phase: "06", leverage: "high", surface: "chat + code",    desc: "Produces component specs, platform handoff packages, design decision records, and release notes." },
-  { file: "design-systems.md",         phase: null, leverage: "high", surface: "chat + code",    desc: "Audits any product against Material Design 3, Atlassian, Carbon, and Apple HIG." },
+  { file: "design-system.md",          phase: null, leverage: "high", surface: "chat + code",    desc: "Works from your existing design system in Figma or Claude Design — maps screens to it, checks work against it, and reports gaps to its owner." },
   { file: "figma-playbook.md",         phase: null, leverage: "high", surface: "code + figma mcp",desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." },
-  { file: "figma-ds-export.md",        phase: null, leverage: "high", surface: "code + figma mcp",desc: "Export --apdf-* tokens from the Design System Studio to Figma as variable collections, text styles, and component scaffolds." },
-  { file: "figma-ds-audit.md",         phase: null, leverage: "high", surface: "code + figma mcp",desc: "Audit an existing Figma design system via MCP — scoring foundations, typography, components, and accessibility against industry standards." },
   { file: "phase-handoff.md",          phase: null, leverage: "high", surface: "chat",           desc: "Generates a structured handoff block at the close of each phase — full context for the next." },
   { file: "skill-chaining.md",         phase: null, leverage: "high", surface: "chat",           desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
-  { file: "design-system-audit.md",    phase: "06", leverage: "high", surface: "chat",           desc: "Audit a product's design system before handoff against four industry standards — Material Design 3, Atlassian, Carbon, and Apple HIG — with a severity-rated gap analysis." },
   { file: "which-claude.md",           phase: null, leverage: "high", surface: "chat",           desc: "Route every design task to the right Claude surface—Chat, Cowork, Code, or Cursor. The first skill to read when onboarding to the framework." },
 ];
 
@@ -759,12 +754,9 @@ const AGENT_ROUTING_SL = {
   "prototype-scoping.md":            "designer",
   "user-flow-mapping.md":            "designer",
   "ux-copy-writing.md":              "designer",
-  "design-systems.md":               "systems",
+  "design-system.md":                "systems",
   "figma-playbook.md":               "systems",
-  "figma-ds-export.md":              "systems",
-  "figma-ds-audit.md":               "systems",
   "component-specs.md":              "systems",
-  "design-system-audit.md":          "systems",
   "prototyping.md":                  "engineer",
   "heuristic-review.md":             "engineer",
   "accessibility-audit.md":          "engineer",
@@ -1644,7 +1636,6 @@ const DELIVERABLES = [
   // Ideate
   { phase: "03", name: "Concept Set",             type: "prompt", ref: "concept-generator",       label: "Concept Generator",              desc: "Generates concepts across five thinking angles including First Principles, Analogous, and Worst Idea First — breaking out of obvious directions.", output: "Named concept cards with strengths and risks" },
   { phase: "03", name: "Cluster Map",             type: "prompt", ref: "idea-clustering",         label: "Idea Clustering",                desc: "Groups a raw concept set by underlying strategic mechanism — not surface similarity — and maps tensions and gaps.", output: "Strategic landscape with recommended directions" },
-  { phase: null, name: "Design System",           type: "tool",   ref: "design-system",           label: "Design System Studio",           desc: "Choose a theme, customize tokens, preview 14 core components live — export CSS with --apdf-* naming ready for Figma.", output: "Complete design system tokens + component previews" },
   // Prototype
   { phase: "04", name: "UX Copy",                 type: "prompt", ref: "ux-copy-writer",          label: "UX Copy Writer",                 desc: "Locks voice and tone first, then writes all flow copy, error states, empty states, and confirmations — grounded in the brief.", output: "Complete copy document for prototyping" },
   { phase: "04", name: "User Flow",               type: "prompt", ref: "user-flow-mapper",        label: "User Flow Mapper",               desc: "Maps the happy path, every branch, and every error state — producing a screen inventory and scoped prototype brief.", output: "Screen inventory + prototype brief" },
@@ -2663,24 +2654,25 @@ Start with Discover: help me write a research plan to understand what users need
   },
   {
     id: 11, type: "general",
-    title: "Design system build or audit",
-    mission: "Build a new component library from scratch or audit an existing one — tokens, components, documentation, and handoff for scale.",
+    title: "Design system alignment or audit",
+    mission: "Ground a product in its design system — in a Figma library or Claude Design — or audit and grow that system: map screens to it, find gaps, and hand proposals to its owner.",
     when: ["Your product has inconsistent UI and needs a shared system", "Engineering is asking for tokens and component specs", "You're onboarding new designers and need a source of truth"],
     phases: [
-      { key: "03", note: "Visual direction, token architecture, component inventory" },
-      { key: "04", note: "Component build, state documentation, usage guidelines" },
-      { key: "06", note: "Token export, component specs, contribution docs" },
+      { key: "03", note: "Locate and summarize the system; map screens to its components" },
+      { key: "04", note: "Build prototypes from system components; document missing states" },
+      { key: "06", note: "Conformance check, component specs, gap report for the system owner" },
     ],
-    deliverables: ["Token set", "Component inventory", "Component specs with states", "Usage guidelines", "Handoff documentation", "Contribution governance"],
-    skills: ["design-systems.md", "visual-design-execution.md", "design-delivery.md", "figma-playbook.md"],
+    deliverables: ["System summary", "Component mapping", "Component specs with states", "Conformance findings", "Gap report", "Handoff documentation"],
+    skills: ["design-system.md", "visual-design-execution.md", "design-delivery.md", "figma-playbook.md"],
     time: "4–12 weeks",
-    prompt: `I need to [build a new design system / audit our existing one] for [PRODUCT]. Help me scope and execute this:
-- Current state: [no system / partial tokens / inconsistent components / needs audit]
+    prompt: `I need to [align [PRODUCT] with our design system / audit our design system]. Help me scope and execute this:
+- Where the system lives: [Figma library URL / Claude Design / none yet]
+- Current state: [partial tokens / inconsistent components / needs audit]
 - Platform: [Web / iOS / Android / Cross-platform]
 - Team size: [N designers, N engineers]
 - Priority: [tokens / core components / patterns / documentation]
 
-Start by helping me create a component inventory and token architecture plan.`,
+Start by summarizing the system and mapping our key screens to its components.`,
   },
   {
     id: 12, type: "ai",
@@ -2968,7 +2960,6 @@ Based on my answers, recommend the most appropriate deliverable and tell me:
 // ── Deliverable card ──────────────────────────────────────────────────────────
 function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPrompt }) {
   const [open, setOpen] = useState(false);
-  const isStudio = d.ref === "design-system";
 
   return (
     <>
@@ -2998,18 +2989,6 @@ function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPromp
         {/* Action row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginTop: 2 }}>
           <span style={{ fontSize: 11, color: T.dim, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.label}</span>
-          {isStudio ? (
-            <button onClick={() => onOpenTool(d.ref)} style={{
-              padding: "5px 14px", borderRadius: 5, flexShrink: 0,
-              fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-              letterSpacing: "0.06em", textTransform: "uppercase",
-              background: "transparent", border: `1px solid ${T.border}`,
-              color: T.muted, cursor: "pointer", transition: "all 0.12s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-            >Open tool</button>
-          ) : (
             <button onClick={() => setOpen(true)} style={{
               padding: "5px 12px", borderRadius: 5, flexShrink: 0,
               fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
@@ -3020,7 +2999,6 @@ function DeliverableCard({ d, borderColor, hoverColor, onOpenTool, getDelivPromp
               onMouseEnter={e => { e.currentTarget.style.borderColor = T.borderHover; e.currentTarget.style.color = T.text; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
             >View prompt</button>
-          )}
         </div>
       </div>
 
@@ -4120,10 +4098,10 @@ function SkillDetailPage({ skill, onBack }) {
 // ── What you get ──────────────────────────────────────────────────────────────
 function WhatYouGet({ onOpenSkills, onOpenAgents }) {
   const items = [
-    { count: "43", label: "Skills", desc: "Markdown skill files for every phase of design. Upload to Claude to extend any conversation with phase-specific workflows.", actionLabel: "Browse skills →", onClick: onOpenSkills },
-    { count: "19", label: "Tools", desc: "Interactive prompt builders. Add your context, get a structured Claude prompt ready to run.", actionLabel: null, onClick: null },
+    { count: String(SKILL_FILES.length), label: "Skills", desc: "Markdown skill files for every phase of design. Upload to Claude to extend any conversation with phase-specific workflows.", actionLabel: "Browse skills →", onClick: onOpenSkills },
+    { count: String(TOOLS.length), label: "Tools", desc: "Interactive prompt builders. Add your context, get a structured Claude prompt ready to run.", actionLabel: null, onClick: null },
     { count: "6", label: "Agents", desc: "Role-based specialists for Claude Code. Each one has skills, tools, and a Definition of Done.", actionLabel: "Meet the team →", onClick: onOpenAgents },
-    { count: "3", label: "Hooks", desc: "Deterministic triggers — auto-persist artifacts, inject project context, route phases on session close.", actionLabel: null, onClick: null },
+    { count: "1", label: "Hook", desc: "A deterministic trigger — at session start, points Claude at the project's state in Pathlon MCP.", actionLabel: null, onClick: null },
   ];
   return (
     <div style={{ marginBottom: 64 }}>
@@ -4319,7 +4297,7 @@ const AGENTS_PREVIEW = [
   { id: "researcher",   name: "Researcher",       role: "UX Research Agent",    color: "#C084FC", desc: "Surfaces 3–5 actionable insights from raw research. Confidence-rated. Standard insight format." },
   { id: "strategist",   name: "Strategist",       role: "Design Lead Agent",    color: "#F472B6", desc: "Produces a problem frame and strategic direction. Validated problem statement, HMW questions, persona, journey." },
   { id: "designer",     name: "Designer",         role: "Product Design Agent", color: "#38BDF8", desc: "Produces a validated concept direction. 4+ concepts, evaluated, recommended direction with rationale." },
-  { id: "systems",      name: "Systems Designer", role: "Design Systems Agent", color: "#34D399", desc: "Produces a token system and component architecture. Every component specified, every state defined." },
+  { id: "systems",      name: "Systems Designer", role: "Design Systems Agent", color: "#34D399", desc: "Works from the team's existing design system — a Figma library or Claude Design. Reads it, maps screens to its components, plans component architecture, specifies states, and routes gaps back to the system's owner." },
   { id: "engineer",     name: "Design Engineer",  role: "Handoff & QA Agent",   color: "#FB923C", desc: "Produces a handoff package. QA against implementation, accessibility audit, decision records." },
 ];
 
@@ -4763,35 +4741,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Design System Studio — primary CTA with brand-glow treatment */}
-        <button
-          onClick={() => setActiveTool("design-system")}
-          style={{
-            width: "100%", marginBottom: 32,
-            display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 24,
-            padding: "20px 24px", textAlign: "left", cursor: "pointer",
-            borderRadius: 10,
-            border: "1px solid rgba(134,59,255,0.30)",
-            background: "linear-gradient(120deg, rgba(134,59,255,0.10) 0%, rgba(192,132,252,0.05) 35%, rgba(233,129,12,0.06) 100%)",
-            transition: "border-color 200ms, box-shadow 200ms",
-            fontFamily: "inherit",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(134,59,255,0.55)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(134,59,255,0.20), 0 0 32px rgba(134,59,255,0.18)"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(134,59,255,0.30)"; e.currentTarget.style.boxShadow = "none"; }}
-        >
-          <div style={{ display: "flex", alignItems: "baseline", gap: 16, flexWrap: "wrap" }}>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, color: T.text }}>Design System Studio</span>
-            <span style={{ fontSize: 13, color: T.muted, lineHeight: 1.55 }}>Build, audit, and export a complete token-based design system with live component previews.</span>
-          </div>
-          <span style={{
-            fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500,
-            padding: "9px 16px", borderRadius: 6, whiteSpace: "nowrap",
-            color: T.text,
-            border: "1px solid rgba(134,59,255,0.45)",
-            background: "linear-gradient(90deg, rgba(134,59,255,0.18) 0%, rgba(233,129,12,0.18) 100%)",
-          }}>Open Studio →</span>
-        </button>
 
         {/* Footer rule + brand attribution */}
         <div style={{ marginTop: 0, height: 1, background: T.border }} />

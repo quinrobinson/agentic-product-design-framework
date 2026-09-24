@@ -198,7 +198,7 @@ const PHASES = [
       },
       {
         title: "M3 Token Documenter",
-        prompt: `Document all design tokens for the [COMPONENT NAME] component following Material Design 3 token naming conventions:\n\nFor each token, provide:\n- Token name: md.comp.[component].[element].[property]\n- System token it maps to: md.sys.color.* | md.sys.elevation.* | md.sys.shape.*\n- States it applies to: default | hover | focus | pressed | disabled | error\n- Description of what it controls\n\nCover: color roles, elevation, shape/corner radius, typography, spacing.\n\nUse the M3 Token Reference artifact (m3-token-reference.jsx) as the reference format.`,
+        prompt: `Document all design tokens for the [COMPONENT NAME] component following Material Design 3 token naming conventions:\n\nFor each token, provide:\n- Token name: md.comp.[component].[element].[property]\n- System token it maps to: md.sys.color.* | md.sys.elevation.* | md.sys.shape.*\n- States it applies to: default | hover | focus | pressed | disabled | error\n- Description of what it controls\n\nCover: color roles, elevation, shape/corner radius, typography, spacing.\n`,
         when: "Documenting component tokens for Figma variables",
         output: "M3-format token spec → use to create Figma variables",
       },
@@ -238,11 +238,11 @@ const PHASES = [
         workflow: ["Select visual style matched to domain and audience", "Build semantic color token architecture with light/dark pairing", "Define typography pairings and type scale", "Establish 4pt spacing scale and shape tokens", "Set elevation and motion timing standards", "Define icon library and touch target rules"],
         outputs: ["Color Token System", "Typography Scale", "Spacing & Shape Tokens", "Motion Spec", "Icon Standards", "Pre-Delivery Visual QA"],
         checklist: ["One style system throughout — no mixing", "All colors reference semantic tokens", "Light and dark mode both tested", "Body text ≥ 4.5:1 contrast in both modes", "All spacing multiples of 4", "Animations ≤ 300ms, transform/opacity only", "Single icon library, consistent stroke width"] },
-      { name: "design-systems", file: "design-systems.md", title: "Design System Audit & Token Documentation",
-        summary: "Audit products against Material, Atlassian, Carbon, Apple HIG. Document tokens using M3 naming. Set up Figma variables.",
-        workflow: ["Run design system audit using checklist artifact", "Document tokens following M3 naming conventions", "Set up Figma variable collections (Reference → System → Component)", "Create component anatomy documentation", "Compare approaches across the four major systems"],
-        outputs: ["Audit Report", "M3 Token Specs", "Figma Variable Collections", "Component Anatomy Docs", "Cross-System Comparison"],
-        checklist: ["All design decisions expressed as named tokens", "Light and dark mode variants for every color", "Typography scale uses M3 typescale names or equivalent", "Spacing follows 4px or 8px base grid", "Elevation documented with shadow + surface tint pairs"] },
+      { name: "design-system", file: "design-system.md", title: "Design System",
+        summary: "Work from the team's existing design system in Figma or Claude Design — Pathlon reads and checks it rather than building one.",
+        workflow: ["Locate the system (Figma library, Claude Design, or code) and record it", "Read it via the Figma MCP and save a system summary", "Map every screen element to a system component or a named gap", "Check work against the system: tokens, instances, states, accessibility", "Send gaps to the system's owner as proposals"],
+        outputs: ["System Summary", "Component Mapping", "Conformance Findings", "Gap Report"],
+        checklist: ["System source recorded", "Summary saved before screen work", "Every element mapped or listed as a gap", "No tokens or components invented locally", "Contrast and touch targets checked"] },
     ],
     handoff: {
       direction: "Ideate → Prototype",
@@ -521,7 +521,7 @@ The six phases and their skill files are:
 - Prototype → prototyping.md, accessibility-audit.md
 - Validate → usability-testing.md
 - Deliver → design-delivery.md
-- Cross-phase → design-systems.md, figma-playbook.md
+- Cross-phase → design-system.md, figma-playbook.md
 
 I'm starting a new design project and need help getting oriented.
 Please ask me the following four questions (all at once is fine):

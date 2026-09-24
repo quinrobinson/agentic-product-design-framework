@@ -21,7 +21,7 @@ The framework is built around six phases — **Discover → Define → Ideate �
 3. **Do the work** — Claude follows structured outputs; you review, direct, and decide
 4. **Start designing** — Open any phase and create. Research, concepts, wireframes, specs — the framework meets you where you are. Use the Phase Handoff Block at the end of each phase to carry full context into the next conversation.
 
-The [live site](https://quinrobinson.github.io/agentic-product-design-framework) has interactive tools for exploring the system, previewing design tokens, and auditing design systems. Bring your own Figma files — Claude reads and writes against them directly via Figma MCP.
+The [live site](https://quinrobinson.github.io/agentic-product-design-framework) has interactive tools for exploring the system and every phase. Bring your own design system — a Figma library or Claude Design — and your own Figma files — Claude reads and writes against them directly via Figma MCP.
 
 ---
 
@@ -29,7 +29,7 @@ The [live site](https://quinrobinson.github.io/agentic-product-design-framework)
 
 - **Claude access** — A claude.ai account (free tier works; Pro recommended for longer sessions)
 - **Figma** — Optional but recommended. For MCP integration (Claude reading and writing against your own Figma files), you'll need Claude Desktop or Claude Code + the Figma desktop app. See the in-app Figma Setup Guide for full steps.
-- **Skill files** — Available in `/skills`. Upload whichever phase you're starting in — or use the Kickoff Prompt below if you're not sure
+- **Skill files** — Available in `/pathlon/skills`. Upload whichever phase you're starting in — or use the Kickoff Prompt below if you're not sure
 
 ---
 
@@ -65,8 +65,8 @@ The six phases and their skill files are:
 - Ideate → concept-generation.md, concept-proof.md, visual-design-execution.md, concept-critique.md, idea-clustering.md, storyboarding.md
 - Prototype → prototyping.md, user-flow-mapping.md, ux-copy-writing.md, prototype-scoping.md, heuristic-review.md, test-script-drafting.md, accessibility-audit.md
 - Validate → usability-testing.md, usability-findings-synthesis.md, insight-report.md, recruitment-screener.md, stakeholder-presentation.md, iteration-brief.md
-- Deliver → design-delivery.md, component-specs.md, design-qa.md, handoff-annotation.md, accessibility-annotation.md, design-decision-record.md, design-system-audit.md
-- Cross-phase → design-systems.md, figma-playbook.md, phase-handoff.md, skill-chaining.md, which-claude.md
+- Deliver → design-delivery.md, component-specs.md, design-qa.md, handoff-annotation.md, accessibility-annotation.md, design-decision-record.md
+- Cross-phase → design-system.md, figma-playbook.md, phase-handoff.md, skill-chaining.md, which-claude.md
 
 I'm starting a new design project and need help getting oriented.
 Please ask me the following four questions (all at once is fine):
@@ -93,19 +93,19 @@ Based on my answers, respond with:
 
 ## What's Inside
 
-### `/skills` — Claude Skill Files
+### `/pathlon/skills` — Claude Skill Files
 
-43 structured `.md` skill files — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/agentic-product-design-framework) on the live site.
+40 skills (`<name>/SKILL.md`) — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/agentic-product-design-framework) on the live site.
 
 | Phase | Skills | Files |
 |-------|--------|-------|
-| 01 — Discover | 5 | `research-planning.md`, `research-synthesis.md`, `competitive-analysis.md`, `service-blueprint.md`, `insight-framing.md` |
-| 02 — Define | 5 | `problem-framing.md`, `journey-mapping.md`, `persona-creation.md`, `assumption-mapping.md`, `requirements-prioritization.md` |
-| 03 — Ideate | 6 | `concept-generation.md`, `concept-proof.md`, `visual-design-execution.md`, `concept-critique.md`, `idea-clustering.md`, `storyboarding.md` |
-| 04 — Prototype | 7 | `prototyping.md`, `accessibility-audit.md`, `user-flow-mapping.md`, `ux-copy-writing.md`, `prototype-scoping.md`, `heuristic-review.md`, `test-script-drafting.md` |
-| 05 — Validate | 6 | `usability-testing.md`, `usability-findings-synthesis.md`, `insight-report.md`, `recruitment-screener.md`, `stakeholder-presentation.md`, `iteration-brief.md` |
-| 06 — Deliver | 7 | `design-delivery.md`, `component-specs.md`, `design-qa.md`, `handoff-annotation.md`, `accessibility-annotation.md`, `design-decision-record.md`, `design-system-audit.md` |
-| Cross-phase | 7 | `design-systems.md`, `figma-playbook.md`, `figma-ds-export.md`, `figma-ds-audit.md`, `phase-handoff.md`, `skill-chaining.md`, `which-claude.md` |
+| 01 — Discover | 5 | `research-planning`, `research-synthesis`, `competitive-analysis`, `service-blueprint`, `insight-framing` |
+| 02 — Define | 5 | `problem-framing`, `journey-mapping`, `persona-creation`, `assumption-mapping`, `requirements-prioritization` |
+| 03 — Ideate | 6 | `concept-generation`, `concept-proof`, `visual-design-execution`, `concept-critique`, `idea-clustering`, `storyboarding` |
+| 04 — Prototype | 7 | `prototyping`, `accessibility-audit`, `user-flow-mapping`, `ux-copy-writing`, `prototype-scoping`, `heuristic-review`, `test-script-drafting` |
+| 05 — Validate | 6 | `usability-testing`, `usability-findings-synthesis`, `insight-report`, `recruitment-screener`, `stakeholder-presentation`, `iteration-brief` |
+| 06 — Deliver | 6 | `design-delivery`, `component-specs`, `design-qa`, `handoff-annotation`, `accessibility-annotation`, `design-decision-record` |
+| Cross-phase | 5 | `design-system`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
 
 ### `/pathlon/agents` — Specialist Agents
 
@@ -126,12 +126,9 @@ Six pre-configured Claude agents, each scoped to a role in the design process. A
 
 ### `/artifacts` — Interactive React Components & Onboarding Deck
 
-Five JSX artifacts that render as interactive tools, plus a team onboarding presentation:
+An interactive JSX artifact plus a team onboarding presentation:
 
 - **`design-process-system.jsx`** — Clickable phase-by-phase system with AI prompts, skill docs, templates, and tool recommendations per phase
-- **`design-tokens-system.jsx`** — Universal starter design system with tunable tokens, live component previews, presets, and AI-powered customization export
-- **`design-system-checklist.jsx`** — Comprehensive audit checklist synthesized from Material Design 3, Atlassian, IBM Carbon, and Apple HIG — with Figma-ready prompts per item
-- **`m3-token-reference.jsx`** — Interactive M3 token documentation for Button, Card, Text Field, and Navigation Bar — covers color roles, elevation, shape, typography, and spacing with Figma variable spec prompts
 - **`onboarding-deck.pptx`** — 18-slide team onboarding presentation covering the framework's value, structure, and step-by-step setup. Designed to match the Figma Cover aesthetic: dark/light slide balance, phase colors (01–06) used consistently throughout.
 
 ### Figma MCP

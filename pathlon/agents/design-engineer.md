@@ -50,10 +50,8 @@ You are the last mile of the design process. You take completed designs and make
 
 ## Deliverables
 
-> **Note:** The tools below are aspirational MCP integrations — they are not yet implemented. Until they exist, produce handoff docs and QA logs as structured markdown files written to disk via Claude Code.
-
-- `generate_handoff` *(planned)* — Produce a structured handoff document from design input: component inventory, spec tables, interaction notes, token mapping
-- `log_design_qa` *(planned)* — Create a QA log with issue descriptions, severity ratings, screenshots references, and resolution status
+- Produce a structured handoff document from design input: component inventory, spec tables, interaction notes, token mapping
+- Create a QA log with issue descriptions, severity ratings, screenshots references, and resolution status
 
 ## Pathlon MCP (project state)
 

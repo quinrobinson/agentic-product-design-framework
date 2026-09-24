@@ -57,12 +57,9 @@ const AGENT_ROUTING = {
   "user-flow-mapping.md":           "designer",
   "ux-copy-writing.md":             "designer",
   // Systems Designer
-  "design-systems.md":              "systems",
+  "design-system.md":               "systems",
   "figma-playbook.md":              "systems",
-  "figma-ds-export.md":             "systems",
-  "figma-ds-audit.md":              "systems",
   "component-specs.md":             "systems",
-  "design-system-audit.md":         "systems",
   // Design Engineer
   "prototyping.md":                 "engineer",
   "heuristic-review.md":            "engineer",
@@ -97,10 +94,8 @@ const SKILL_META = {
   "accessibility-audit.md": { phase: "04", leverage: "high", surface: "chat", desc: "Runs a systematic WCAG 2.1 AA audit — color contrast, keyboard navigation, focus management, screen reader behavior, and touch targets — with severity-ranked issues and specific fixes." },
   "usability-testing.md": { phase: "05", leverage: "high", surface: "chat", desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations." },
   "design-delivery.md": { phase: "06", leverage: "high", surface: "chat + code", desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right." },
-  "design-systems.md": { phase: null, leverage: "high", surface: "chat + code", desc: "Audits any product against Material Design 3, Atlassian, IBM Carbon, and Apple HIG — then documents tokens using M3 naming conventions and sets up Figma variable collections." },
+  "design-system.md": { phase: null, leverage: "high", surface: "chat + code", desc: "Works from your existing design system in Figma or Claude Design — maps screens to it, checks work against it, and reports gaps to its owner." },
   "figma-playbook.md": { phase: null, leverage: "high", surface: "code + figma mcp", desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file." },
-  "figma-ds-export.md": { phase: null, leverage: "high", surface: "code + figma mcp", desc: "Exports --apdf-* tokens from the Design System Studio to Figma as three variable collections (Reference, System, Component), text styles, and optional component scaffolds." },
-  "figma-ds-audit.md": { phase: null, leverage: "high", surface: "code + figma mcp", desc: "Audits an existing Figma design system via MCP — reads variables, styles, and components, then scores against Material, Atlassian, Carbon, and HIG criteria with a severity-rated gap analysis." },
   "phase-handoff.md": { phase: null, leverage: "high", surface: "chat", desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing." },
   "skill-chaining.md": { phase: null, leverage: "high", surface: "chat", desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
   // Phase 02 additions
@@ -125,7 +120,6 @@ const SKILL_META = {
   "recruitment-screener.md": { phase: "05", leverage: "high", surface: "chat", desc: "Generate participant recruitment screener criteria and screening questions from a persona. Ensure usability test participants match the user being designed for." },
   "stakeholder-presentation.md": { phase: "05", leverage: "high", surface: "chat", desc: "Reframe usability test findings for different stakeholder audiences—executive, engineering, design. Present the same findings three different ways for different decision-makers." },
   // Phase 06 additions
-  "design-system-audit.md": { phase: "06", leverage: "high", surface: "chat", desc: "Audit a product's design system before handoff against four industry standards — Material Design 3, Atlassian, Carbon, and Apple HIG — with a severity-rated gap analysis." },
   "accessibility-annotation.md": { phase: "06", leverage: "high", surface: "chat", desc: "Generate WCAG 2.1 AA accessibility annotations—ARIA roles, keyboard navigation, focus order, and screen reader behavior. Ensure developers have the specs to build inclusively." },
   "component-specs.md": { phase: "06", leverage: "high", surface: "chat", desc: "Generate complete component specifications covering every state, variant, and interaction. Create developer-ready specs in the time it used to take to document one." },
   "design-decision-record.md": { phase: "06", leverage: "high", surface: "chat", desc: "Generate a structured design decision record documenting why specific choices were made. Create a permanent record that prevents decisions from being relitigated." },
@@ -141,8 +135,8 @@ const SKILLS = [
   { phase: "03", dir: "03-ideate", files: ["concept-generation.md", "concept-proof.md", "visual-design-execution.md", "concept-critique.md", "idea-clustering.md", "storyboarding.md"] },
   { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md", "prototype-scoping.md", "user-flow-mapping.md", "test-script-drafting.md", "heuristic-review.md", "ux-copy-writing.md"] },
   { phase: "05", dir: "05-validate", files: ["usability-testing.md", "usability-findings-synthesis.md", "insight-report.md", "iteration-brief.md", "recruitment-screener.md", "stakeholder-presentation.md"] },
-  { phase: "06", dir: "06-deliver", files: ["design-delivery.md", "design-system-audit.md", "accessibility-annotation.md", "component-specs.md", "design-decision-record.md", "design-qa.md", "handoff-annotation.md"] },
-  { phase: null, dir: "", files: ["design-systems.md", "figma-playbook.md", "figma-ds-export.md", "figma-ds-audit.md", "phase-handoff.md", "skill-chaining.md", "which-claude.md"] },
+  { phase: "06", dir: "06-deliver", files: ["design-delivery.md", "accessibility-annotation.md", "component-specs.md", "design-decision-record.md", "design-qa.md", "handoff-annotation.md"] },
+  { phase: null, dir: "", files: ["design-system.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md", "which-claude.md"] },
 ];
 
 const PHASE_FILTERS = [
@@ -189,16 +183,13 @@ const ALL_SKILL_FILES = [
   { path: "05-validate/recruitment-screener.md",           zipPath: "recruitment-screener/SKILL.md" },
   { path: "05-validate/stakeholder-presentation.md",       zipPath: "stakeholder-presentation/SKILL.md" },
   { path: "06-deliver/design-delivery.md",                 zipPath: "design-delivery/SKILL.md" },
-  { path: "06-deliver/design-system-audit.md",             zipPath: "design-system-audit/SKILL.md" },
   { path: "06-deliver/accessibility-annotation.md",        zipPath: "accessibility-annotation/SKILL.md" },
   { path: "06-deliver/component-specs.md",                 zipPath: "component-specs/SKILL.md" },
   { path: "06-deliver/design-decision-record.md",          zipPath: "design-decision-record/SKILL.md" },
   { path: "06-deliver/design-qa.md",                       zipPath: "design-qa/SKILL.md" },
   { path: "06-deliver/handoff-annotation.md",              zipPath: "handoff-annotation/SKILL.md" },
-  { path: "design-systems.md",                             zipPath: "design-systems/SKILL.md" },
+  { path: "design-system.md",                              zipPath: "design-system/SKILL.md" },
   { path: "figma-playbook.md",                      zipPath: "figma-playbook/SKILL.md" },
-  { path: "figma-ds-export.md",                     zipPath: "figma-ds-export/SKILL.md" },
-  { path: "figma-ds-audit.md",                      zipPath: "figma-ds-audit/SKILL.md" },
   { path: "phase-handoff.md",                       zipPath: "phase-handoff/SKILL.md" },
   { path: "skill-chaining.md",                            zipPath: "skill-chaining/SKILL.md" },
   { path: "which-claude.md",                               zipPath: "which-claude/SKILL.md" },

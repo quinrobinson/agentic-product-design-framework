@@ -441,12 +441,12 @@ space4.setValueForMode(collection.defaultModeId, 16);
 
 ### Client Customization Flow
 
-When adapting the design system for a client:
+When a client's work uses their own design system:
 
-1. User provides brand guidelines (colors, fonts, personality)
-2. Generate new token values (using the design-tokens-system artifact or AI prompt)
-3. Update the Design System page swatches and samples
-4. Update Figma variables if they exist
+1. Locate the client's system (Figma library or Claude Design) and read it — see the `design-system` skill
+2. Point the file's components at the client's library instead of recreating tokens locally
+3. Update the Design System page swatches and samples to reflect the client's system
+4. Send anything the client's system lacks to its owner as a gap proposal
 5. Verify all components on other pages still look correct
 
 ---
