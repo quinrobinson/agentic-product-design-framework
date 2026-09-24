@@ -50,20 +50,17 @@ const AGENTS = [
       "Each insight is confidence-rated: strongly evidenced vs. directional",
       "A competitive snapshot exists if the phase requires it",
       "Open questions and unvalidated assumptions are explicitly named",
-      "Phase Handoff Block is written and ready for the Strategist or Designer",
+      "Phase Handoff Block is saved to Pathlon and ready for the Strategist or Designer",
     ],
-    mcpTools: ["synthesize_research", "build_competitive_snapshot", "synthesize_findings", "generate_insight_report", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Researcher agent from the Agentic Product Design Framework. Your role is a senior UX researcher. You synthesize interviews, plan research, run competitive analysis, and produce insight reports. Ask me what phase of research we're in and what decisions this research needs to inform.",
     mapCells: {
-      chat:   { type: "primary",    tools: ["synthesize_research", "build_competitive_snapshot", "synthesize_findings", "generate_insight_report"], skills: ["research-synthesis", "research-planning", "competitive-analysis", "usability-testing", "recruitment-screener"] },
+      chat:   { type: "primary",    skills: ["research-synthesis", "research-planning", "competitive-analysis", "usability-testing", "recruitment-screener"] },
       code:   { type: "occasional", skills: ["figma-playbook", "competitive-analysis", "service-blueprint"], note: "Push research artifacts to Figma via MCP. Build Research Findings Boards and Competitive Analysis matrices from synthesized data." },
       cowork: { type: "occasional", note: "Observe live usability test sessions. Screen-aware note-taking alongside Maze, Lookback, or UserTesting recordings." },
     },
     commands: [
-      { name: "/synthesize-research",  desc: "Synthesize sessions into themes, insights, directions",        inputs: ["research_question", "session_notes"] },
-      { name: "/competitive-snapshot", desc: "Map the competitive landscape and surface opportunities",       inputs: ["product", "design_question"] },
-      { name: "/synthesize-findings",  desc: "Consolidate usability test notes into structured findings",    inputs: ["tasks_tested", "session_notes"] },
-      { name: "/insight-report",       desc: "Generate a stakeholder-ready insight report",                  inputs: ["prototype_name", "synthesis", "decision_needed"] },
+      { name: "/pathlon:synthesize-research", desc: "Synthesize sessions into themes, insights, directions", inputs: ["research_question", "session_notes"] },
     ],
   },
   {
@@ -84,20 +81,17 @@ const AGENTS = [
       "Current-state journey is documented before any future-state work begins",
       "All assumptions are mapped and ranked by risk × knowability",
       "Known facts and assumed facts are explicitly separated throughout all artifacts",
-      "Phase Handoff Block is written and ready for the Designer",
+      "Phase Handoff Block is saved to Pathlon and ready for the Designer",
     ],
-    mcpTools: ["frame_problem", "map_journey", "generate_service_blueprint", "build_client_deck", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Strategist agent from the Agentic Product Design Framework. Your role is a senior design lead. You frame problems, map journeys, define personas, blueprint services, and build stakeholder decks. Ask me what we're trying to define and who the key users are.",
     mapCells: {
-      chat:   { type: "primary",    tools: ["frame_problem", "map_journey", "generate_service_blueprint", "build_client_deck"], skills: ["problem-framing", "journey-mapping", "assumption-mapping", "service-blueprint", "stakeholder-presentation", "persona-creation"] },
+      chat:   { type: "primary",    skills: ["problem-framing", "journey-mapping", "assumption-mapping", "service-blueprint", "stakeholder-presentation", "persona-creation"] },
       code:   { type: "occasional", note: "Export journey maps and service blueprints to Figma boards via Figma MCP. Push structured outputs to repo." },
       cowork: { type: "occasional", skills: ["journey-mapping", "service-blueprint"], note: "Walk through Figma journey maps and service blueprints in real time with stakeholders. Review and refine live strategy artifacts." },
     },
     commands: [
-      { name: "/frame-problem",     desc: "Transform research into problem statements and HMW questions",        inputs: ["research_data", "persona"] },
-      { name: "/map-journey",       desc: "Build a journey map across stages, emotions, and opportunities",      inputs: ["persona", "goal"] },
-      { name: "/service-blueprint", desc: "Generate a service blueprint across all swim lanes",                  inputs: ["persona", "goal"] },
-      { name: "/client-deck",       desc: "Build a structured client presentation with speaker notes",           inputs: ["project_name", "deck_goal", "desired_outcome"] },
+      { name: "/pathlon:frame-problem", desc: "Transform research into problem statements and HMW questions", inputs: ["research_data", "persona"] },
     ],
   },
   {
@@ -118,21 +112,17 @@ const AGENTS = [
       "At least one user flow is mapped for the primary use case",
       "UX copy exists for all primary screens or states in scope",
       "What remains unresolved is explicitly named — not left implicit",
-      "Phase Handoff Block is written and ready for the Systems Designer or Design Engineer",
+      "Phase Handoff Block is saved to Pathlon and ready for the Systems Designer or Design Engineer",
     ],
-    mcpTools: ["generate_concepts", "cluster_ideas", "generate_concept_proof", "map_user_flow", "write_ux_copy", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Designer agent from the Agentic Product Design Framework. Your role is a senior product designer. You generate concepts, cluster ideas, map flows, write UX copy, and build concept proofs. Ask me what problem we're designing for and what's already been defined.",
     mapCells: {
-      chat:   { type: "primary",    tools: ["generate_concepts", "cluster_ideas", "generate_concept_proof", "map_user_flow", "write_ux_copy"], skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy-writing"] },
+      chat:   { type: "primary",    skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy-writing"] },
       code:   { type: "occasional", note: "Build wireframes and concept frames directly in Figma via MCP. Generate Figma Make prompts from session context." },
       cowork: { type: "occasional", note: "Review live prototypes in Figma or staging. Navigate complex design tools with Claude watching alongside." },
     },
     commands: [
-      { name: "/generate-concepts", desc: "Generate meaningfully distinct design concepts",                    inputs: ["problem_statement", "persona"] },
-      { name: "/cluster-ideas",     desc: "Cluster raw ideas into strategic themes",                           inputs: ["concepts", "problem_statement"] },
-      { name: "/concept-proof",     desc: "Generate a Figma Make prompt for a clickable concept proof",        inputs: ["concept_name", "user_perspective", "key_mechanism", "key_assumption"] },
-      { name: "/map-flow",          desc: "Map a user flow including decision points and error states",        inputs: ["entry_point", "goal"] },
-      { name: "/ux-copy",           desc: "Define voice and generate copy for a product flow",                 inputs: ["product", "persona", "flow"] },
+      { name: "/pathlon:generate-concepts", desc: "Generate meaningfully distinct design concepts", inputs: ["problem_statement", "persona"] },
     ],
   },
   {
@@ -143,7 +133,7 @@ const AGENTS = [
     primarySurfaces: ["code"],
     occasionalSurfaces: ["chat"],
     description: "Plans component architecture, specifies states and variants, generates component specs, and manages design tokens. Primary work — pushing token files, Figma MCP operations, Git — happens in Claude Code. Chat is for token strategy and audit analysis.",
-    howToUse: "Open Claude Code in your project root and run the agent from .claude/agents/. For token strategy or audit analysis without file operations, use Claude Chat with the activation prompt. Upload design-systems.md or figma-playbook.md from the Skills Library.",
+    howToUse: "Open Claude Code with the Pathlon plugin installed and invoke the pathlon:systems-designer agent. For token strategy or audit analysis without file operations, use Claude Chat with the activation prompt. Upload design-systems.md or figma-playbook.md from the Skills Library.",
     skills: ["design-systems", "design-system-audit", "figma-ds-audit", "figma-ds-export", "figma-playbook", "component-specs"],
     primaryGoal: "Produce a token system and component architecture that a design engineer can build from without ambiguity — every component specified, every state defined, every token named for intent.",
     definitionOfDone: [
@@ -153,19 +143,16 @@ const AGENTS = [
       "No interactive component is missing hover, focus, active, or disabled states",
       "No data component is missing loading, empty, error, or populated states",
       "Decision rationale is documented alongside every architectural choice",
-      "Phase Handoff Block is written and ready for the Design Engineer",
+      "Phase Handoff Block is saved to Pathlon and ready for the Design Engineer",
     ],
-    mcpTools: ["plan_component_architecture", "specify_component_states", "generate_component_spec", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Systems Designer agent from the Agentic Product Design Framework. Your role is a senior design systems engineer. You plan component architecture, specify states, generate specs, and manage design tokens. Ask me what system we're building or auditing.",
     mapCells: {
       chat:   { type: "occasional", note: "Token strategy, naming conventions, component architecture decisions. Audit analysis and recommendations.", skills: ["design-systems", "design-system-audit", "figma-ds-audit"] },
-      code:   { type: "primary",    tools: ["plan_component_architecture", "specify_component_states", "generate_component_spec"], skills: ["figma-ds-export", "figma-playbook", "component-specs"], note: "Push tokens.css / tokens.json to repo. Scaffold components in Figma via MCP. Sync design tokens." },
+      code:   { type: "primary",    skills: ["figma-ds-export", "figma-playbook", "component-specs"], note: "Push tokens.css / tokens.json to repo. Scaffold components in Figma via MCP. Sync design tokens." },
       cowork: { type: "occasional", skills: ["design-systems", "figma-ds-audit"], note: "Review a live design system implementation alongside a developer. Spot token drift and component divergence in real time across a browser-based design tool." },
     },
     commands: [
-      { name: "/component-architecture", desc: "Analyze screens and produce a component breakdown",               inputs: ["screen_inventory"] },
-      { name: "/component-states",       desc: "Generate a complete state inventory for a component",             inputs: ["component_name", "component_type"] },
-      { name: "/component-spec",         desc: "Generate full component documentation for handoff",               inputs: ["component_name", "description"] },
     ],
   },
   {
@@ -186,18 +173,17 @@ const AGENTS = [
       "Accessibility audit is complete with pass/fail per WCAG 2.1 AA criterion",
       "All design decisions with downstream implications have a Decision Record",
       "No open QA items without an explicit accept/defer decision",
-      "Phase Handoff Block is written confirming the feature is ready for engineering",
+      "Phase Handoff Block is saved to Pathlon confirming the feature is ready for engineering",
     ],
-    mcpTools: ["generate_handoff", "log_design_qa", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Design Engineer agent from the Agentic Product Design Framework. Your role bridges design and engineering. You generate handoff docs, run design QA, write decision records, and annotate accessibility specs. Ask me what's being handed off and what the current state of implementation is.",
     mapCells: {
       chat:   { type: "occasional", note: "Accessibility audits and heuristic reviews before handoff. Annotation guidance for developers.", skills: ["accessibility-audit", "heuristic-review", "accessibility-annotation"] },
-      code:   { type: "primary",    tools: ["generate_handoff", "log_design_qa"], skills: ["prototyping", "design-delivery", "design-qa", "design-decision-record", "handoff-annotation", "component-specs"], note: "Build prototype and production code from component specs. Write handoff docs to disk. Translate design tokens to CSS custom properties. Generate all component states. Run QA artifacts and Git operations for delivery." },
+      code:   { type: "primary",    skills: ["prototyping", "design-delivery", "design-qa", "design-decision-record", "handoff-annotation", "component-specs"], note: "Build prototype and production code from component specs. Write handoff docs to disk. Translate design tokens to CSS custom properties. Generate all component states. Run QA artifacts and Git operations for delivery." },
       cowork: { type: "primary",    note: "Review live staging implementations. Click through built screens to verify against spec. Screen-aware QA that compares implementation to design intent in real time." },
     },
     commands: [
-      { name: "/handoff",    desc: "Generate a prototype handoff document for engineering",        inputs: ["screens_built", "flows_covered", "problem_statement"] },
-      { name: "/design-qa", desc: "Structure QA notes into a severity-rated issue log",            inputs: ["feature", "raw_notes"] },
+      { name: "/pathlon:design-qa", desc: "Structure QA notes into a severity-rated issue log", inputs: ["feature", "raw_notes"] },
     ],
   },
   {
@@ -207,31 +193,28 @@ const AGENTS = [
     file: "orchestrator.md",
     primarySurfaces: ["code", "chat"],
     occasionalSurfaces: [],
-    description: "Orients new projects, routes work to the right specialist agent, manages phase handoff blocks, and tracks what's been decided vs. what's still open. Invoke at the start of a project, when switching phases, or when you're not sure which agent to use.\n\nBefore routing any work, runs a Phase Gap Analysis — comparing what exists in .apdf/artifacts/ against the current phase's Definition of Done. Surfaces missing artifacts and their assumption and dependency risks before proceeding.\n\nIn Claude Code, the Orchestrator runs in autonomous mode — spawning specialist agents without manual routing. Run /kickoff, /discover, or /deliver to trigger autonomous phase execution. Requires .apdf/context.json to be filled in first.",
+    description: "Orients new projects, routes work to the right specialist agent, keeps phase handoffs in Pathlon, and tracks what's been decided vs. what's still open. Invoke at the start of a project, when switching phases, or when you're not sure which agent to use.\n\nBefore routing any work, runs a Phase Gap Analysis — comparing what Pathlon has recorded against the current phase's Definition of Done. Surfaces missing artifacts and their assumption and dependency risks before proceeding.\n\nIn Claude Code, the Orchestrator runs in autonomous mode — spawning specialist agents without manual routing. Run /pathlon:kickoff to trigger autonomous phase execution. Project state comes from Pathlon MCP.",
     howToUse: "Start here on any new project. In Claude Code, it spawns specialist agents and manages the handoff block as a living file. In Claude Chat, paste the activation prompt and describe where you are in the project — it will tell you which agent to invoke next and on which surface.",
     skills: ["which-claude", "skill-chaining", "phase-handoff"],
     primaryGoal: "Drive every design phase to a complete, handoff-ready output — resolving blockers, spawning the right agents, and knowing when a phase is genuinely done.",
     definitionOfDone: [
-      "The phase's primary artifact exists in .apdf/artifacts/",
-      "All open questions from the previous handoff block are resolved or explicitly deferred with a reason",
-      "The Phase Handoff Block is updated and reflects current state",
+      "The phase's primary artifact exists and is recorded in Pathlon",
+      "All open questions from the previous handoff are resolved or explicitly deferred with a reason",
+      "The Phase Handoff Block is saved to Pathlon and reflects current state",
       "The next agent has been identified and knows what it needs to start",
       "No undocumented assumptions remain buried in the work",
     ],
-    mcpTools: ["generate_handoff", "artifact-registry"],
+    mcpTools: ["get_project_context", "get_memories", "recommend_starting_point", "detect_patterns", "write_memory", "link_artifact (after 5.4)"],
     activationPrompt: "You are the Orchestrator agent from the Agentic Product Design Framework. Your role is a senior design program manager. You orient new projects, route work to the right specialist agent, manage phase handoff blocks, and track what's been decided vs. what's still open. Ask me what project we're starting and where we are in the process.",
     mapCells: {
       chat:   { type: "primary", note: "Kickoff orientation. Deciding which agent and surface to route to. Generating Phase Handoff Blocks for context transfer between sessions.", skills: ["which-claude", "skill-chaining", "phase-handoff"] },
-      code:   { type: "primary", tools: ["generate_handoff"], note: "Spawns subagents. Reads project state from disk. Routes tasks to the right specialist agent. Manages the handoff block as a living project file across the full six-phase lifecycle." },
+      code:   { type: "primary", note: "Spawns subagents. Reads project state from disk. Routes tasks to the right specialist agent. Manages the handoff block as a living project file across the full six-phase lifecycle." },
       cowork: { type: "occasional", skills: ["skill-chaining", "phase-handoff"], note: "Coordinate multi-agent workflows in a shared session. Review phase progress alongside a specialist agent. Hand off context between phases in real time." },
     },
     commands: [
-      { name: "/handoff-block", desc: "Generate a Phase Handoff Block for the next phase session",                                                inputs: ["current_phase", "summary"] },
-      { name: "/route",         desc: "Read project context and recommend which agent and command to run next",                                     inputs: [] },
-      { name: "/transition",    desc: "Read the latest phase handoff block and propose the next phase plan — spawns agents after confirmation",    inputs: [] },
-      { name: "/kickoff",       desc: "Read project state and autonomously kick off the current phase",                                            inputs: [] },
-      { name: "/discover",      desc: "Run the full Discover phase in parallel — research synthesis, competitive analysis, optional blueprint",    inputs: ["session-notes.md in .apdf/inputs/"] },
-      { name: "/deliver",       desc: "Run the full Deliver phase — parallel component architecture, handoff docs, and QA log",                   inputs: ["screen-inventory.md in .apdf/inputs/"] },
+      { name: "/pathlon:kickoff", desc: "Read project state from Pathlon and kick off the current phase", inputs: [] },
+      { name: "/pathlon:route", desc: "Recommend which agent and command to run next", inputs: [] },
+      { name: "/pathlon:transition", desc: "Close the phase with a handoff saved to Pathlon, then start the next phase", inputs: [] },
     ],
   },
 ];
@@ -550,7 +533,7 @@ function AgentDrawerContent({ agent }) {
         <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.65, margin: "0 0 14px" }}>{agent.howToUse}</p>
         <div style={{ background: "rgba(96,165,250,0.06)", border: "1px solid rgba(96,165,250,0.15)", borderRadius: 6, padding: "10px 14px" }}>
           <p style={{ fontSize: 12, color: T.dim, lineHeight: 1.6, margin: 0 }}>
-            <span style={{ color: T.muted, fontWeight: 500 }}>For MCP tool access and file operations</span>, use Claude Code. Paste the activation prompt as a Claude Code system prompt or place the .md file in <code style={{ fontFamily: "'JetBrains Mono', monospace" }}>.claude/agents/</code>.
+            <span style={{ color: T.muted, fontWeight: 500 }}>For MCP tool access and file operations</span>, use Claude Code. Install the Pathlon plugin and the agents are available as <code style={{ fontFamily: "'JetBrains Mono', monospace" }}>pathlon:*</code>.
           </p>
         </div>
       </div>
@@ -574,11 +557,9 @@ function SetupDrawerContent() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {[
-            { n: "1", label: "Create the agents directory", code: "mkdir -p .claude/agents" },
-            { n: "2", label: "Download each agent .md file", note: "Click any agent in the map to open its drawer, then use the download button." },
-            { n: "3", label: "Place files in .claude/agents/", code: ".claude/\n  agents/\n    researcher.md\n    strategist.md\n    designer.md\n    systems-designer.md\n    design-engineer.md\n    orchestrator.md" },
-            { n: "4", label: "Open Claude Code in your project root", code: "claude", note: "Agents are discovered automatically — no additional configuration needed." },
-            { n: "5", label: "Start with the Orchestrator", note: "It reads the project state and routes work to the right specialist agent." },
+            { n: "1", label: "Add the Pathlon marketplace", code: "/plugin marketplace add quinrobinson/agentic-product-design-framework" },
+            { n: "2", label: "Install the plugin", code: "/plugin install pathlon@pathlon", note: "Installs all six agents, the skills, the /pathlon:* commands, and the Pathlon MCP connection — no other configuration." },
+            { n: "3", label: "Start with the Orchestrator", code: "/pathlon:kickoff", note: "It reads the project state from Pathlon and routes work to the right specialist agent." },
           ].map(step => (
             <div key={step.n} style={{ display: "flex", gap: 14 }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: T.dim, width: 18, flexShrink: 0, paddingTop: 1 }}>{step.n}.</div>
@@ -949,62 +930,17 @@ export default function AgentsPage({ currentPage = "agents", onNavigate, initial
         {/* ── Hooks (collapsible) ── */}
         <Disclosure
           title="Hooks"
-          count="4 triggers"
-          summary="Deterministic triggers that fire every time — no prompting required. Unlike agents and commands, hooks don't rely on Claude choosing to act."
+          count="1 trigger"
+          summary="Deterministic triggers that fire every time — no prompting required. The Pathlon plugin ships one; project state lives in Pathlon MCP, not local files."
         >
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 2 }}>
-            {[
-              {
-                name: "Auto-persist",
-                event: "PostToolUse",
-                settings: "settings.json",
-                settingsNote: "shared",
-                script: ".claude/hooks/persist-artifact.sh",
-                desc: "Every time an APDF MCP tool completes, its output is written automatically to .apdf/artifacts/ as a timestamped markdown file. An index.md tracks every artifact generated across the project lifecycle — a complete audit trail without any manual saving.",
-              },
-              {
-                name: "Auto-inject context",
-                event: "PreToolUse",
-                settings: "settings.json",
-                settingsNote: "shared",
-                script: ".claude/hooks/inject-context.sh",
-                desc: "Before any APDF MCP tool runs, this hook checks for a .apdf/context.json file in the project root. If found, it reads the current persona, problem statement, phase, and constraints and injects them as additional context. Tools run richer without the designer assembling context by hand each session.",
-              },
-              {
-                name: "Session awareness",
-                event: "Stop",
-                settings: "settings.local.json",
-                settingsNote: "personal — opt-in",
-                script: ".claude/hooks/session-awareness.sh",
-                desc: "When Claude finishes responding, this hook checks whether phase-level work was completed during the session. If yes and no handoff block was generated, it reminds the designer to run /handoff-block before closing. Fires once per session, then clears. Personal preference — opt in by copying settings.local.json.example and removing .example.",
-              },
-              {
-                name: "Phase Routing",
-                event: "Stop",
-                settings: "settings.json",
-                settingsNote: "shared",
-                script: ".claude/hooks/phase-routing.sh",
-                desc: "After every session, checks .apdf/artifacts/ for a newly written Phase Handoff Block. If one is detected, prompts the designer to run /transition to kick off the next phase automatically. Fires only when a real phase handoff block is present — silent on all other sessions.",
-              },
-            ].map(hook => (
-              <div key={hook.name} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>{hook.name}</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, letterSpacing: "0.04em" }}>{hook.event}</span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.dim, letterSpacing: "0.04em" }}>{hook.settings} — {hook.settingsNote}</span>
-                </div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, letterSpacing: "0.04em" }}>{hook.script}</div>
-                <p style={{ fontSize: 13, color: T.dim, lineHeight: 1.65, margin: 0 }}>{hook.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ marginTop: 16, background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: "12px 16px" }}>
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.dim, lineHeight: 1.7, margin: 0 }}>
-              Make hook scripts executable after placing them: <span style={{ color: T.muted }}>chmod +x .claude/hooks/*.sh</span>
-              <br />
-              Copy <span style={{ color: T.muted }}>settings.local.json.example</span> to <span style={{ color: T.muted }}>settings.local.json</span> to activate the session awareness hook.
-            </p>
+          <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>Session start</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, letterSpacing: "0.04em" }}>SessionStart</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.dim, letterSpacing: "0.04em" }}>pathlon plugin — installed with it</span>
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, letterSpacing: "0.04em" }}>pathlon/hooks/session-start.sh</div>
+            <p style={{ fontSize: 13, color: T.dim, lineHeight: 1.65, margin: 0 }}>At the start of every session, points Claude at the project's state in Pathlon MCP: read the current phase, decisions, and prior handoffs with get_project_context and get_memories before doing phase work. If there is no project yet, it suggests /pathlon:kickoff.</p>
           </div>
         </Disclosure>
 

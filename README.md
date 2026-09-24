@@ -33,43 +33,18 @@ The [live site](https://quinrobinson.github.io/agentic-product-design-framework)
 
 ---
 
-## Claude Code Setup (MCP + Automation)
+## Claude Code Setup (Pathlon plugin)
 
-Claude Chat with a skill file gets you 80% of the framework. Claude Code with the MCP server gets you the rest — autonomous phase execution, automatic artifact persistence, and context injection across sessions.
+Claude Chat with a skill file gets you most of the framework. Claude Code with the Pathlon plugin adds the rest: every skill, six specialist agents, `/pathlon:*` commands, and project state that persists across sessions and surfaces in Pathlon MCP.
 
-**Three steps:**
-
-```bash
-# 1. Build the MCP server
-cd mcp && npm install && npm run build && cd ..
-
-# 2. Set up your project context
-cp .apdf/context.json.example .apdf/context.json
-# Fill in project_name, phase, persona, problem_statement
-
-# 3. Make hooks executable
-chmod +x .claude/hooks/*.sh
+```
+/plugin marketplace add quinrobinson/agentic-product-design-framework
+/plugin install pathlon@pathlon
 ```
 
-The `.claude/settings.json` already points Claude Code at `./mcp/dist/index.js` and wires up the four hooks. Once the server is built and `context.json` is filled in, open Claude Code in this directory — the 18 APDF tools will appear automatically and hooks will fire on every tool call.
+That's the whole setup. The plugin connects to Pathlon MCP (`mcp.pathlon.io`) automatically; project state — phase, decisions, handoffs — lives there, not in local files. Start a project with `/pathlon:kickoff`.
 
-### `.apdf/context.json` — Project Context Schema
-
-Copy from `.apdf/context.json.example` and fill in before using MCP tools. The `inject-context.sh` hook injects this into every `mcp__apdf__*` tool call automatically.
-
-| Field | Description |
-|-------|-------------|
-| `project_name` | Project identifier — used in artifact filenames and handoff blocks |
-| `phase` | Current phase: `"01"` through `"06"` (or the phase name, e.g. `"Discover"`) |
-| `persona` | Primary user persona — Claude references this when generating prompts |
-| `problem_statement` | The core design problem being solved |
-| `constraints` | Timeline, technical, business, or platform constraints |
-| `open_questions` | What the team still needs to answer — focuses Claude's attention |
-| `last_handoff` | Paste the Phase Handoff Block from the previous phase to carry context across sessions |
-
-All fields are strings. Leave fields blank if not yet known — the hooks handle partial context gracefully.
-
-See [`/mcp/README.md`](./mcp/README.md) for the full tool reference, verification steps, and troubleshooting.
+The plugin source is in [`/pathlon`](./pathlon). To try local changes without installing: `claude --plugin-dir ./pathlon`.
 
 ---
 
@@ -132,9 +107,9 @@ Based on my answers, respond with:
 | 06 — Deliver | 7 | `design-delivery.md`, `component-specs.md`, `design-qa.md`, `handoff-annotation.md`, `accessibility-annotation.md`, `design-decision-record.md`, `design-system-audit.md` |
 | Cross-phase | 7 | `design-systems.md`, `figma-playbook.md`, `figma-ds-export.md`, `figma-ds-audit.md`, `phase-handoff.md`, `skill-chaining.md`, `which-claude.md` |
 
-### `/.claude/agents` — Specialist Agents
+### `/pathlon/agents` — Specialist Agents
 
-Six pre-configured Claude agents, each scoped to a role in the design process. Available in Claude Code as subagents (auto-spawned by the Orchestrator) or in any Claude conversation by uploading the agent file. Every agent declares a **Primary Goal** (one-sentence outcome commitment) and a **Definition of Done** (checkable completion criteria) at the top of its file, so each agent knows what "finished" looks like before it starts.
+Six pre-configured Claude agents, each scoped to a role in the design process. Available in Claude Code through the Pathlon plugin as `pathlon:*` subagents (auto-spawned by the Orchestrator) or in any Claude conversation by uploading the agent file. Every agent declares a **Primary Goal** (one-sentence outcome commitment) and a **Definition of Done** (checkable completion criteria) at the top of its file, so each agent knows what "finished" looks like before it starts.
 
 | Agent | File | Primary Surface | When to Invoke |
 |-------|------|----------------|----------------|
@@ -145,7 +120,7 @@ Six pre-configured Claude agents, each scoped to a role in the design process. A
 | **Systems Designer** | `systems-designer.md` | Code | Component architecture, token systems, design system audits, and Figma variable scaffolding. |
 | **Design Engineer** | `design-engineer.md` | Code + Cowork | Handoff docs, design QA, accessibility annotations, and building component code from specs. |
 
-**In Claude Code:** The Orchestrator auto-spawns agents based on phase. Run `/kickoff`, `/discover`, or `/deliver` to trigger autonomous phase execution. Requires `.apdf/context.json` to be filled in first.
+**In Claude Code:** Install the Pathlon plugin (above). The Orchestrator auto-spawns agents based on phase — run `/pathlon:kickoff` to start, `/pathlon:route` to see what's next, and `/pathlon:transition` to close a phase. Project state comes from Pathlon MCP.
 
 **In Claude Chat or any conversation:** Upload the agent's `.md` file, or copy the activation prompt from the [Agents page](https://quinrobinson.github.io/Agentic-Product-Design-Framework) on the live site.
 

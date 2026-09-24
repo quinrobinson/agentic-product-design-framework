@@ -52,11 +52,11 @@ Open **http://localhost:3456/agentic-product-design-framework/** (port set in `.
 
 ---
 
-## Deprecated (do not build on)
+## Removed (do not reintroduce)
 
-- **Local `apdf` MCP** (`mcp/`, `mcp__apdf__*` tools). Its tools are prompt templates that duplicate skills and commands. Removed in spec 5.7.
-- **`.apdf/context.json` and the hooks that read it** (`inject-context.sh`, `ds-gate.sh`, `figma-write-log.sh`). Project state lives in Pathlon MCP. Replaced in the plugin by `pathlon/hooks/session-start.sh`; this repo's `.claude/settings.json` still loads the old hooks until 5.7.
-- **`docs/archive/commands/`** — the 17 commands pruned in 5.5 (kept for reference, not loaded).
-- **`.apdf/artifacts/`, `.apdf/registry.json`, `.claude/tools/artifact-registry.ts`.** Superseded by Pathlon's `link_artifact` (5.4).
+Removed in spec 5.7; still in git history before that commit.
+- **The local APDF MCP server** (`mcp/`). Its tools were prompt templates duplicating skills and commands.
+- **Local project state** (`.apdf/` context, artifacts, registry, phase manifest), the `.claude/hooks/` that read it, `.claude/tools/artifact-registry.ts`, and `.claude/settings.json`. Project state lives in Pathlon MCP; the plugin's `session-start.sh` points Claude at it.
+- **`docs/archive/commands/`** holds the 17 commands pruned in 5.5 (reference only, not loaded).
 
-Do not edit generated output: `web/dist/`, `web/public/skills/`, `web/public/agents/`, `mcp/dist/`.
+Do not edit generated output: `web/dist/`, `web/public/skills/`, `web/public/agents/`, `build/`.
