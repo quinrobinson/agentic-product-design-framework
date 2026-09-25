@@ -27,6 +27,7 @@ Rules:
   - `skills/<name>/SKILL.md` — every skill. The `phase:` frontmatter sets its phase; phase skills start with an Outcomes & KPIs header. Cross-phase skills are listed in `web/sync-content.mjs`.
   - `agents/` — 6 agents (orchestrator + 5 specialists). `commands/` — 7 slash commands (`/pathlon:kickoff`, `/pathlon:route`, `/pathlon:transition`, …).
   - `hooks/` — SessionStart hook pointing Claude at Pathlon MCP. `.mcp.json` — Pathlon MCP (`https://mcp.pathlon.io/mcp`).
+  - `server/` — the local Pathlon store (Revision 1): `store.mjs` reads and writes `.pathlon/` project files, format in `FORMAT.md`. Test with `node --test pathlon/server/store.test.mjs`. R2 wraps it as the local MCP server and replaces the remote one in `.mcp.json`.
   - Validate with `claude plugin validate ./pathlon`; try it with `claude --plugin-dir ./pathlon`.
 - `.claude-plugin/marketplace.json` — makes this repo installable: `/plugin marketplace add quinrobinson/agentic-product-design-framework`, then `/plugin install pathlon@pathlon`.
 - `.claude/agents/spec-reviewer.md` — reviews each rewire step against the spec. Not part of the plugin.

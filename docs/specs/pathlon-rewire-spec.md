@@ -249,7 +249,7 @@ Adds scope. Not scheduled; revisit after dogfood (Phase 3) unless noted.
 
 **Rules** (replace section 4 rules 2 and 4):
 - **One store:** `.pathlon/` for the project, read and written only through the local Pathlon MCP and hooks. Never by hand, never duplicated elsewhere.
-- **A project is a folder:** the nearest `.pathlon/` above the working directory. Work without a folder lives in `~/.pathlon/projects/<name>/`, listed in `~/.pathlon/projects.json`.
+- **A project is a folder:** the nearest `.pathlon/` above the working directory. Work without a folder lives in `~/.pathlon/projects/<name>/.pathlon/`, and every project is listed in `~/.pathlon/projects.json`.
 - **Plain files:** readable and diffable, so the designer can see and edit their own data.
 
 ### 11.4 Plan
@@ -259,14 +259,17 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 **R1 — Local store format**
 - `.pathlon/project.json`: name, current phase, phase statuses, links (Figma files, repo, docs, design system source).
 - `.pathlon/log.jsonl`: append-only memories (`decision`, `context`, `handoff`, `brief`, `pattern`), each with a timestamp, phase, agent and summary.
-- `.pathlon/handoffs/<phase>.md`: the readable handoff for each phase.
-- Acceptance: the format is documented in the plugin, and a fixture project round-trips through R2's tools.
+- `.pathlon/handoffs/<phase>-<name>.md` (e.g. `02-define.md`): the latest readable handoff for each phase.
+- Acceptance: the format is documented in the plugin (`pathlon/server/FORMAT.md`), and a fixture project round-trips through R2's tools.
+- **Done Sept 25, 2026:** `pathlon/server/store.mjs` (zero dependencies), `FORMAT.md`, a fixture, and 12 passing tests, including a fixture round-trip through the store functions R2's tools will call. The round-trip through the tools themselves is carried into R2's acceptance.
+- Additions beyond the list above: memory types `preference` (carried over from the remote MCP) and `session` (for R3); link kinds `artifact` and `other` with `produced_by` and `source` (for `link_artifact`); `settings.share_in_git` (the 11.6 decision).
 
 **R2 — Local Pathlon MCP (replaces 5.4)**
 - A Node stdio server bundled in the plugin (`${CLAUDE_PLUGIN_ROOT}`) and registered in the plugin's `.mcp.json` in place of the remote Worker.
 - Tools: `get_project_context`, `get_memories`, `write_memory` and `recommend_starting_point` keep their current names. `create_project`, `list_projects` and `link_artifact` are added. `file_id` is no longer required.
 - Figma-specific tools (`get_figma_actions`, `log_figma_activity`, `detect_patterns`) are kept only where the local version is useful. The rest wait for sync.
-- Acceptance: in a fresh folder, create a project, write a memory, and read it back in a new session. Nothing touches the network.
+- Acceptance: in a fresh folder, create a project, write a memory, and read it back in a new session. Nothing touches the network. Also closes R1's round-trip: copy `pathlon/server/fixtures/sample-project`, then over stdio call `get_project_context` (no `file_id`), `write_memory`, `get_memories`, `link_artifact` and `list_projects`, and confirm the files match the store tests.
+- R2 also updates `CLAUDE.md` (architecture, rule 2, `.mcp.json`) and `hooks/session-start.sh` to the local model.
 
 **R3 — Automatic context (hooks)**
 - **SessionStart:** inside a Pathlon project, inject the project, phase, open questions, recent decisions and suggested next step. Outside one, stay silent. This fixes the plugin firing in unrelated repos.
