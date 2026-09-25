@@ -46,6 +46,8 @@ A concept that survives rigorous critique is a better starting point for prototy
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Concept cluster(s) to critique** — name, strategic bet, core mechanism, key assumption
 2. **Problem statement** — the locked framing from Define
 3. **Primary persona** — who the concept must work for

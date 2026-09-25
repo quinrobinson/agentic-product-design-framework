@@ -48,6 +48,8 @@ Different prioritization frameworks produce different decisions. Choose based on
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Requirements list** — the full set of features, opportunities, or user stories to prioritize
 2. **Business context** — goals, success metrics, timeline, and budget constraints
 3. **Research context** — which requirements are grounded in user research vs. stakeholder requests

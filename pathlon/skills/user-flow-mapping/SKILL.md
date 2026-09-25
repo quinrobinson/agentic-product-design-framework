@@ -55,6 +55,8 @@ A flow missing its error paths produces a prototype missing the moments users ne
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Selected concept** — name, one-liner, core mechanism from `storyboarding.md`
 2. **Primary persona** — who is performing this flow
 3. **Trigger** — what specific event or action initiates the flow

@@ -40,6 +40,8 @@ Accessibility annotations are the specification that prevents this. They're not 
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Component or screen description** — what it contains and how it behaves
 2. **Interactive elements** — every element the user can interact with
 3. **Component type** — is it a button, dialog, form, navigation, list, etc.

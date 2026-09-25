@@ -32,7 +32,7 @@ Turn a project brief or business goal into a complete research plan and intervie
 
 ## Step 1: Clarify Before Planning
 
-Before generating a plan, Claude needs four inputs. If any are missing, ask:
+Before generating a plan, Claude needs four inputs. Infer what you can from the request and the project; if the plan can't be useful without one, ask for it in a single message:
 
 1. **What are you designing?** (product, feature, service, or problem space)
 2. **Who are the likely users?** (role, context, or segment — even a rough guess)

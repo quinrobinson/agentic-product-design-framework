@@ -2,10 +2,10 @@
 name: start
 phase: all
 description: >
-  Pathlon's front door. Starts or resumes a design project in the current folder and decides which
-  Pathlon agent or skill should handle a request. Use when beginning work in a folder with no
-  Pathlon project, when the user asks what to do next or where things stand, when a request could
-  go to more than one specialist, or when invoked as /pathlon:start.
+  Pathlon's front door. Starts or resumes a Pathlon design project and decides which Pathlon agent
+  or skill should handle a request. Use when the user asks to start, set up, or resume a design
+  project, asks what to do next or where a project stands, when a design request could go to more
+  than one specialist, or when invoked as /pathlon:start.
 claude_surface: code
 ai_leverage: high
 ---
@@ -23,7 +23,9 @@ The front door to Pathlon: get the project set up (or picked back up) fast, then
 
 ## 1. No project yet — intake (under 90 seconds)
 
-If `get_project_context` finds no project, ask these together, in one message:
+Run this intake only when the designer asked to start or set up a project and `get_project_context` finds none. If a request is simply unclear ("help with the onboarding"), don't run the intake — ask the one question that decides what they want, with short answer options if that helps. Don't fold intake questions (product, users, research) into it; those come after they answer.
+
+Ask these together, in one message:
 
 1. **What's the project called, and what are you trying to achieve?**
 2. **Where are you?** Nothing yet / a brief / research done / designs exist / building.

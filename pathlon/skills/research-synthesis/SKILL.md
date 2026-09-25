@@ -52,7 +52,9 @@ Raw data
 
 ## What Claude Needs to Start
 
-Before synthesizing, confirm:
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
+Work these out from the material itself (the research question is often implied by what was asked in the sessions):
 
 1. **What was the research question?** (from research-planning.md)
 2. **What type of data?** (interview transcripts / observer notes / survey responses / mixed)

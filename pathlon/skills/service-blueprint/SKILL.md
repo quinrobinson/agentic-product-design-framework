@@ -60,6 +60,8 @@ Every blueprint has five swim lanes. Understand these before generating output.
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 ### For Current State
 1. Research synthesis outputs — themes, pain points, session summaries from `research-synthesis.md`
 2. The primary user persona and the scenario being mapped (one scenario per blueprint)

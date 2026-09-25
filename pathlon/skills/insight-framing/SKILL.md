@@ -67,6 +67,8 @@ HMW statements sit in a narrow window between too broad and too narrow. Getting 
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Insight statements** from `research-synthesis.md` — the formatted [User X does Y because Z, which means W] statements
 2. **Top pain points** ranked by severity
 3. **Systemic gaps** from `service-blueprint.md` (if completed)

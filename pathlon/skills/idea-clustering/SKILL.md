@@ -45,6 +45,8 @@ The clusters become the unit of decision-making. The team doesn't choose between
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Full concept set** — all concepts from `concept-generation.md`, in any format (names + one-liners is sufficient)
 2. **Problem statement** — to evaluate whether clusters address the right problem
 3. **Primary persona** — to check clusters against user needs

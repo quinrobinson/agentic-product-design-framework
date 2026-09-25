@@ -56,6 +56,8 @@ This skill file covers **research-grounded personas** — built from actual inte
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 Before generating personas, Claude needs:
 
 1. **Research synthesis outputs** — themes, pain points, behavioral patterns from `research-synthesis.md`

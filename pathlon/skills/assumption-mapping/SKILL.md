@@ -58,6 +58,8 @@ Every assumption belongs to one of four categories. Map them before scoring.
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Project context** — what you're designing, for whom, and why
 2. **Problem frame** — the problem statement from `problem-framing.md`
 3. **Research outputs** — what Discover confirmed and what it left open

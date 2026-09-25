@@ -46,6 +46,8 @@ This skill file covers **diverge only**. Do not evaluate ideas during this step.
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Problem statement** — the locked HMW, JTBD, or User + Need + Insight from `problem-framing.md`
 2. **Primary persona** — who this concept must work for
 3. **Top 3–5 HMW questions** — the scored list from Define

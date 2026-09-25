@@ -47,6 +47,8 @@ Claude's role here: structuring the QA log. The designer does the visual compari
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Raw QA notes** — observations from reviewing the implementation (any format)
 2. **Component or screen context** — what was being reviewed
 3. **Approved design reference** — description of what the design specified (or paste from component-specs.md)

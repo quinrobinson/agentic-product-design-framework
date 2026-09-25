@@ -40,6 +40,8 @@ The screener's job is not to find the most agreeable participants. It's to find 
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Persona** — from `persona-creation.md` — behavioral segment, goals, context, pain points
 2. **Product context** — what the product does and who it's for
 3. **Test focus** — which tasks or scenarios will be tested (affects which criteria matter most)

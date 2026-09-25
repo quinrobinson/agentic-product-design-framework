@@ -40,6 +40,8 @@ A DDR costs 20 minutes to write. It saves hours of future discussion, prevents "
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **The decision** — what was designed and what was decided
 2. **The context** — what problem was being solved, what constraints existed
 3. **Alternatives considered** — what other options were explored (even briefly)

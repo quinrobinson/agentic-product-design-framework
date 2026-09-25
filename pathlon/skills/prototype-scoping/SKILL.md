@@ -42,6 +42,8 @@ The scope question is: **What's the minimum I need to build to answer my highest
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Selected concept** — name, one-liner, core mechanism
 2. **Top 3 risks from critique** — the assumptions most likely to fail (from `concept-critique.md`)
 3. **Storyboard** — the scenario and critical moments (from `storyboarding.md`)

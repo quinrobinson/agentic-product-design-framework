@@ -1,0 +1,319 @@
+{
+  "tools": [
+    {
+      "name": "get_project_context",
+      "description": "Where the current project stands: name, current phase, each phase's status, links (Figma files, repo, docs, design system, deliverables), the latest handoff, recent decisions and context, and the suggested next step. Call before phase work.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "recent": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "description": "How many recent decisions/context items (default 8)."
+          }
+        }
+      }
+    },
+    {
+      "name": "get_memories",
+      "description": "Read the project's memories, newest first, optionally filtered by type and phase.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "memory_type": {
+            "type": "string",
+            "enum": [
+              "decision",
+              "context",
+              "handoff",
+              "brief",
+              "pattern",
+              "preference",
+              "session",
+              "agent_run"
+            ]
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          }
+        }
+      }
+    },
+    {
+      "name": "write_memory",
+      "description": "Save something to the project as it happens: a decision, deliverable summary (context), phase handoff, engagement brief, friction pattern, preference, or session summary. A handoff needs the phase it closes and also updates the readable handoff file.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "content": {
+            "type": "string",
+            "description": "The memory as markdown."
+          },
+          "memory_type": {
+            "type": "string",
+            "enum": [
+              "decision",
+              "context",
+              "handoff",
+              "brief",
+              "pattern",
+              "preference",
+              "session"
+            ],
+            "description": "Default: context."
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver. Defaults to the current phase; required for handoff."
+          },
+          "summary": {
+            "type": "string",
+            "description": "One line (default: the content's first line)."
+          },
+          "agent": {
+            "type": "string",
+            "description": "Which agent is writing, e.g. researcher."
+          }
+        }
+      }
+    },
+    {
+      "name": "recommend_starting_point",
+      "description": "What to do next in the project and why, with the latest handoff and open decisions for context.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          }
+        }
+      }
+    },
+    {
+      "name": "create_project",
+      "description": "Start a Pathlon project. With path, the project lives in that folder (in .pathlon/); without path, in ~/.pathlon/projects/<name>/ for work that has no folder. share_in_git=false keeps the project's state out of git (client work).",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "description": "Folder the project belongs to (usually the current working directory)."
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "Starting phase (default 01). 01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver"
+          },
+          "share_in_git": {
+            "type": "boolean",
+            "description": "Default true."
+          }
+        }
+      }
+    },
+    {
+      "name": "list_projects",
+      "description": "All Pathlon projects on this machine, newest first, with where each lives.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "link_artifact",
+      "description": "Record something the project uses or produced: a Figma file, repo, doc, the design system's source, or a deliverable (artifact). Linking the same kind and URL again updates it.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "kind",
+          "url"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "figma_file",
+              "repo",
+              "doc",
+              "design_system",
+              "artifact",
+              "other"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "URL or path."
+          },
+          "label": {
+            "type": "string"
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver"
+          },
+          "produced_by": {
+            "type": "string",
+            "description": "Agent or 'designer' (deliverables)."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "framework",
+              "custom"
+            ],
+            "description": "Deliverables: a framework deliverable or one the team defined."
+          }
+        }
+      }
+    },
+    {
+      "name": "set_phase",
+      "description": "Start, complete, or reset a phase. Starting a phase makes it the current phase. Use when a phase closes (after its handoff) or a new one begins.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "phase"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "complete"
+            ],
+            "description": "Default in_progress."
+          }
+        }
+      }
+    },
+    {
+      "name": "detect_patterns",
+      "description": "Warning signs in the project: a phase stalled with no recent activity, phases skipped, or a completed phase with no handoff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "stall_days": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Default 7."
+          }
+        }
+      }
+    },
+    {
+      "name": "log_figma_activity",
+      "description": "After Figma MCP writes, record what was created so the project keeps track of Figma work. Links the Figma file and saves a context memory.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "action": {
+            "type": "string",
+            "description": "What was created or changed, in a sentence."
+          },
+          "file_url": {
+            "type": "string",
+            "description": "The Figma file URL (or key)."
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^0[1-6]$",
+            "description": "01 discover \u00b7 02 define \u00b7 03 ideate \u00b7 04 prototype \u00b7 05 validate \u00b7 06 build & deliver"
+          },
+          "artifact_type": {
+            "type": "string",
+            "description": "e.g. research board, wireframes, component set."
+          }
+        }
+      }
+    }
+  ]
+}

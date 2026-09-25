@@ -47,6 +47,8 @@ The key is structured input. Raw stream-of-consciousness notes produce mediocre 
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Session notes** — one set per participant, in any format (raw observations, timestamps, quotes)
 2. **Task structure** — what tasks participants attempted and what they were trying to accomplish
 3. **Prototype questions** — the 3 questions from `prototype-scoping.md` this test was designed to answer

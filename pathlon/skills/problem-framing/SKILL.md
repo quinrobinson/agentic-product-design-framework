@@ -32,7 +32,9 @@ Turn research findings into a sharp, pressure-tested problem definition — and 
 
 ## What Claude Needs to Start
 
-Before framing, Claude needs three inputs. If any are missing, ask:
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
+Before framing, Claude needs three inputs. The inputs:
 
 1. **What did Discover reveal?** — paste the Research Synthesis handoff block, or summarize the top 3 themes and critical pain points
 2. **Who is the primary user?** — persona name, role, context, goal

@@ -57,6 +57,8 @@ Run heuristic review first. Fix the obvious issues. Then test with users to catc
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Prototype description** — a screen-by-screen walkthrough of the prototype, OR screenshots with descriptions
 2. **Primary persona** — who the prototype is designed for
 3. **Key flow** — which user flow to evaluate

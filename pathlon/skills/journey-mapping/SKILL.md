@@ -48,6 +48,8 @@ Use both when: the user experience is poor AND the root cause is organizational.
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 Before generating a journey map, Claude needs four inputs:
 
 1. **Persona** — who is this map about? (name, role, context, goal)

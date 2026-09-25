@@ -44,6 +44,8 @@ A test script that asks "how easy was it to use the navigation?" measures opinio
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Prototype questions** — what the prototype must answer (from `prototype-scoping.md`)
 2. **Persona** — who is being tested, and what role they should play in the scenario
 3. **Flow being tested** — which user flow and key screens

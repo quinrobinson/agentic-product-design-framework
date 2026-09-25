@@ -45,6 +45,8 @@ Write the notes developers need to build correctly — before they ask, before t
 
 ## What Claude Needs to Start
 
+**Infer before asking.** Work these out from what the designer has already given you and from the project's state. If something is missing but a reasonable assumption lets you proceed, state the assumption and do the work. Ask — one question — only when the task can't be done without the answer.
+
 1. **Screen description** — what the screen contains and what the user can do on it
 2. **Interactions** — what happens on click, hover, tap, swipe
 3. **Conditional states** — what changes based on user state, data, or permissions
