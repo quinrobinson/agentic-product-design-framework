@@ -1,6 +1,6 @@
 {
   "name": "pathlon",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Pathlon: an agentic product design framework. Six phases (Discover, Define, Ideate, Prototype, Validate, Deliver) as skills, agents, and commands, with project state kept locally in each project's .pathlon/ folder.",
   "author": {
     "name": "Quin Robinson"

@@ -1,0 +1,200 @@
+#!/usr/bin/env node
+// Pathlon hooks: automatic project context in, session records out.
+//
+//   node context.mjs session-start   SessionStart (startup, resume, clear, compact) → inject where the project stands
+//   node context.mjs prompt          UserPromptSubmit → one-line phase hint
+//   node context.mjs checkpoint      PreCompact → record the session so far
+//   node context.mjs session-end     SessionEnd → record the rest of the session
+//
+// Outside a Pathlon project every mode prints nothing. A hook must never break a session, so any
+// error is reported on stderr and the script still exits 0.
+
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+import * as store from "../server/store.mjs";
+
+const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Which specialist fits each phase (the router in R4 refines this).
+const PHASE_AGENTS = {
+  "01": "researcher",
+  "02": "strategist",
+  "03": "designer",
+  "04": "designer (systems-designer for components)",
+  "05": "researcher",
+  "06": "design-engineer (systems-designer for components)",
+};
+
+function readInput() {
+  try {
+    const raw = readFileSync(0, "utf8");
+    return raw.trim() ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function emit(event, text) {
+  process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: event, additionalContext: text } }) + "\n");
+}
+
+function day(iso) {
+  return iso ? new Date(iso).toISOString().slice(0, 10) : "?";
+}
+
+function phaseLabel(project, phase = project.current_phase) {
+  const name = store.PHASES[phase].replace("-", " & ");
+  return `${phase} ${name[0].toUpperCase()}${name.slice(1)}`;
+}
+
+/** Skills whose `phase:` frontmatter starts with the given phase number. */
+function skillsForPhase(phase) {
+  const dir = join(PLUGIN_ROOT, "skills");
+  if (!existsSync(dir)) return [];
+  const out = [];
+  for (const name of readdirSync(dir)) {
+    const file = join(dir, name, "SKILL.md");
+    if (!existsSync(file)) continue;
+    const m = readFileSync(file, "utf8").slice(0, 600).match(/^phase:\s*"?(\d\d)/m);
+    if (m?.[1] === phase) out.push(name);
+  }
+  return out.sort();
+}
+
+// ── session-start ────────────────────────────────────────────────────────────
+
+/** Bullet lines under an "Open Questions" heading in a handoff, if it has one. */
+function openQuestions(markdown) {
+  if (!markdown) return [];
+  const m = markdown.match(/^#{2,4}\s*Open Questions\s*\n([\s\S]*?)(?=^#{1,4}\s|^---\s*$|$(?![\s\S]))/im);
+  if (!m) return [];
+  return m[1].split("\n").map((l) => l.replace(/^\s*(?:[-*]|\d+\.)\s+/, "").trim()).filter((l) => l && !l.startsWith("[")).slice(0, 5);
+}
+
+function sessionStart(input, root) {
+  const ctx = store.getContext(root, { recent: 3 });
+  const { project } = ctx;
+  const status = project.phases[project.current_phase].status.replace("_", " ");
+  const lines = [
+    `Pathlon project: ${project.name} (state in ${join(root, ".pathlon")}).`,
+    `Phase ${phaseLabel(project)} — ${status}. Next: ${ctx.next.reason}`,
+  ];
+  if (ctx.latest_handoff) lines.push(`Latest handoff (${day(ctx.latest_handoff.ts)}): ${ctx.latest_handoff.summary}`);
+  const questions = openQuestions(ctx.latest_handoff?.content);
+  if (questions.length) lines.push("Open questions (from that handoff):", ...questions.map((q) => `- ${q}`));
+  if (ctx.recent_context.length) lines.push("Recent work:", ...ctx.recent_context.slice(0, 2).map((m) => `- ${m.summary} (${m.phase}, ${day(m.ts)})`));
+  if (ctx.recent_decisions.length) {
+    lines.push("Recent decisions:", ...ctx.recent_decisions.map((m) => `- ${m.summary} (${m.phase}, ${day(m.ts)})`));
+  }
+  const links = project.links.filter((l) => l.kind !== "artifact").slice(0, 5);
+  if (links.length) lines.push(`Links: ${links.map((l) => `${l.kind.replace("_", " ")} ${l.label ? `"${l.label}" ` : ""}${l.url}`).join("; ")}`);
+  if (input.source === "compact") lines.push("(Context was just compacted; this is the project state from .pathlon/.)");
+  lines.push(
+    "Save as you go with the Pathlon tools: decisions and deliverable summaries (write_memory), deliverables and files (link_artifact), phase changes and handoffs (set_phase, write_memory type handoff). Call get_project_context for full detail.",
+  );
+  emit("SessionStart", lines.join("\n"));
+}
+
+// ── prompt ───────────────────────────────────────────────────────────────────
+
+function prompt(input, root) {
+  if (typeof input.prompt === "string" && input.prompt.trim().startsWith("/")) return; // slash commands carry their own instructions
+  const project = store.loadProject(root);
+  const phase = project.current_phase;
+  const skills = skillsForPhase(phase);
+  emit(
+    "UserPromptSubmit",
+    `Pathlon · ${project.name} · phase ${phaseLabel(project)} (${project.phases[phase].status.replace("_", " ")}). ` +
+      `Phase work fits the ${PHASE_AGENTS[phase]} agent${skills.length ? `; skills: ${skills.join(", ")}` : ""}. ` +
+      `If the request is ambiguous about what to do, ask one clarifying question.`,
+  );
+}
+
+// ── checkpoint / session-end ─────────────────────────────────────────────────
+
+/** Timestamp of the last session record for this session, so records don't repeat each other. */
+function lastRecorded(root, sessionId) {
+  const { memories } = store.getMemories(root, { type: "session", limit: 200 });
+  return memories.find((m) => m.content.includes(`Session ${sessionId}`))?.ts ?? null;
+}
+
+/** Mechanical facts from the transcript since `since`: files changed and Pathlon writes. No prompt text. */
+function summarize(transcriptPath, since, root) {
+  const files = new Set();
+  let outside = 0;
+  const pathlon = [];
+  let turns = 0;
+  let first = null;
+  let last = null;
+  if (!transcriptPath || !existsSync(transcriptPath)) return null;
+  for (const line of readFileSync(transcriptPath, "utf8").split("\n")) {
+    if (!line.trim()) continue;
+    let e;
+    try {
+      e = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    if (!e.timestamp || (since && e.timestamp <= since)) continue;
+    if (e.type === "user" && typeof e.message?.content === "string") turns++;
+    if (e.type !== "assistant" || !Array.isArray(e.message?.content)) continue;
+    first ??= e.timestamp;
+    last = e.timestamp;
+    for (const block of e.message.content) {
+      if (block.type !== "tool_use") continue;
+      const name = block.name || "";
+      const input = block.input || {};
+      if (["Edit", "Write", "MultiEdit", "NotebookEdit"].includes(name) && input.file_path) {
+        const rel = relative(root, input.file_path);
+        if (rel.startsWith("..") || rel.startsWith("/")) outside++; // count only: no home-folder paths in a committed log
+        else files.add(rel);
+      }
+      const tool = name.split("__").pop();
+      if (/pathlon/i.test(name) && ["write_memory", "link_artifact", "set_phase", "create_project", "log_figma_activity"].includes(tool)) {
+        const what = input.summary || input.label || input.url || (input.phase ? `phase ${input.phase} → ${input.status || "in_progress"}` : "") || input.memory_type || "";
+        pathlon.push(`${tool}${input.memory_type ? ` (${input.memory_type})` : ""}${what ? `: ${String(what).slice(0, 120)}` : ""}`);
+      }
+    }
+  }
+  if (!first) return null;
+  return { turns, files: [...files].sort(), outside, pathlon, first, last };
+}
+
+function record(input, root, kind) {
+  const sessionId = input.session_id;
+  if (!sessionId) return; // can't tell sessions apart without an id
+  const facts = summarize(input.transcript_path, lastRecorded(root, sessionId), root);
+  if (!facts || (!facts.files.length && !facts.outside && !facts.pathlon.length)) return; // nothing worth recording
+  const why = kind === "checkpoint" ? `before compaction (${input.trigger || "auto"})` : `session end${input.reason ? ` (${input.reason})` : ""}`;
+  const content = [
+    `## Session ${sessionId} — ${why}`,
+    `${day(facts.first)} ${facts.first.slice(11, 16)}–${facts.last.slice(11, 16)} UTC · ${facts.turns} message(s)`,
+    facts.pathlon.length ? `\n**Saved to Pathlon (${facts.pathlon.length}):**\n${facts.pathlon.map((p) => `- ${p}`).join("\n")}` : "",
+    facts.files.length ? `\n**Files changed (${facts.files.length}):**\n${facts.files.slice(0, 40).map((f) => `- ${f}`).join("\n")}${facts.files.length > 40 ? `\n- …and ${facts.files.length - 40} more` : ""}` : "",
+    facts.outside ? `\n${facts.outside} change(s) to files outside the project (not listed).` : "",
+  ].filter(Boolean).join("\n");
+  store.writeMemory(root, {
+    type: "session",
+    content,
+    summary: `Session ${day(facts.first)}: ${facts.pathlon.length} Pathlon update(s), ${facts.files.length} file(s) changed`,
+    source: "hook",
+  });
+}
+
+// ── main ─────────────────────────────────────────────────────────────────────
+
+const mode = process.argv[2];
+try {
+  const input = readInput();
+  const root = store.findProjectRoot(input.cwd || process.cwd());
+  if (root) {
+    if (mode === "session-start") sessionStart(input, root);
+    else if (mode === "prompt") prompt(input, root);
+    else if (mode === "checkpoint") record(input, root, "checkpoint");
+    else if (mode === "session-end") record(input, root, "session-end");
+  }
+} catch (err) {
+  process.stderr.write(`pathlon hook (${mode}): ${err.message}\n`);
+}
+process.exit(0);

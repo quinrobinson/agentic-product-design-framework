@@ -4103,7 +4103,7 @@ function WhatYouGet({ onOpenSkills, onOpenAgents }) {
     { count: String(SKILL_FILES.length), label: "Skills", desc: "Markdown skill files for every phase of design. Upload to Claude to extend any conversation with phase-specific workflows.", actionLabel: "Browse skills →", onClick: onOpenSkills },
     { count: String(TOOLS.length), label: "Tools", desc: "Interactive prompt builders. Add your context, get a structured Claude prompt ready to run.", actionLabel: null, onClick: null },
     { count: "6", label: "Agents", desc: "Role-based specialists for Claude Code. Each one has skills, tools, and a Definition of Done.", actionLabel: "Meet the team →", onClick: onOpenAgents },
-    { count: "1", label: "Hook", desc: "A deterministic trigger — at session start, points Claude at the project's state in Pathlon MCP.", actionLabel: null, onClick: null },
+    { count: "4", label: "Hooks", desc: "Deterministic triggers inside a Pathlon project — load project context at session start, hint the phase on each message, record sessions at compaction and exit.", actionLabel: null, onClick: null },
   ];
   return (
     <div style={{ marginBottom: 64 }}>

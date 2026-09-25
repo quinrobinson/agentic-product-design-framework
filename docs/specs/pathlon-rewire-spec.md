@@ -270,7 +270,7 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 - Tools: `get_project_context`, `get_memories`, `write_memory` and `recommend_starting_point` keep their current names. `create_project`, `list_projects` and `link_artifact` are added. `file_id` is no longer required.
 - Figma-specific tools (`get_figma_actions`, `log_figma_activity`, `detect_patterns`) are kept only where the local version is useful. The rest wait for sync.
 - Acceptance: in a fresh folder, create a project, write a memory, and read it back in a new session. Nothing touches the network. Also closes R1's round-trip: copy `pathlon/server/fixtures/sample-project`, then over stdio call `get_project_context` (no `file_id`), `write_memory`, `get_memories`, `link_artifact` and `list_projects`, and confirm the files match the store tests.
-- R2 also updates `CLAUDE.md` (architecture, rule 2, `.mcp.json`) and `hooks/session-start.sh` to the local model.
+- R2 also updates `CLAUDE.md` (architecture, rule 2, `.mcp.json`) and the session-start hook to the local model.
 - **Done Sept 25, 2026:** `pathlon/server/index.mjs`, a zero-dependency stdio MCP server wrapping the R1 store, registered in the plugin's `.mcp.json` in place of the remote Worker (plugin 0.2.0).
   - **Tools (10):** `get_project_context`, `get_memories`, `write_memory`, `recommend_starting_point`, `create_project`, `list_projects`, `link_artifact`, plus `set_phase` (needed by `/pathlon:transition`), and local versions of `detect_patterns` and `log_figma_activity`.
   - **Dropped:** `get_skill_doc`, `get_phase_prompts`, `get_figma_actions` and `refresh_methodology` served methodology from the remote server; the plugin's skills do that now.
@@ -282,6 +282,12 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 - **UserPromptSubmit:** inside a project, add a short routing hint (phase plus the matching agent or skill). No output otherwise.
 - **PreCompact and SessionEnd:** record a session summary to the log, so progress survives compaction and session end.
 - Acceptance: pick up a project in a new session with no prompt about where things stand, and get the correct phase and next step. An unrelated repo shows no Pathlon context.
+- **Done Sept 25, 2026:** `pathlon/hooks/context.mjs` (one script, four modes) wired in `hooks.json`; it replaces `session-start.sh`.
+  - **SessionStart**, including after compaction: injects the phase and status, next step, latest handoff and its open questions, recent decisions, recent work and links.
+  - **UserPromptSubmit:** a one-line hint with the phase, the matching agent, and that phase's skills (read from `phase:` frontmatter). Skipped for slash commands.
+  - **PreCompact and SessionEnd:** record a `session` memory with the files changed in the project (files outside it are only counted) and the Pathlon writes since the last record for that session. **Prompt text is never stored**, because `.pathlon/` is committed to git by default. Quiet sessions record nothing.
+  - **Everywhere:** every mode is silent outside a project, and a hook never fails a session.
+  - **Tests:** 6 pass. Summaries are mechanical (facts from the transcript); a model-written summary would need a prompt or agent hook, which waits for R4. Known limits for R4: edits made by subagents live in separate transcripts and aren't counted; resumed sessions with a new id may re-record earlier work.
 
 **R4 — Agents that act (replaces 5.6)**
 - **Router:** the main session routes using the injected state and an intent-to-agent map in an always-available `pathlon` skill. When intent is unclear it asks one question. `/pathlon` becomes the single optional entry point; the other commands stay only if R5's evals show they help.

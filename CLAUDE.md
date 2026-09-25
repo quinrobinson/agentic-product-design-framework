@@ -26,7 +26,7 @@ Rules:
 - `pathlon/` — the Claude Code plugin, and the canonical source for all methodology:
   - `skills/<name>/SKILL.md` — every skill. The `phase:` frontmatter sets its phase; phase skills start with an Outcomes & KPIs header. Cross-phase skills are listed in `web/sync-content.mjs`.
   - `agents/` — 6 agents (orchestrator + 5 specialists). `commands/` — 7 slash commands (`/pathlon:kickoff`, `/pathlon:route`, `/pathlon:transition`, …).
-  - `hooks/` — SessionStart hook pointing Claude at Pathlon MCP. `.mcp.json` — runs the local Pathlon MCP (`server/index.mjs`) over stdio.
+  - `hooks/` — `context.mjs` via `hooks.json`: SessionStart injects the project's state, UserPromptSubmit adds a phase hint, PreCompact and SessionEnd record the session. Silent outside a Pathlon project. Test with `node --test pathlon/hooks/context.test.mjs`. `.mcp.json` — runs the local Pathlon MCP (`server/index.mjs`) over stdio.
   - `server/` — the local Pathlon store (Revision 1): `store.mjs` reads and writes `.pathlon/` project files, format in `FORMAT.md`. Test with `node --test pathlon/server/store.test.mjs`. `index.mjs` is the MCP server (no dependencies); test with `node --test pathlon/server/server.test.mjs`. The remote Worker and Supabase (`../pathlon-mcp`) are frozen until optional sync (spec 11.2).
   - Validate with `claude plugin validate ./pathlon`; try it with `claude --plugin-dir ./pathlon`.
 - `.claude-plugin/marketplace.json` — makes this repo installable: `/plugin marketplace add quinrobinson/agentic-product-design-framework`, then `/plugin install pathlon@pathlon`.
@@ -57,7 +57,7 @@ Open **http://localhost:3456/agentic-product-design-framework/** (port set in `.
 
 Removed in spec 5.7; still in git history before that commit.
 - **The local APDF MCP server** (`mcp/`). Its tools were prompt templates duplicating skills and commands.
-- **Local project state** (`.apdf/` context, artifacts, registry, phase manifest), the `.claude/hooks/` that read it, `.claude/tools/artifact-registry.ts`, and `.claude/settings.json`. Project state lives in Pathlon MCP; the plugin's `session-start.sh` points Claude at it.
+- **Local project state** (`.apdf/` context, artifacts, registry, phase manifest), the `.claude/hooks/` that read it, `.claude/tools/artifact-registry.ts`, and `.claude/settings.json`. Project state lives in Pathlon MCP; the plugin's hooks (`hooks/context.mjs`) load it automatically.
 - **`docs/archive/commands/`** holds the 17 commands pruned in 5.5 (reference only, not loaded).
 
 Do not edit generated output: `web/dist/`, `web/public/skills/`, `web/public/agents/`, `build/`.

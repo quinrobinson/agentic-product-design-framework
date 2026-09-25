@@ -929,17 +929,25 @@ export default function AgentsPage({ currentPage = "agents", onNavigate, initial
         {/* ── Hooks (collapsible) ── */}
         <Disclosure
           title="Hooks"
-          count="1 trigger"
-          summary="Deterministic triggers that fire every time — no prompting required. The Pathlon plugin ships one; project state lives in the project's .pathlon/ files, managed by the Pathlon tools."
+          count="4 triggers"
+          summary="Deterministic triggers that fire every time — no prompting required. They only act inside a Pathlon project (a folder with .pathlon/) and stay silent everywhere else."
         >
-          <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>Session start</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, letterSpacing: "0.04em" }}>SessionStart</span>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.dim, letterSpacing: "0.04em" }}>pathlon plugin — installed with it</span>
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, letterSpacing: "0.04em" }}>pathlon/hooks/session-start.sh</div>
-            <p style={{ fontSize: 13, color: T.dim, lineHeight: 1.65, margin: 0 }}>At the start of every session, points Claude at the project's state in Pathlon MCP: read the current phase, decisions, and prior handoffs with get_project_context and get_memories before doing phase work. If there is no project yet, it suggests /pathlon:kickoff.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 2 }}>
+            {[
+              { name: "Project context", event: "SessionStart", desc: "When a session opens (and again after context is compacted), loads where the project stands from .pathlon/: phase and status, next step, latest handoff, recent decisions, and linked files — so you never have to re-explain." },
+              { name: "Phase hint", event: "UserPromptSubmit", desc: "Adds one line to each message: the current phase, the agent that fits it, and that phase's skills — so the right specialist and skill get picked. Skipped for slash commands." },
+              { name: "Checkpoint", event: "PreCompact", desc: "Before a long conversation is compacted, records the session so far: files changed and what was saved to Pathlon. Prompt text is never stored." },
+              { name: "Session record", event: "SessionEnd", desc: "When a session ends, records what happened since the last checkpoint. Quiet sessions record nothing." },
+            ].map(hook => (
+              <div key={hook.name} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>{hook.name}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 8px", borderRadius: 3, background: T.card, border: `1px solid ${T.border}`, color: T.muted, letterSpacing: "0.04em" }}>{hook.event}</span>
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: T.dim, letterSpacing: "0.04em" }}>pathlon/hooks/context.mjs</div>
+                <p style={{ fontSize: 13, color: T.dim, lineHeight: 1.65, margin: 0 }}>{hook.desc}</p>
+              </div>
+            ))}
           </div>
         </Disclosure>
 
