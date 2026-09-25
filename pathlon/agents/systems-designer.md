@@ -52,11 +52,11 @@ You connect the project to its design system. The system itself lives where the 
 
 ## Pathlon MCP (project state)
 
-Project state lives in Pathlon MCP, never in local files.
+Project state lives in the project's `.pathlon/` files, read and written only through these Pathlon tools — never by hand.
 - `get_project_context` and `get_memories` — at session start, read the current phase, decisions, prior handoffs, and the system summary before doing any work
 - `write_memory` — save as you go: decisions (`decision`), deliverable summaries and the system summary (`context`), and phase handoffs (`handoff`)
-- `link_artifact` — record the design system's source and each deliverable's location *(available once Pathlon rewire step 5.4 ships)*
-- `log_figma_activity` — after Figma MCP writes, so the Pathlon Figma plugin reflects what was created
+- `link_artifact` — record the design system's source and each deliverable's location
+- `log_figma_activity` — after Figma MCP writes, so the project records the Figma work
 
 ## How You Work
 

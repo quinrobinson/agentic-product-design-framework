@@ -11,13 +11,13 @@ Pathlon is an agentic product design framework with six phases: Discover → Def
 | Layer | What | Source of truth |
 |---|---|---|
 | **Brain** | Skills, commands, agents, hooks | This repo, packaged as the Pathlon for Claude Code plugin (`pathlon/`) |
-| **Memory spine** | Project state, memories, phase progress, artifacts | Pathlon MCP (`mcp.pathlon.io`, Supabase), source in `../pathlon-mcp` |
-| **Hands** | Figma MCP, Notion, Drive, Supabase, etc. | External |
+| **Memory spine** | Project state, memories, phase progress, artifacts | Local Pathlon MCP bundled in the plugin (`pathlon/server/`), reading and writing `.pathlon/` files in each project |
+| **Hands** | Figma MCP, Notion, Drive, etc. | External |
 
 Rules:
 1. **This repo is the only source of methodology.** Installed Claude skills and Pathlon's served skill content are generated from it. Edit skills here, never in `~/.claude/skills/` or claude.ai Settings.
-2. **Pathlon MCP is the only store for project state.** Read and write it with the Pathlon tools (`get_project_context`, `get_memories`, `write_memory`, `get_skill_doc`, ...). Handoff blocks are not the primary mechanism.
-3. **A project exists independently of any Figma file.** A Figma file is a linked artifact. (Until spec 5.4 lands, Pathlon tools are still keyed on Figma `file_id`.)
+2. **`.pathlon/` is the only store for project state**, read and written through the Pathlon MCP tools (`get_project_context`, `get_memories`, `write_memory`, `link_artifact`, `set_phase`, …) — never by hand, never duplicated elsewhere. Handoffs are saved there, not pasted. No network or account is involved.
+3. **A project is a folder** (the nearest `.pathlon/` above the working directory), or `~/.pathlon/projects/<name>/` for work without one. A Figma file is a linked artifact, not the project.
 
 ---
 
@@ -26,8 +26,8 @@ Rules:
 - `pathlon/` — the Claude Code plugin, and the canonical source for all methodology:
   - `skills/<name>/SKILL.md` — every skill. The `phase:` frontmatter sets its phase; phase skills start with an Outcomes & KPIs header. Cross-phase skills are listed in `web/sync-content.mjs`.
   - `agents/` — 6 agents (orchestrator + 5 specialists). `commands/` — 7 slash commands (`/pathlon:kickoff`, `/pathlon:route`, `/pathlon:transition`, …).
-  - `hooks/` — SessionStart hook pointing Claude at Pathlon MCP. `.mcp.json` — Pathlon MCP (`https://mcp.pathlon.io/mcp`).
-  - `server/` — the local Pathlon store (Revision 1): `store.mjs` reads and writes `.pathlon/` project files, format in `FORMAT.md`. Test with `node --test pathlon/server/store.test.mjs`. R2 wraps it as the local MCP server and replaces the remote one in `.mcp.json`.
+  - `hooks/` — SessionStart hook pointing Claude at Pathlon MCP. `.mcp.json` — runs the local Pathlon MCP (`server/index.mjs`) over stdio.
+  - `server/` — the local Pathlon store (Revision 1): `store.mjs` reads and writes `.pathlon/` project files, format in `FORMAT.md`. Test with `node --test pathlon/server/store.test.mjs`. `index.mjs` is the MCP server (no dependencies); test with `node --test pathlon/server/server.test.mjs`. The remote Worker and Supabase (`../pathlon-mcp`) are frozen until optional sync (spec 11.2).
   - Validate with `claude plugin validate ./pathlon`; try it with `claude --plugin-dir ./pathlon`.
 - `.claude-plugin/marketplace.json` — makes this repo installable: `/plugin marketplace add quinrobinson/agentic-product-design-framework`, then `/plugin install pathlon@pathlon`.
 - `.claude/agents/spec-reviewer.md` — reviews each rewire step against the spec. Not part of the plugin.

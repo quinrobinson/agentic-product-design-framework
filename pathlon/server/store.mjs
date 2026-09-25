@@ -6,7 +6,7 @@
 // `$PATHLON_HOME/projects.json` so it can be found from anywhere.
 
 import { randomUUID } from "node:crypto";
-import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, parse, resolve } from "node:path";
 
@@ -34,9 +34,19 @@ export function pathlonHome() {
   return resolve(process.env.PATHLON_HOME || join(homedir(), ".pathlon"));
 }
 
+/** The folder's real path (symlinks resolved), so one project never has two registry entries. */
+function canonical(dir) {
+  const abs = resolve(dir);
+  try {
+    return realpathSync.native(abs);
+  } catch {
+    return abs; // doesn't exist yet
+  }
+}
+
 /** Walk up from `startDir` to the nearest folder containing `.pathlon/project.json`. */
 export function findProjectRoot(startDir = process.cwd()) {
-  let dir = resolve(startDir);
+  let dir = canonical(startDir);
   const { root } = parse(dir);
   for (;;) {
     if (existsSync(join(dir, DIR, "project.json"))) return dir;
@@ -168,8 +178,10 @@ export function listProjects() {
 export function createProject({ name, dir, phase = "01", shareInGit = true } = {}) {
   assertText(name, "name", 200);
   assertPhase(phase);
-  const root = resolve(dir || join(pathlonHome(), "projects", slugify(name)));
-  if (existsSync(join(storeDir(root), "project.json"))) throw new PathlonError(`a Pathlon project already exists at ${root}`);
+  const target = resolve(dir || join(pathlonHome(), "projects", slugify(name)));
+  if (existsSync(join(storeDir(target), "project.json"))) throw new PathlonError(`a Pathlon project already exists at ${target}`);
+  mkdirSync(target, { recursive: true });
+  const root = canonical(target);
 
   const ts = now();
   const phases = Object.fromEntries(Object.keys(PHASES).map((p) => [p, { status: "not_started", started_at: null, completed_at: null }]));

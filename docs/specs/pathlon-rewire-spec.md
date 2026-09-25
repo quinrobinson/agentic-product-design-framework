@@ -37,7 +37,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 - **Pathlon is an agentic product design framework.** Six phases: Discover, Define, Ideate, Prototype, Validate, Deliver.
 - **Naming family:** Pathlon (framework), Pathlon MCP (memory spine), Pathlon for Claude Code (plugin), Pathlon for Figma (companion plugin).
 - **ASPF stays a separate framework.** It connects to Pathlon only through a generic engagement brief input (see 5.4). Pathlon does not own strategy. *(Superseded Sept 25, 2026: ASPF folds into Pathlon as the AI track. See section 12.)*
-- **Two stores only.** GitHub holds methodology. Pathlon MCP (Supabase) holds live project state. No Notion copy of framework context. *(Proposed change: state moves to local `.pathlon/` files. See section 11.)*
+- **Two stores only.** GitHub holds methodology. Pathlon MCP (Supabase) holds live project state. No Notion copy of framework context. *(Superseded Sept 25, 2026: state lives in local `.pathlon/` files. See section 11.)*
 
 ## 3. Current-state inventory (verified Sept 23, 2026)
 
@@ -63,8 +63,9 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
         |                     |                     |
    BRAIN                 MEMORY SPINE             HANDS
    Pathlon plugin        Pathlon MCP             Figma MCP, Notion,
-   (skills, commands,    (Supabase)              Drive, Supabase,
-   agents, hooks)        project state,          etc.
+   (skills, commands,    (local .pathlon/        Drive, Supabase,
+   agents, hooks)        files, section 11)      etc.
+                         project state,
    source: GitHub        memories, phase
                          progress
                               |
@@ -77,7 +78,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 
 **Rules**
 1. GitHub is the single source of methodology. Installed skills and Pathlon's served content are generated from it, never edited directly.
-2. Pathlon MCP is the single source of project state. No `context.json`, no pasted handoff blocks as the primary mechanism. *(Proposed: backed by local `.pathlon/` files instead of Supabase. See section 11.)*
+2. Pathlon MCP is the single source of project state. No `context.json`, no pasted handoff blocks as the primary mechanism. *(Superseded Sept 25, 2026: backed by local `.pathlon/` files, not Supabase. See section 11.)*
 3. A project exists independently of any Figma file. A Figma file is a linked artifact.
 4. The Figma plugin reads and displays. It does not orchestrate.
 
@@ -99,7 +100,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 
 ### Phase 2: Rewire (2 to 3 Code sessions)
 
-**5.4 Re-key Pathlon MCP to projects** *(needs Quin's go on schema change; proposed to be replaced by 11.4 R2)*
+**5.4 Re-key Pathlon MCP to projects** *(superseded by 11.4 R2, done Sept 25, 2026)*
 - Add a `projects` table: `id`, `name`, `created_at`, `current_phase`, optional `figma_file_id`, optional `repo`.
 - Add `project_id` to `project_memories`, `intervention_log`, `project_artifacts`. Backfill existing rows from `file_id`.
 - All tools accept `project_id` or `file_id` (resolve `file_id` to project). Keep `file_id` working so the Figma plugin does not break.
@@ -125,7 +126,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 - When the plugin is installed, remove the old copies in `~/.claude/skills/` so they don't conflict.
 - Acceptance: in a fresh repo, installing the plugin gives Code the skills, commands, and Pathlon MCP with no manual setup.
 
-**5.6 `/pathlon:start` intake command** *(proposed to be replaced by 11.4 R4)*
+**5.6 `/pathlon:start` intake command** *(superseded by 11.4 R4)*
 - Implements the under-90-second intake already designed: read the brief and any linked Figma file in parallel, ask 3 or fewer diagnostic questions, create or resume the project in Pathlon, route to a phase entry point.
 - Acceptance: running `/pathlon:start` in a new repo produces a project in Pathlon and a recommended starting phase in one exchange.
 
@@ -270,6 +271,11 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 - Figma-specific tools (`get_figma_actions`, `log_figma_activity`, `detect_patterns`) are kept only where the local version is useful. The rest wait for sync.
 - Acceptance: in a fresh folder, create a project, write a memory, and read it back in a new session. Nothing touches the network. Also closes R1's round-trip: copy `pathlon/server/fixtures/sample-project`, then over stdio call `get_project_context` (no `file_id`), `write_memory`, `get_memories`, `link_artifact` and `list_projects`, and confirm the files match the store tests.
 - R2 also updates `CLAUDE.md` (architecture, rule 2, `.mcp.json`) and `hooks/session-start.sh` to the local model.
+- **Done Sept 25, 2026:** `pathlon/server/index.mjs`, a zero-dependency stdio MCP server wrapping the R1 store, registered in the plugin's `.mcp.json` in place of the remote Worker (plugin 0.2.0).
+  - **Tools (10):** `get_project_context`, `get_memories`, `write_memory`, `recommend_starting_point`, `create_project`, `list_projects`, `link_artifact`, plus `set_phase` (needed by `/pathlon:transition`), and local versions of `detect_patterns` and `log_figma_activity`.
+  - **Dropped:** `get_skill_doc`, `get_phase_prompts`, `get_figma_actions` and `refresh_methodology` served methodology from the remote server; the plugin's skills do that now.
+  - **Tests:** 19 passing, including the R1 fixture round-trip over stdio and create → write → read back from a new server process.
+  - **Verified in Claude Code:** the server connects in a fresh folder and lists all 10 tools. No network modules are imported.
 
 **R3 — Automatic context (hooks)**
 - **SessionStart:** inside a Pathlon project, inject the project, phase, open questions, recent decisions and suggested next step. Outside one, stay silent. This fixes the plugin firing in unrelated repos.

@@ -52,7 +52,7 @@ const AGENTS = [
       "Open questions and unvalidated assumptions are explicitly named",
       "Phase Handoff Block is saved to Pathlon and ready for the Strategist or Designer",
     ],
-    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact"],
     activationPrompt: "You are the Researcher agent from the Agentic Product Design Framework. Your role is a senior UX researcher. You synthesize interviews, plan research, run competitive analysis, and produce insight reports. Ask me what phase of research we're in and what decisions this research needs to inform.",
     mapCells: {
       chat:   { type: "primary",    skills: ["research-synthesis", "research-planning", "competitive-analysis", "usability-testing", "recruitment-screener"] },
@@ -83,7 +83,7 @@ const AGENTS = [
       "Known facts and assumed facts are explicitly separated throughout all artifacts",
       "Phase Handoff Block is saved to Pathlon and ready for the Designer",
     ],
-    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact"],
     activationPrompt: "You are the Strategist agent from the Agentic Product Design Framework. Your role is a senior design lead. You frame problems, map journeys, define personas, blueprint services, and build stakeholder decks. Ask me what we're trying to define and who the key users are.",
     mapCells: {
       chat:   { type: "primary",    skills: ["problem-framing", "journey-mapping", "assumption-mapping", "service-blueprint", "stakeholder-presentation", "persona-creation"] },
@@ -114,7 +114,7 @@ const AGENTS = [
       "What remains unresolved is explicitly named — not left implicit",
       "Phase Handoff Block is saved to Pathlon and ready for the Systems Designer or Design Engineer",
     ],
-    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact"],
     activationPrompt: "You are the Designer agent from the Agentic Product Design Framework. Your role is a senior product designer. You generate concepts, cluster ideas, map flows, write UX copy, and build concept proofs. Ask me what problem we're designing for and what's already been defined.",
     mapCells: {
       chat:   { type: "primary",    skills: ["concept-generation", "concept-critique", "idea-clustering", "storyboarding", "prototype-scoping", "user-flow-mapping", "ux-copy-writing"] },
@@ -146,7 +146,7 @@ const AGENTS = [
       "Decision rationale is documented alongside every architectural choice",
       "Phase Handoff Block is saved to Pathlon and ready for the Design Engineer",
     ],
-    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact"],
     activationPrompt: "You are the Systems Designer agent from the Agentic Product Design Framework. Your role is a senior design systems designer. You work from our existing design system in Figma or Claude Design: map screens to it, plan component architecture, specify states, and report gaps to its owner. Ask me where our design system lives.",
     mapCells: {
       chat:   { type: "occasional", note: "Mapping screens to the design system, component architecture decisions, specs, and gap analysis.", skills: ["design-system", "component-specs"] },
@@ -176,7 +176,7 @@ const AGENTS = [
       "No open QA items without an explicit accept/defer decision",
       "Phase Handoff Block is saved to Pathlon confirming the feature is ready for engineering",
     ],
-    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "write_memory", "link_artifact"],
     activationPrompt: "You are the Design Engineer agent from the Agentic Product Design Framework. Your role bridges design and engineering. You generate handoff docs, run design QA, write decision records, and annotate accessibility specs. Ask me what's being handed off and what the current state of implementation is.",
     mapCells: {
       chat:   { type: "occasional", note: "Accessibility audits and heuristic reviews before handoff. Annotation guidance for developers.", skills: ["accessibility-audit", "heuristic-review", "accessibility-annotation"] },
@@ -205,7 +205,7 @@ const AGENTS = [
       "The next agent has been identified and knows what it needs to start",
       "No undocumented assumptions remain buried in the work",
     ],
-    mcpTools: ["get_project_context", "get_memories", "recommend_starting_point", "detect_patterns", "write_memory", "link_artifact (after 5.4)"],
+    mcpTools: ["get_project_context", "get_memories", "recommend_starting_point", "detect_patterns", "set_phase", "write_memory", "link_artifact"],
     activationPrompt: "You are the Orchestrator agent from the Agentic Product Design Framework. Your role is a senior design program manager. You orient new projects, route work to the right specialist agent, manage phase handoff blocks, and track what's been decided vs. what's still open. Ask me what project we're starting and where we are in the process.",
     mapCells: {
       chat:   { type: "primary", note: "Kickoff orientation. Deciding which agent and surface to route to. Generating Phase Handoff Blocks for context transfer between sessions.", skills: ["which-claude", "skill-chaining", "phase-handoff"] },
@@ -930,7 +930,7 @@ export default function AgentsPage({ currentPage = "agents", onNavigate, initial
         <Disclosure
           title="Hooks"
           count="1 trigger"
-          summary="Deterministic triggers that fire every time — no prompting required. The Pathlon plugin ships one; project state lives in Pathlon MCP, not local files."
+          summary="Deterministic triggers that fire every time — no prompting required. The Pathlon plugin ships one; project state lives in the project's .pathlon/ files, managed by the Pathlon tools."
         >
           <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'Inter', sans-serif" }}>Session start</div>

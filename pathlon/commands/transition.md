@@ -72,7 +72,7 @@ Save it to Pathlon: `write_memory` with `memory_type: "handoff"` and the current
 
 Accept any clear affirmative ("yes", "y", "go", "proceed", "do it").
 
-1. Update the project's current phase in Pathlon (once Pathlon rewire step 5.4 ships; until then, record the phase change in the handoff memory). Carry forward persona, problem statement,
+1. Mark the completed phase `complete` and start the next one with `set_phase`. Carry forward persona, problem statement,
    constraints, and open questions from the handoff; they stay in Pathlon memories.
 2. Spawn the next phase's specialists in parallel using the Task tool, passing the relevant
    handoff content to each.

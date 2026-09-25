@@ -29,7 +29,7 @@ Pathlon doesn't build design systems. The system lives where the team designs: a
 ## Step 1 — Locate the system
 
 Ask where the system lives, and record the answer in Pathlon so no one asks again
-(`link_artifact` once Pathlon rewire step 5.4 ships; until then `write_memory` with `memory_type: "decision"`).
+(`link_artifact` with `kind: "design_system"`).
 
 | Source | What to get |
 |---|---|

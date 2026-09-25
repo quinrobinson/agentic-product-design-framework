@@ -42,7 +42,7 @@ Claude Chat with a skill file gets you most of the framework. Claude Code with t
 /plugin install pathlon@pathlon
 ```
 
-That's the whole setup. The plugin connects to Pathlon MCP (`mcp.pathlon.io`) automatically; project state — phase, decisions, handoffs — lives there, not in local files. Start a project with `/pathlon:kickoff`.
+That's the whole setup (it needs Node.js 18 or newer, which Claude Code already uses). The plugin runs Pathlon MCP locally; project state — phase, decisions, handoffs — is saved as plain files in a `.pathlon/` folder in your project. You own it, and nothing leaves your machine. Start a project with `/pathlon:kickoff`.
 
 The plugin source is in [`/pathlon`](./pathlon). To try local changes without installing: `claude --plugin-dir ./pathlon`.
 

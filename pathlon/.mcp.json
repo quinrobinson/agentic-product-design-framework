@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "pathlon": {
-      "type": "http",
-      "url": "https://mcp.pathlon.io/mcp"
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/index.mjs"]
     }
   }
 }

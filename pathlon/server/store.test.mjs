@@ -1,14 +1,14 @@
 // Run: node --test pathlon/server/store.test.mjs
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, beforeEach, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const FIXTURE = fileURLToPath(new URL("./fixtures/sample-project", import.meta.url));
-const scratch = mkdtempSync(join(tmpdir(), "pathlon-store-"));
+const scratch = realpathSync(mkdtempSync(join(tmpdir(), "pathlon-store-")));
 process.env.PATHLON_HOME = join(scratch, "home");
 
 const store = await import("./store.mjs");
