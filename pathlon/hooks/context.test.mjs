@@ -63,6 +63,8 @@ test("session start injects where the project stands, from a subfolder", () => {
   assert.match(text, /- Research synthesis complete/);
   assert.match(text, /figma file "Main"/);
   assert.doesNotMatch(text, /compacted/);
+  assert.match(text, /Save by default/);
+  assert.match(text, /Ask one yes\/no question first only before changing project state/);
 
   const again = run("session-start", { cwd: dir, source: "compact" }).json.hookSpecificOutput.additionalContext;
   assert.match(again, /Context was just compacted/);
@@ -127,4 +129,21 @@ test("a broken project never breaks the session", () => {
   const res = run("session-start", { cwd: dir, source: "startup" });
   assert.equal(res.out, "");
   assert.match(res.err, /pathlon hook/);
+});
+
+test("agent-stop records Pathlon agent runs, retries, and Done reports; ignores other agents", () => {
+  const dir = join(scratch, "proj-f");
+  const { root } = store.createProject({ name: "Agents", dir, phase: "01" });
+  const msg = "Synthesis below.\n\n**Done report**\nTask: Synthesize five interviews\nScope: single deliverable\nDefinition of Done: 1 met, 2 met\nSaved to Pathlon: write_memory (context)\nOpen: none";
+  run("agent-stop", { cwd: dir, agent_type: "pathlon:researcher", agent_id: "a1", session_id: "s1", stop_hook_active: false, last_assistant_message: msg });
+  run("agent-stop", { cwd: dir, agent_type: "pathlon:researcher", agent_id: "a1", session_id: "s1", stop_hook_active: true, last_assistant_message: "no report" });
+  run("agent-stop", { cwd: dir, agent_type: "Explore", agent_id: "x", stop_hook_active: false, last_assistant_message: msg });
+  const { memories } = store.getMemories(root, { type: "agent_run" });
+  assert.equal(memories.length, 2);
+  assert.match(memories[1].summary, /^researcher finished: Synthesize five interviews$/);
+  assert.match(memories[1].content, /Scope: single deliverable/);
+  assert.doesNotMatch(memories[1].content, /Synthesis below/);
+  assert.match(memories[0].summary, /after being sent back/);
+  assert.match(memories[0].content, /No Done report/);
+  assert.equal(memories[0].agent, "researcher");
 });

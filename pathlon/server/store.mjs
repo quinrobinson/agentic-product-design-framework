@@ -20,7 +20,9 @@ export const PHASES = {
   "06": "build-deliver",
 };
 export const PHASE_STATUSES = ["not_started", "in_progress", "complete"];
-export const MEMORY_TYPES = ["decision", "context", "handoff", "brief", "pattern", "preference", "session"];
+export const MEMORY_TYPES = ["decision", "context", "handoff", "brief", "pattern", "preference", "session", "agent_run"];
+/** Types Claude may write through the MCP tools. `agent_run` is written only by the SubagentStop hook, so its measure stays clean. */
+export const WRITABLE_MEMORY_TYPES = MEMORY_TYPES.filter((t) => t !== "agent_run");
 export const LINK_KINDS = ["figma_file", "repo", "doc", "design_system", "artifact", "other"];
 
 const DIR = ".pathlon";

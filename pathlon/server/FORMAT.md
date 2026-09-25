@@ -64,7 +64,7 @@ One memory per line, oldest first. Never rewritten; new memories are appended.
 
 | Field | Values |
 |---|---|
-| `type` | `decision` · `context` · `handoff` · `brief` · `pattern` · `preference` · `session` |
+| `type` | `decision` · `context` · `handoff` · `brief` · `pattern` · `preference` · `session` · `agent_run` |
 | `phase` | the phase it belongs to (defaults to the current phase; required for `handoff`) |
 | `agent` | which agent wrote it (`researcher`, `strategist`, …) or `null` |
 | `source` | `claude`, `designer`, or `hook` |
@@ -75,6 +75,7 @@ One memory per line, oldest first. Never rewritten; new memories are appended.
 - **`brief`** is an engagement brief (from ASPF-style strategy work or any upstream source).
 - **`pattern`** is a friction-log entry (dogfood, Phase 4 reviews).
 - **`session`** is an automatic end-of-session summary (hooks, Revision 1 R3).
+- **`agent_run`** is recorded automatically each time a Pathlon specialist finishes: the agent, whether it had been sent back by its Definition of Done check, and its Done report. A run checked once and accepted has one record; a run sent back has a second record marked as a retry.
 - A line that fails to parse is skipped and counted, never fatal.
 
 ## `~/.pathlon/projects.json`

@@ -121,6 +121,9 @@ test("errors come back as tool errors, not crashes", async () => {
   assert.ok(missing.isError);
   assert.match(missing.text, /No Pathlon project found/);
   const bad = await s.call("write_memory", { path: scratch, content: "" });
+  const hookOnly = await s.call("write_memory", { memory_type: "agent_run", content: "x" });
+  assert.ok(hookOnly.isError);
+  assert.match(hookOnly.text, /memory_type must be one of/);
   assert.ok(bad.isError);
   const unknown = await s.request("tools/call", { name: "get_figma_actions", arguments: {} });
   assert.equal(unknown.error.code, -32602);

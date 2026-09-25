@@ -74,11 +74,10 @@ Accept any clear affirmative ("yes", "y", "go", "proceed", "do it").
 
 1. Mark the completed phase `complete` and start the next one with `set_phase`. Carry forward persona, problem statement,
    constraints, and open questions from the handoff; they stay in Pathlon memories.
-2. Spawn the next phase's specialists in parallel using the Task tool, passing the relevant
-   handoff content to each.
-3. Collect results. Synthesize — do not concatenate. Save to Pathlon (`write_memory`,
-   `memory_type: "context"`, with the new phase).
-4. Print a summary of what was completed and the next recommended command.
+2. Hand the new phase to the `pathlon:orchestrator` agent with the Agent tool ("Run phase [NN] for [project]"), passing the handoff
+   content. It spawns the specialists, checks their Done reports, and saves the results to Pathlon. If it can't spawn
+   agents, run the Orchestrator's "Running a phase" steps from here instead.
+3. Relay its Done report in a few lines and the one recommended next step.
 
 ## Phase sequence
 

@@ -20,23 +20,12 @@ If Pathlon is unavailable, say so once and proceed only with what the designer g
 Compare the current phase's Definition of Done (see the Orchestrator agent) against what Pathlon has recorded.
 Surface gaps before spawning, in the Orchestrator's gap format.
 
-## 3. Spawn the phase agents
+## 3. Hand the phase to the Orchestrator
 
-Based on the current phase, spawn specialist subagents in parallel using the Task tool:
-- Discover: Researcher (synthesize research) + Researcher (competitive snapshot)
-- Define: Strategist (frame problem) + Strategist (map journey)
-- Ideate: Designer (generate concepts), then Designer (cluster ideas) [sequential]
-- Prototype: Designer (map user flow) + Designer (write UX copy)
-- Validate: Researcher (synthesize findings) + Researcher (insight report)
-- Deliver: Systems Designer (component architecture) + Design Engineer (handoff)
+Delegate to the `pathlon:orchestrator` agent with the Agent tool: "Run phase [NN] for [project]" plus what you learned in steps 1–2 (the gaps and whether the designer accepted them, the persona, relevant memories, inputs the designer pointed to). It plans the phase, spawns the specialists, checks their Done reports, saves the results, and writes the handoff when the phase is complete.
 
-For each subagent, pass the relevant project context from Pathlon, any inputs the designer
-pointed to, and a clear task with the expected output format.
+If the Orchestrator can't spawn agents (it reports that the Agent tool isn't available), run the phase from here instead: follow the Orchestrator's "Running a phase" steps yourself, spawning the specialists directly.
 
-## 4. Save and report
+## 4. Report back
 
-Collect all results. Synthesize — do not just concatenate.
-Save the synthesized output to Pathlon (`write_memory`, `memory_type: "context"`, with the phase),
-and record where any files or Figma frames live.
-
-Print a summary of what was completed and the recommended next command.
+Relay the Orchestrator's Done report in a few lines: what was produced, what was saved to Pathlon, what's open, and the one recommended next step. If it reports a phase change waiting for confirmation, ask the designer one yes/no and, on yes, call `set_phase`.

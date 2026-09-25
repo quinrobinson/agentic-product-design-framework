@@ -4,14 +4,22 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" session-start", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" session-start",
+            "timeout": 10
+          }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" prompt", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" prompt",
+            "timeout": 10
+          }
         ]
       }
     ],
@@ -19,7 +27,11 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" checkpoint", "timeout": 15 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" checkpoint",
+            "timeout": 15
+          }
         ]
       }
     ],
@@ -27,7 +39,103 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" session-end", "timeout": 15 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" session-end",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "^pathlon:design-engineer$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon design-engineer agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe design-engineer's Definition of Done:\n1. Handoff document exists with component inventory, token references, interaction specs, and edge cases\n2. Design QA has been run against implementation — not against opinion\n3. Every QA issue has a severity rating and resolution status\n4. Accessibility audit is complete with pass/fail per WCAG 2.1 AA criterion\n5. All design decisions with downstream implications have a Decision Record\n6. No open QA items without an explicit accept/defer decision\n7. Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`), confirming the feature is ready for engineering\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^pathlon:designer$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon designer agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe designer's Definition of Done:\n1. At least 4 meaningfully different concepts have been generated and documented\n2. Concepts have been evaluated against desirability, feasibility, and novelty criteria\n3. A recommended direction has been identified with written rationale\n4. At least one user flow is mapped for the primary use case\n5. UX copy exists for all primary screens or states in scope\n6. What remains unresolved is explicitly named — not left implicit\n7. Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`) and ready for the Systems Designer or Design Engineer\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^pathlon:orchestrator$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon orchestrator agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe orchestrator's Definition of Done:\n1. The phase's primary artifact exists and is recorded in Pathlon\n2. All open questions from the previous handoff are resolved or explicitly deferred with a reason\n3. The Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`) and reflects current state\n4. The next agent has been identified and knows what it needs to start\n5. No undocumented assumptions remain buried in the work\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^pathlon:researcher$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon researcher agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe researcher's Definition of Done:\n1. All raw inputs (transcripts, notes, session data) have been processed — nothing left unsynthesized\n2. Insight statements follow the standard format and are grounded in specific evidence\n3. Each insight is confidence-rated: strongly evidenced vs. directional\n4. A competitive snapshot exists if the phase requires it\n5. Open questions and unvalidated assumptions are explicitly named\n6. Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`) and ready for the Strategist or Designer\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^pathlon:strategist$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon strategist agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe strategist's Definition of Done:\n1. A validated problem statement exists in the standard format\n2. At least 3 HMW questions have been generated from the problem statement\n3. The primary persona is defined with needs, behaviors, and context\n4. Current-state journey is documented before any future-state work begins\n5. All assumptions are mapped and ranked by risk × knowability\n6. Known facts and assumed facts are explicitly separated throughout all artifacts\n7. Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`) and ready for the Designer\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^pathlon:systems-designer$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You check whether the Pathlon systems-designer agent has really finished its task. The hook input is JSON: $ARGUMENTS\n\nRead `last_assistant_message`. It should end with a Done report giving: the task, its scope (single deliverable or full phase), each Definition of Done item that applies (met / deferred with a reason / blocked on the designer), what was saved to Pathlon, and what remains open.\n\nThe systems-designer's Definition of Done:\n1. The design system's source (Figma library, Claude Design, or code) is identified and recorded in Pathlon\n2. A system summary is saved to Pathlon before any component work\n3. Every component in scope maps to a system component and variant, or is listed as a gap with a proposal for the system's owner\n4. Every component in scope has a full spec: anatomy, props, states, token references, accessibility notes\n5. No interactive component is missing hover, focus, active, or disabled states\n6. No data component is missing loading, empty, error, or populated states\n7. Decision rationale is documented alongside every architectural choice\n8. Phase Handoff Block is saved to Pathlon (`write_memory`, `memory_type: \"handoff\"`) and ready for the Design Engineer\n\nRules:\n- If `stop_hook_active` is true, the agent was already sent back once: respond {\"ok\": true}. (One retry at most.)\n- No Done report → {\"ok\": false, \"reason\": \"End with a Done report: task, scope, the Definition of Done items that apply (met / deferred / blocked), what you saved to Pathlon, and what remains open.\"}\n- Judge only the items that apply to the stated scope. A single deliverable is judged on the items relevant to it; full phase work on every item.\n- An item explicitly deferred with a reason, or blocked on input only the designer can give, does not fail the check.\n- If an applicable item is clearly unmet and not deferred or blocked, fail it: name the item and what to do, in one or two sentences.\n- Don't fail for style or length, and don't add requirements beyond the list.\n\nRespond with JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/context.mjs\" agent-stop",
+            "timeout": 10
+          }
         ]
       }
     ]

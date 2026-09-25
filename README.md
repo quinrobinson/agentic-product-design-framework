@@ -19,7 +19,7 @@ You work the way you normally would ("synthesize these interview notes", "let's 
      │                    │                     │
    BRAIN               MEMORY                 HANDS
    Pathlon plugin      .pathlon/ in your      Figma MCP and your
-   41 skills           project folder,        other tools
+   42 skills           project folder,        other tools
    6 agents            managed by a local
    7 commands          Pathlon server
 ```
@@ -46,7 +46,7 @@ You work the way you normally would ("synthesize these interview notes", "let's 
 
 Restart Claude Code. Then, in your project's folder:
 
-1. Say **"start a Pathlon project for this folder"** (or run `/pathlon:kickoff`). Claude asks for the name, phase, and primary persona and creates `.pathlon/`.
+1. Run **`/pathlon:start`** (or just say "start a Pathlon project for this folder"). Claude asks three quick questions — the project and goal, where you are, the primary user — and creates `.pathlon/`.
 2. Work normally. The right skills and agents are picked from what you ask and the phase you're in.
 3. Next time you open this folder, Claude already knows the project: phase, next step, the latest handoff and its open questions, and recent decisions.
 
@@ -60,14 +60,15 @@ To update later: `/plugin update pathlon@pathlon`, then restart.
 |---|---|
 | **Open a session** in a Pathlon project | Loads where the project stands — automatically. Outside a Pathlon project it stays silent. |
 | **Ask in plain language** ("cluster these ideas", "write the error states") | The matching skill loads; each message carries a one-line hint about the current phase and the agent that fits it. |
-| **Ask for a specialist** ("have the researcher synthesize these notes") | Runs the agent — Researcher, Strategist, Designer, Systems Designer, Design Engineer — with its goal and Definition of Done. |
-| **`/pathlon:kickoff`** | Starts or resumes a project and runs the current phase's agents in parallel. |
+| **Ask for a specialist** ("have the researcher synthesize these notes") — or just describe the work | Runs the agent — Researcher, Strategist, Designer, Systems Designer, Design Engineer. Each ends with a Done report that's checked automatically against its Definition of Done; if something applicable is missing, it keeps working. |
+| **`/pathlon:start`** | Starts or resumes the project and routes your request to the right agent or skill. |
+| **`/pathlon:kickoff`** | Runs the current phase: the Orchestrator plans it, spawns the specialists in parallel, checks their work, and saves the result. |
 | **`/pathlon:route`** | Recommends what to do next and which agent to use. |
 | **`/pathlon:transition`** | Writes the phase handoff, closes the phase, and starts the next one. |
 | **`/pathlon:synthesize-research`, `frame-problem`, `generate-concepts`, `design-qa`** | Shortcuts for the most common deliverables. |
 | **End a session, or hit context compaction** | Records a factual session log (files changed, what was saved) so progress survives. |
 
-Unsure what to do? Ask **"where does this project stand?"** or run `/pathlon:route`.
+Unsure what to do? Ask **"where does this project stand?"**, or run `/pathlon:start` or `/pathlon:route`.
 
 ## Your project data
 
@@ -101,7 +102,7 @@ Chat has the skills but not agents, commands, or project memory — `.pathlon/` 
 
 ### Skills — `pathlon/skills/<name>/SKILL.md`
 
-41 skills. Every phase skill opens with the business outcome it moves, the design KPI it improves, and the product risk it reduces.
+42 skills. Every phase skill opens with the business outcome it moves, the design KPI it improves, and the product risk it reduces.
 
 | Phase | Skills |
 |---|---|
@@ -111,15 +112,16 @@ Chat has the skills but not agents, commands, or project memory — `.pathlon/` 
 | 04 — Prototype | `prototyping`, `accessibility-audit`, `user-flow-mapping`, `ux-copy-writing`, `prototype-scoping`, `heuristic-review`, `test-script-drafting` |
 | 05 — Validate | `usability-testing`, `usability-findings-synthesis`, `insight-report`, `recruitment-screener`, `stakeholder-presentation`, `iteration-brief` |
 | 06 — Deliver | `design-delivery`, `component-specs`, `design-qa`, `handoff-annotation`, `accessibility-annotation`, `design-decision-record` |
-| Cross-phase | `design-system`, `motion`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
+| Cross-phase | `start`, `design-system`, `motion`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
 
-Two cross-phase skills worth knowing:
+Three cross-phase skills worth knowing:
+- **`start`** — Pathlon's front door (`/pathlon:start`): a three-question intake for a new project, and routing each request to the right agent or skill.
 - **`design-system`** — finds your existing system (Figma library or Claude Design), maps screens to its components, checks work against it, and sends gaps to its owner.
 - **`motion`** — decides whether something should move at all, then specs or builds it on any platform (web, React Native, Flutter, SwiftUI, Compose, Framer, Webflow, Figma), with recipes for common components.
 
 ### Agents — `pathlon/agents/`
 
-Each agent declares a **Primary Goal** and a **Definition of Done**, so it knows what "finished" means before it starts.
+Each agent declares a **Primary Goal** and a **Definition of Done**, so it knows what "finished" means before it starts, and ends every run with a **Done report**. When a specialist finishes, an automatic check reads that report against its Definition of Done (for the scope it was given) and sends it back to keep working if something applicable is missing. The Orchestrator can run a whole phase, spawning the specialists itself.
 
 | Agent | Invoke when |
 |---|---|
@@ -158,10 +160,9 @@ Each skill is tagged with an AI leverage level:
 
 ## Roadmap
 
-**Now — agents that act** (Revision 1)
-- A router that picks the right agent from your request and the project's state, asking one clarifying question when intent is unclear.
-- The Orchestrator running a whole phase, spawning specialists, and checking each output against its Definition of Done before it counts.
-- An evaluation suite measuring whether the right skill and agent fire on the first try.
+**Now — measured triggers** (Revision 1)
+- An evaluation suite measuring whether the right skill and agent fire on the first try, and that Pathlon stays quiet in unrelated projects.
+- Merging overlapping handoff skills and tightening skill descriptions that fire too broadly.
 
 **Next — Build & Deliver and the AI track** (Revision 2)
 - Phase 06 expands to **Build & Deliver**: handoff → build planning → build → QA and client acceptance → launch and handover, following agency practice.

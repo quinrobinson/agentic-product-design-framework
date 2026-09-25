@@ -5,6 +5,7 @@
 //   node context.mjs prompt          UserPromptSubmit → one-line phase hint
 //   node context.mjs checkpoint      PreCompact → record the session so far
 //   node context.mjs session-end     SessionEnd → record the rest of the session
+//   node context.mjs agent-stop      SubagentStop (Pathlon agents) → record the agent's run and Done report
 //
 // Outside a Pathlon project every mode prints nothing. A hook must never break a session, so any
 // error is reported on stderr and the script still exits 0.
@@ -16,7 +17,7 @@ import * as store from "../server/store.mjs";
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || join(dirname(fileURLToPath(import.meta.url)), "..");
 
-// Which specialist fits each phase (the router in R4 refines this).
+// Which specialist fits each phase. The `start` skill routes individual requests in detail.
 const PHASE_AGENTS = {
   "01": "researcher",
   "02": "strategist",
@@ -91,7 +92,7 @@ function sessionStart(input, root) {
   if (links.length) lines.push(`Links: ${links.map((l) => `${l.kind.replace("_", " ")} ${l.label ? `"${l.label}" ` : ""}${l.url}`).join("; ")}`);
   if (input.source === "compact") lines.push("(Context was just compacted; this is the project state from .pathlon/.)");
   lines.push(
-    "Save as you go with the Pathlon tools: decisions and deliverable summaries (write_memory), deliverables and files (link_artifact), phase changes and handoffs (set_phase, write_memory type handoff). Call get_project_context for full detail.",
+    "Save by default: when you produce something worth keeping — an assessment, synthesis, deliverable, or a decision the designer agreed to — save it (write_memory, link_artifact) without asking, and say so in one line (\"Saved to Pathlon: …\"). Ask one yes/no question first only before changing project state: moving phases (set_phase), recording a decision the designer hasn't confirmed, or marking work complete. Call get_project_context for full detail.",
   );
   emit("SessionStart", lines.join("\n"));
 }
@@ -107,7 +108,7 @@ function prompt(input, root) {
     "UserPromptSubmit",
     `Pathlon · ${project.name} · phase ${phaseLabel(project)} (${project.phases[phase].status.replace("_", " ")}). ` +
       `Phase work fits the ${PHASE_AGENTS[phase]} agent${skills.length ? `; skills: ${skills.join(", ")}` : ""}. ` +
-      `If the request is ambiguous about what to do, ask one clarifying question.`,
+      `If the request is ambiguous about what to do, ask one clarifying question. To route or start over, use /pathlon:start.`,
   );
 }
 
@@ -182,6 +183,35 @@ function record(input, root, kind) {
   });
 }
 
+// ── agent-stop ───────────────────────────────────────────────────────────────
+
+/** The Done report at the end of an agent's final message, if there is one. */
+function doneReport(message) {
+  if (typeof message !== "string") return null;
+  const i = message.search(/\*{0,2}Done report\*{0,2}/i);
+  return i >= 0 ? message.slice(i).trim().slice(0, 1500) : null;
+}
+
+function agentStop(input, root) {
+  const agent = String(input.agent_type || "").replace(/^pathlon:/, "");
+  if (!agent || agent === input.agent_type) return; // only Pathlon's own agents
+  const retry = input.stop_hook_active === true;
+  const report = doneReport(input.last_assistant_message);
+  const task = report?.match(/^Task:\s*(.+)$/im)?.[1]?.trim();
+  store.writeMemory(root, {
+    type: "agent_run",
+    agent,
+    source: "hook",
+    summary: `${agent} finished${retry ? " after being sent back by its Definition of Done check" : ""}${task ? `: ${task}` : ""}`.slice(0, 200),
+    content: [
+      `## ${agent} run${retry ? " (retry)" : ""}`,
+      `Agent id: ${input.agent_id || "unknown"} · Session: ${input.session_id || "unknown"}`,
+      "",
+      report ?? "No Done report in the agent's final message.",
+    ].join("\n"),
+  });
+}
+
 // ── main ─────────────────────────────────────────────────────────────────────
 
 const mode = process.argv[2];
@@ -193,6 +223,7 @@ try {
     else if (mode === "prompt") prompt(input, root);
     else if (mode === "checkpoint") record(input, root, "checkpoint");
     else if (mode === "session-end") record(input, root, "session-end");
+    else if (mode === "agent-stop") agentStop(input, root);
   }
 } catch (err) {
   process.stderr.write(`pathlon hook (${mode}): ${err.message}\n`);

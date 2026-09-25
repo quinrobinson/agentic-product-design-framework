@@ -296,9 +296,35 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 - **Definition of Done checks:** a `SubagentStop` hook (prompt or agent type) checks each specialist's output against its Definition of Done. If it fails, the agent gets the reason and continues, up to a retry limit. Results are recorded to `.pathlon/`.
 - Verify during build: whether an agent's tool list can name specific MCP tools, and the exact input the `SubagentStop` hook receives.
 - Acceptance: "we finished the interviews, here are the notes" leads, with no command, to the Researcher running, its output passing its Definition of Done, and the result being logged. An ambiguous request produces exactly one clarifying question.
+- **Built Sept 25, 2026** (plugin 0.4.0):
+  - **Router:** a new cross-phase `start` skill (`/pathlon:start`, which also covers old 5.6). It has a three-question intake for new projects, resume, an intent-to-agent table, and ASPF's rules: problem before solution, at most one clarifying question, name the agent, one next action. The per-message hook hint still names the phase's agent and points to `/pathlon:start`.
+  - **Agents:** every agent has a `maxTurns` (60, Orchestrator 120) and a "use proactively when…" line so the main session delegates on its own. Every agent ends with a **Done report**: task, scope, Definition of Done items (met, deferred or blocked), what was saved to Pathlon, and what's open.
+  - **Running a phase:** `/pathlon:kickoff` and `/pathlon:transition` hand the phase to the Orchestrator agent. It spawns specialists with single-deliverable scopes, checks their reports, saves results, writes the phase handoff itself, and ends with one next action.
+  - **Definition of Done checks:** one `SubagentStop` prompt hook per agent (matcher `^pathlon:<agent>$`), generated from each agent's Definition of Done by `hooks/build-dod-checks.mjs`, so the checklist lives only in the agent file.
+    - A failed check feeds the reason back and the agent continues. Items deferred with a reason, or blocked on the designer, pass.
+    - **Retry limit is one,** via the hook input's `stop_hook_active`, which the installed Claude Code provides on `SubagentStop`.
+    - The check reads the agent's final message, hence the Done report. It runs on the fast default model.
+  - **Results recorded to `.pathlon/`:** a command hook on the same event writes an `agent_run` memory each time a specialist finishes, with the agent, whether it was a retry, and its Done report. A run accepted first time has one record; a run sent back has a second, retry record. This is what the 11.5 pass-rate measure reads.
+  - **Not in Chat:** `start` is left out of the Chat zips, because it needs Pathlon's tools.
+  - **Save by default** (Quin's suggestion from the Courtside IQ test): the session context, the agents and `start` tell Claude to save assessments, syntheses, deliverables and agreed decisions without asking, and to say so in one line. It asks a single yes/no question only before changing project state: phases, unconfirmed decisions, marking work complete. `start` offers once to seed a new project from work already in the folder: an assessment, the loose ends as open questions, and the inferred phase. A per-turn automatic save check (a Stop prompt hook) is held back: it would cost a model call on every turn in every repo. Revisit in R5 with evals.
+  - **Measure:** the meaningful number is the **first-try pass rate**, runs whose agent id has no retry record. "Passing after retries" is always 100%, because the second check is forced to pass. `agent_run` is written only by the hook; the `write_memory` tool refuses it.
+  - **Tests:** 30 pass, including that the generated checks match the agent files and that `write_memory` refuses the hook-only type.
+  - **Fallback:** if a plugin subagent can't spawn agents, `/pathlon:kickoff` and `/pathlon:transition` run the phase from the main session.
+- **Pending Quin's decision (departures from this step as written):**
+  - **Own model per agent:** all agents use `model: inherit`, the session's model.
+  - **Own tool list:** agents inherit every tool, including the Pathlon MCP tools and the Agent tool.
+  - **Preloaded skills:** not used. Full skill text in every agent's context is costly, so agents load skills on demand.
+  - **Persistent agent memory:** not used. Claude Code keeps it in `.claude/agent-memory/`, a second state store, against rule 11.3.
+  - **Router name:** the router is `start`, not `pathlon`, because plugin skills and commands are namespaced (`/pathlon:start`).
+- **Unverified until a live session:**
+  - delegation with no command
+  - a check sending an agent back once
+  - the `^pathlon:<agent>$` matchers firing
+  - the Orchestrator spawning specialists at depth 2
+  - exactly one clarifying question for an ambiguous request
 
 **R5 — Triggers and evals**
-- A `claude plugin eval` suite in `pathlon/evals/` covering:
+- A `claude plugin eval` suite in `pathlon/evals/` (the "one clarifying question" case excludes `start`'s intake, which asks up to three questions at once) covering:
   - the right skill fires first (target 80%+)
   - the right agent is chosen
   - Definition of Done pass rate
@@ -322,7 +348,7 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 | Network needed to remember a project | None |
 | Pathlon commands the designer must type for a phase | 0 required (`/pathlon` optional) |
 | Right skill or agent on first try | 80%+ in evals and in dogfood logs |
-| Specialist output passing its Definition of Done | 90%+ after retries |
+| Specialist output passing its Definition of Done | 90%+ on the first try (from `agent_run` records) |
 | Pathlon context injected in unrelated repos | 0 |
 
 ### 11.6 Decisions (Sept 25, 2026)

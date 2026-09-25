@@ -65,13 +65,16 @@ const TOOLS = [
       properties: {
         ...WHERE,
         content: { type: "string", description: "The memory as markdown." },
-        memory_type: { type: "string", enum: store.MEMORY_TYPES, description: "Default: context." },
+        memory_type: { type: "string", enum: store.WRITABLE_MEMORY_TYPES, description: "Default: context." },
         phase: { ...PHASE, description: `${PHASE.description}. Defaults to the current phase; required for handoff.` },
         summary: { type: "string", description: "One line (default: the content's first line)." },
         agent: { type: "string", description: "Which agent is writing, e.g. researcher." },
       },
     },
-    run: (a) => store.writeMemory(locate(a), { type: a.memory_type ?? "context", content: a.content, phase: a.phase, summary: a.summary, agent: a.agent, source: "claude" }),
+    run: (a) => {
+      if (a.memory_type && !store.WRITABLE_MEMORY_TYPES.includes(a.memory_type)) throw new store.PathlonError(`memory_type must be one of ${store.WRITABLE_MEMORY_TYPES.join(", ")}`);
+      return store.writeMemory(locate(a), { type: a.memory_type ?? "context", content: a.content, phase: a.phase, summary: a.summary, agent: a.agent, source: "claude" });
+    },
   },
   {
     name: "recommend_starting_point",

@@ -15,12 +15,14 @@ const SKILLS = `${ROOT}pathlon/skills`;
 const OUT = `${ROOT}build/chat-skills`;
 const STAGE = `${ROOT}build/.chat-skills-stage`;
 const ALLOWED = new Set(["name", "description", "license", "allowed-tools", "metadata", "compatibility"]);
+// Skills that only work with Pathlon's MCP tools, which Chat doesn't have.
+const CODE_ONLY = new Set(["start"]);
 
 // Pass 1: parse and validate every skill before writing anything
 const errors = [];
 const skills = [];
 for (const entry of readdirSync(SKILLS, { withFileTypes: true })) {
-  if (!entry.isDirectory()) continue;
+  if (!entry.isDirectory() || CODE_ONLY.has(entry.name)) continue;
   const name = entry.name;
   const text = readFileSync(`${SKILLS}/${name}/SKILL.md`, "utf8");
   const match = text.match(/^---\n([\s\S]*?)\n---\n/);
