@@ -3,8 +3,8 @@
 //
 //   node context.mjs session-start   SessionStart (startup, resume, clear, compact) → inject where the project stands
 //   node context.mjs prompt          UserPromptSubmit → one-line phase hint
-//   node context.mjs checkpoint      PreCompact → record the session so far
-//   node context.mjs session-end     SessionEnd → record the rest of the session
+//   node context.mjs checkpoint      PreCompact → record the session so far, and which Pathlon skills/agents/commands ran
+//   node context.mjs session-end     SessionEnd → the same, for the rest of the session
 //   node context.mjs agent-stop      SubagentStop (Pathlon agents) → record the agent's run and Done report
 //
 // Outside a Pathlon project every mode prints nothing. A hook must never break a session, so any
@@ -92,7 +92,7 @@ function sessionStart(input, root) {
   if (links.length) lines.push(`Links: ${links.map((l) => `${l.kind.replace("_", " ")} ${l.label ? `"${l.label}" ` : ""}${l.url}`).join("; ")}`);
   if (input.source === "compact") lines.push("(Context was just compacted; this is the project state from .pathlon/.)");
   lines.push(
-    "Save by default: when you produce something worth keeping — an assessment, synthesis, deliverable, or a decision the designer agreed to — save it (write_memory, link_artifact) without asking, and say so in one line (\"Saved to Pathlon: …\"). Ask one yes/no question first only before changing project state: moving phases (set_phase), recording a decision the designer hasn't confirmed, or marking work complete. Call get_project_context for full detail.",
+    "Save by default: when you produce something worth keeping — an assessment, synthesis, deliverable, or a decision the designer agreed to — save it (write_memory, link_artifact) without asking, and say so in one line (\"Saved to Pathlon: …\"). Ask one yes/no question first only before changing project state: moving phases (set_phase), recording a decision the designer hasn't confirmed, or marking work complete. When design work needs something no Pathlon skill covers, or the designer corrects Pathlon's approach, save a one-line gap note (write_memory, memory_type \"gap\") saying what was missing; these drive improvements to Pathlon. Call get_project_context for full detail.",
   );
   emit("SessionStart", lines.join("\n"));
 }
@@ -116,11 +116,26 @@ function prompt(input, root) {
 
 /** Timestamp of the last session record for this session, so records don't repeat each other. */
 function lastRecorded(root, sessionId) {
-  const { memories } = store.getMemories(root, { type: "session", limit: 200 });
-  return memories.find((m) => m.content.includes(`Session ${sessionId}`))?.ts ?? null;
+  const hits = ["session", "usage"]
+    .flatMap((type) => store.getMemories(root, { type, limit: 200 }).memories)
+    .filter((m) => m.content.includes(`Session ${sessionId}`))
+    .map((m) => m.ts);
+  return hits.length ? hits.sort().at(-1) : null;
 }
 
-/** Mechanical facts from the transcript since `since`: files changed and Pathlon writes. No prompt text. */
+function bump(counts, key) {
+  counts[key] = (counts[key] || 0) + 1;
+}
+
+/** A Pathlon name ("pathlon:research-synthesis") without its prefix, or null for anything else. */
+function pathlonName(value) {
+  const m = typeof value === "string" && value.match(/^\/?pathlon:([\w-]+)$/);
+  return m ? m[1] : null;
+}
+
+const isSkill = (name) => existsSync(join(PLUGIN_ROOT, "skills", name, "SKILL.md"));
+
+/** Mechanical facts from the transcript since `since`: files changed, Pathlon writes, and which Pathlon skills, agents and commands ran. No prompt text. */
 function summarize(transcriptPath, since, root) {
   const files = new Set();
   let outside = 0;
@@ -128,6 +143,7 @@ function summarize(transcriptPath, since, root) {
   let turns = 0;
   let first = null;
   let last = null;
+  const usage = { skills: {}, agents: {}, commands: {} };
   if (!transcriptPath || !existsSync(transcriptPath)) return null;
   for (const line of readFileSync(transcriptPath, "utf8").split("\n")) {
     if (!line.trim()) continue;
@@ -138,7 +154,11 @@ function summarize(transcriptPath, since, root) {
       continue;
     }
     if (!e.timestamp || (since && e.timestamp <= since)) continue;
-    if (e.type === "user" && typeof e.message?.content === "string") turns++;
+    if (e.type === "user" && typeof e.message?.content === "string") {
+      turns++;
+      const invoked = pathlonName(e.message.content.match(/<command-name>([^<]+)<\/command-name>/)?.[1]?.trim());
+      if (invoked) bump(isSkill(invoked) ? usage.skills : usage.commands, invoked);
+    }
     if (e.type !== "assistant" || !Array.isArray(e.message?.content)) continue;
     first ??= e.timestamp;
     last = e.timestamp;
@@ -151,6 +171,9 @@ function summarize(transcriptPath, since, root) {
         if (rel.startsWith("..") || rel.startsWith("/")) outside++; // count only: no home-folder paths in a committed log
         else files.add(rel);
       }
+      const invoked = name === "Skill" && pathlonName(input.skill); // Claude runs commands through the Skill tool too
+      if (invoked) bump(isSkill(invoked) ? usage.skills : usage.commands, invoked);
+      if ((name === "Agent" || name === "Task") && pathlonName(input.subagent_type)) bump(usage.agents, pathlonName(input.subagent_type));
       const tool = name.split("__").pop();
       if (/pathlon/i.test(name) && ["write_memory", "link_artifact", "set_phase", "create_project", "log_figma_activity"].includes(tool)) {
         const what = input.summary || input.label || input.url || (input.phase ? `phase ${input.phase} → ${input.status || "in_progress"}` : "") || input.memory_type || "";
@@ -159,14 +182,16 @@ function summarize(transcriptPath, since, root) {
     }
   }
   if (!first) return null;
-  return { turns, files: [...files].sort(), outside, pathlon, first, last };
+  return { turns, files: [...files].sort(), outside, pathlon, usage, first, last };
 }
 
 function record(input, root, kind) {
   const sessionId = input.session_id;
   if (!sessionId) return; // can't tell sessions apart without an id
   const facts = summarize(input.transcript_path, lastRecorded(root, sessionId), root);
-  if (!facts || (!facts.files.length && !facts.outside && !facts.pathlon.length)) return; // nothing worth recording
+  if (!facts) return;
+  recordUsage(root, sessionId, facts.usage);
+  if (!facts.files.length && !facts.outside && !facts.pathlon.length) return; // nothing else worth recording
   const why = kind === "checkpoint" ? `before compaction (${input.trigger || "auto"})` : `session end${input.reason ? ` (${input.reason})` : ""}`;
   const content = [
     `## Session ${sessionId} — ${why}`,
@@ -180,6 +205,21 @@ function record(input, root, kind) {
     content,
     summary: `Session ${day(facts.first)}: ${facts.pathlon.length} Pathlon update(s), ${facts.files.length} file(s) changed`,
     source: "hook",
+  });
+}
+
+/** One `usage` record per checkpoint: counts of the Pathlon skills, agents and commands that ran. */
+function recordUsage(root, sessionId, usage) {
+  const parts = Object.entries(usage)
+    .filter(([, counts]) => Object.keys(counts).length)
+    .map(([kind, counts]) => `${kind}: ${Object.entries(counts).map(([n, c]) => (c > 1 ? `${n} ×${c}` : n)).join(", ")}`);
+  if (!parts.length) return;
+  store.writeMemory(root, {
+    type: "usage",
+    source: "hook",
+    summary: `Pathlon used — ${parts.join("; ")}`,
+    content: `Session ${sessionId}\n\n${parts.map((p) => `- ${p}`).join("\n")}`,
+    data: usage,
   });
 }
 
@@ -202,6 +242,7 @@ function agentStop(input, root) {
     type: "agent_run",
     agent,
     source: "hook",
+    data: { agent_id: input.agent_id || null, retry },
     summary: `${agent} finished${retry ? " after being sent back by its Definition of Done check" : ""}${task ? `: ${task}` : ""}`.slice(0, 200),
     content: [
       `## ${agent} run${retry ? " (retry)" : ""}`,

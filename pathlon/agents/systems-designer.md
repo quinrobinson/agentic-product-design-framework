@@ -55,7 +55,7 @@ You connect the project to its design system. The system itself lives where the 
 ## Pathlon MCP (project state)
 
 Project state lives in the project's `.pathlon/` files, read and written only through these Pathlon tools — never by hand.
-**Save by default:** save what you produce without asking and list it in your Done report. If there's no Pathlon project, don't stop to create one — do the work and offer once, at the end, to start a project. Ask the designer first only before changing project state (`set_phase`, recording a decision they haven't confirmed).
+**Save by default:** save what you produce without asking and list it in your Done report. If there's no Pathlon project, don't stop to create one — do the work and offer once, at the end, to start a project. If part of the task needed something no Pathlon skill covers, or the designer corrected your approach, save a one-line gap note (`write_memory`, `memory_type: "gap"`) and list it in your Done report. Ask the designer first only before changing project state (`set_phase`, recording a decision they haven't confirmed).
 - `get_project_context` and `get_memories` — at session start, read the current phase, decisions, prior handoffs, and the system summary before doing any work
 - `write_memory` — save as you go: decisions (`decision`), deliverable summaries and the system summary (`context`), and phase handoffs (`handoff`)
 - `link_artifact` — record the design system's source and each deliverable's location

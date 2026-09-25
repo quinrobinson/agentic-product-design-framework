@@ -348,7 +348,35 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
   - **Not yet covered:** the Definition of Done checks (subagent hooks; measured from `agent_run` records in dogfood) and silence of the session hooks in an unrelated repo (covered by `hooks/context.test.mjs`).
 - **Earlier note on R5b:** the installed Claude Code (2.1.114) had no `claude plugin eval`, and the CLI isn't logged in for headless runs; Quin updated to 2.1.282 on Sept 25. After `claude update` and `claude /login`, write the suite in `pathlon/evals/` against the format that version documents (`claude plugin eval --help`), run it, and record the baselines. The suite should cover the first skill fired, the agent chosen, first-try Definition of Done pass rate, and silence in an unrelated repo; the one-question case excludes `start`'s intake. Also still to do: removing the duplicate claude.ai account skills (5.8), which compete with the plugin's skills in Claude Code sessions.
 
-**Then:** Phase 3 dogfood on Courtside IQ, unchanged.
+- **R5b done Sept 25, 2026** (plugin 0.5.1, `bc0f796`):
+  - **Pilot finding:** Pathlon made Claude ask instead of work. Cases 01, 02 and 07 scored below the no-plugin baseline because commands, skills and agents said "ask for missing inputs first", and `start` ran its four-question intake on an ambiguous request.
+  - **Fix:** commands, skills and agents infer missing inputs, state the assumption, and ask one question only when the task can't be done without the answer. With no project, Claude does the work, then offers once to start one. `start` runs its intake only when asked to start a project. The 07 rubric accepts one question with answer options, and the mocks carry the real tool list (`_tools.json`).
+  - **Baseline (full suite, 3 runs per arm, Sonnet judge, API-equivalent $8.67 on Quin's Max plan):**
+
+    | Case | With | Without | Δ |
+    |---|---|---|---|
+    | 01 synthesize interviews | 1.00 | 0.67 | +0.33 |
+    | 02 frame problem | 1.00 | 1.00 | 0 |
+    | 03 UX copy states | 1.00 | 1.00 | 0 |
+    | 04 motion spec | 1.00 | 0.67 | +0.33 |
+    | 05 phase handoff | 1.00 | 0.67 | +0.33 |
+    | 06 researcher agent | 1.00 | 0.67 | +0.33 |
+    | 07 one question | 1.00 | 1.00 | 0 |
+    | 08–10 should not fire | 1.00 | 1.00 | 0 |
+
+  - **Targets:** outcome 10/10 with Pathlon; silence 3/3. "Right skill fires first" read 3 of 5 because the indicator for 01 and 02 counted only the skill. A kept trace showed Claude ran the matching command (`pathlon:frame-problem`) through the Skill tool. The indicators now accept the command too (committed with R6); confirm at the next full run. Two caveats: that single diagnostic rerun of 02 scored 0 (judge 2–1 against on the same kind of output that passed 3/3 in the full run), and case 01 running `synthesize-research` is inferred from 02, not observed in a trace.
+  - **Commands:** the evals show Claude picks the deliverable commands as entry points, so all 7 stay (11.6).
+
+**R6 — Measure and improve** (added Sept 25, 2026, at Quin's request, before dogfood so the trial produces data)
+- **Usage records:** the PreCompact and SessionEnd hooks also write a `usage` record: counts of the Pathlon skills, agents and commands that ran, with no prompt text. It covers slash commands and commands Claude runs through the Skill tool. Hook-only, like `agent_run`, which now carries structured `data` (`agent_id`, `retry`).
+- **Gap notes:** a new writable memory type, `gap`. The session context and every agent tell Claude to save a one-line gap note when design work needs something no Pathlon skill covers, or when the designer corrects Pathlon's approach.
+- **Usage report:** `pathlon/server/report.mjs` and the `usage_report` MCP tool roll up every registered project (or one). They show skills, agents and commands used; each agent's first-try Definition of Done rate against the 90% target; skills never used; gap notes; and what to look at. Ask "how is Pathlon doing?" or run `node pathlon/server/report.mjs`.
+- **Backlog:** GitHub labels `refinement`, `skill-idea`, `agent-idea` and `tool-idea`, plus issue templates in `.github/ISSUE_TEMPLATE/`.
+- **The loop (Phase 3 and 4):** use Pathlon on real work, read the report, file issues, write an eval case for each change, make it, run the evals, release.
+- **To verify live in dogfood:** whether a typed `/pathlon:x` also shows up as a Skill tool call (it would then be counted twice).
+- Acceptance: the report reads real records from the dogfood project; tests cover usage recording, hook-only types, pass-rate maths (including records from before R6), and the tool.
+
+**Then:** Phase 3 dogfood on Courtside IQ. Read the usage report weekly.
 
 **Later (roadmap, not scheduled):**
 - **Optional sync:** reuse the Supabase schema and the Worker; `.pathlon/` stays the source of truth.

@@ -65,6 +65,7 @@ test("session start injects where the project stands, from a subfolder", () => {
   assert.doesNotMatch(text, /compacted/);
   assert.match(text, /Save by default/);
   assert.match(text, /Ask one yes\/no question first only before changing project state/);
+  assert.match(text, /gap note/);
 
   const again = run("session-start", { cwd: dir, source: "compact" }).json.hookSpecificOutput.additionalContext;
   assert.match(again, /Context was just compacted/);
@@ -146,4 +147,33 @@ test("agent-stop records Pathlon agent runs, retries, and Done reports; ignores 
   assert.match(memories[0].summary, /after being sent back/);
   assert.match(memories[0].content, /No Done report/);
   assert.equal(memories[0].agent, "researcher");
+  assert.deepEqual(memories[0].data, { agent_id: "a1", retry: true });
+  assert.deepEqual(memories[1].data, { agent_id: "a1", retry: false });
+});
+
+test("sessions record which Pathlon skills, agents and commands ran, once, even with no file changes", () => {
+  const dir = join(scratch, "proj-g");
+  const { root } = store.createProject({ name: "Usage", dir });
+  const t = join(scratch, "usage.jsonl");
+  const tool = (ts, name, input) => ({ type: "assistant", timestamp: ts, message: { content: [{ type: "tool_use", name, input }] } });
+  const slash = (ts, name) => ({ type: "user", timestamp: ts, message: { content: `<command-name>/${name}</command-name>\n<command-args></command-args>` } });
+  const entries = [
+    slash("2026-09-25T10:00:00.000Z", "pathlon:kickoff"),
+    slash("2026-09-25T10:00:10.000Z", "pathlon:start"),
+    tool("2026-09-25T10:01:00.000Z", "Skill", { skill: "pathlon:research-synthesis" }),
+    tool("2026-09-25T10:02:00.000Z", "Skill", { skill: "pathlon:research-synthesis" }),
+    tool("2026-09-25T10:03:00.000Z", "Skill", { skill: "design:ux-copy" }),
+    tool("2026-09-25T10:03:30.000Z", "Skill", { skill: "pathlon:frame-problem" }),
+    tool("2026-09-25T10:04:00.000Z", "Agent", { subagent_type: "pathlon:researcher", prompt: "secret prompt text" }),
+    tool("2026-09-25T10:05:00.000Z", "Agent", { subagent_type: "Explore" }),
+  ];
+  transcript(t, entries);
+  run("checkpoint", { cwd: dir, session_id: "u1", transcript_path: t });
+  run("session-end", { cwd: dir, session_id: "u1", transcript_path: t }); // nothing new: no second record
+  const { memories } = store.getMemories(root, { type: "usage" });
+  assert.equal(memories.length, 1);
+  assert.deepEqual(memories[0].data, { skills: { start: 1, "research-synthesis": 2 }, agents: { researcher: 1 }, commands: { kickoff: 1, "frame-problem": 1 } });
+  assert.match(memories[0].summary, /research-synthesis ×2/);
+  assert.doesNotMatch(JSON.stringify(memories[0]), /secret prompt text|ux-copy|Explore/);
+  assert.equal(store.getMemories(root, { type: "session" }).memories.length, 0); // no files or Pathlon writes
 });

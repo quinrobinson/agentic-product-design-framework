@@ -46,8 +46,10 @@
               "brief",
               "pattern",
               "preference",
+              "gap",
               "session",
-              "agent_run"
+              "agent_run",
+              "usage"
             ]
           },
           "phase": {
@@ -65,7 +67,7 @@
     },
     {
       "name": "write_memory",
-      "description": "Save something to the project as it happens: a decision, deliverable summary (context), phase handoff, engagement brief, friction pattern, preference, or session summary. A handoff needs the phase it closes and also updates the readable handoff file.",
+      "description": "Save something to the project as it happens: a decision, deliverable summary (context), phase handoff, engagement brief, friction pattern, preference, gap (Pathlon had no skill for the job, or the designer corrected its approach), or session summary. A handoff needs the phase it closes and also updates the readable handoff file.",
       "inputSchema": {
         "type": "object",
         "required": [
@@ -93,6 +95,7 @@
               "brief",
               "pattern",
               "preference",
+              "gap",
               "session"
             ],
             "description": "Default: context."
@@ -311,6 +314,35 @@
           "artifact_type": {
             "type": "string",
             "description": "e.g. research board, wireframes, component set."
+          }
+        }
+      }
+    },
+    {
+      "name": "usage_report",
+      "description": "How Pathlon is performing, across all projects on this machine (or one project): which skills, agents and commands get used, each agent's first-try Definition of Done pass rate, skills never used, gap notes, and what to refine or add. Use when asked how Pathlon is doing, what to improve, or what's missing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Pathlon project id (from list_projects). Optional."
+          },
+          "path": {
+            "type": "string",
+            "description": "A folder inside the project \u2014 pass the current working directory when unsure. Optional; defaults to the server's working directory."
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "all",
+              "project"
+            ],
+            "description": "all (default): every registered project. project: only the project found from path or project_id."
+          },
+          "since": {
+            "type": "string",
+            "description": "Only records on or after this date (YYYY-MM-DD)."
           }
         }
       }

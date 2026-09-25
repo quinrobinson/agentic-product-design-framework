@@ -55,7 +55,7 @@ test("handshake and tool list", async () => {
   s.notify("notifications/initialized");
   const { result } = await s.request("tools/list", {});
   const names = result.tools.map((t) => t.name).sort();
-  assert.deepEqual(names, ["create_project", "detect_patterns", "get_memories", "get_project_context", "link_artifact", "list_projects", "log_figma_activity", "recommend_starting_point", "set_phase", "write_memory"]);
+  assert.deepEqual(names, ["create_project", "detect_patterns", "get_memories", "get_project_context", "link_artifact", "list_projects", "log_figma_activity", "recommend_starting_point", "set_phase", "usage_report", "write_memory"]);
   for (const t of result.tools) assert.equal(t.inputSchema.type, "object");
   assert.equal((await s.request("nope", {})).error.code, -32601);
   s.stop();
@@ -121,9 +121,11 @@ test("errors come back as tool errors, not crashes", async () => {
   assert.ok(missing.isError);
   assert.match(missing.text, /No Pathlon project found/);
   const bad = await s.call("write_memory", { path: scratch, content: "" });
-  const hookOnly = await s.call("write_memory", { memory_type: "agent_run", content: "x" });
-  assert.ok(hookOnly.isError);
-  assert.match(hookOnly.text, /memory_type must be one of/);
+  for (const memory_type of ["agent_run", "usage"]) {
+    const hookOnly = await s.call("write_memory", { memory_type, content: "x" });
+    assert.ok(hookOnly.isError, memory_type);
+    assert.match(hookOnly.text, /memory_type must be one of/);
+  }
   assert.ok(bad.isError);
   const unknown = await s.request("tools/call", { name: "get_figma_actions", arguments: {} });
   assert.equal(unknown.error.code, -32602);
@@ -144,5 +146,40 @@ test("detect_patterns and log_figma_activity", async () => {
   assert.deepEqual(types, ["missing_handoff:01", "skipped:02"]);
   const fig = await s.call("log_figma_activity", { path: dir, action: "Built research board", file_url: "https://figma.com/design/X/y", phase: "03" });
   assert.equal(fig.data.summary, "Figma: Built research board");
+  s.stop();
+});
+
+test("usage_report rolls up usage, first-try pass rates and gaps across projects", async () => {
+  const home = join(scratch, "home-f");
+  process.env.PATHLON_HOME = home; // the store calls below register projects where the server looks
+  const store = await import("./store.mjs");
+  const a = store.createProject({ name: "Alpha", dir: join(scratch, "alpha") }).root;
+  const b = store.createProject({ name: "Beta", dir: join(scratch, "beta") }).root;
+  const run = (root, id, retry) => store.writeMemory(root, { type: "agent_run", agent: "researcher", source: "hook", content: `## researcher run\nAgent id: ${id}`, data: { agent_id: id, retry } });
+  // Alpha: r1 passes; r2 is sent back (two records). Beta: r3 passes; a pre-R6 record with no data, sent back.
+  run(a, "r1", false);
+  run(a, "r2", false);
+  run(a, "r2", true);
+  run(b, "r3", false);
+  store.writeMemory(b, { type: "agent_run", agent: "researcher", source: "hook", summary: "researcher finished after being sent back by its Definition of Done check", content: "## researcher run (retry)\nAgent id: old1" });
+  store.writeMemory(a, { type: "usage", source: "hook", content: "Session s1", data: { skills: { "research-synthesis": 2 }, agents: { researcher: 1 }, commands: { kickoff: 1 } } });
+  store.writeMemory(b, { type: "usage", source: "hook", content: "Session s2", data: { skills: { "research-synthesis": 1, motion: 1 }, agents: {}, commands: {} } });
+
+  const s = startServer(scratch, home);
+  await s.request("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "0" } });
+  await s.call("write_memory", { path: b, memory_type: "gap", content: "No skill for writing a parent onboarding email sequence" });
+  const { data } = await s.call("usage_report");
+  assert.equal(data.projects.length, 2);
+  assert.equal(data.sessions_with_pathlon, 2);
+  assert.deepEqual(data.skills, { "research-synthesis": 3, motion: 1 });
+  assert.deepEqual(data.agents.researcher, { runs: 4, first_try: 2, first_try_rate: 0.5 });
+  assert.equal(data.gaps[0].summary, "No skill for writing a parent onboarding email sequence");
+  assert.ok(data.unused_skills.includes("persona-creation") && !data.unused_skills.includes("motion"));
+  assert.match(data.to_look_at[0], /Refine researcher: 50% of 4 runs/);
+  assert.match(data.markdown, /\| researcher \| 4 \| 50% \|/);
+
+  const one = await s.call("usage_report", { scope: "project", path: a });
+  assert.deepEqual(one.data.agents.researcher, { runs: 2, first_try: 1, first_try_rate: 0.5 });
+  assert.equal((await s.call("usage_report", { since: "2999-01-01" })).data.sessions_with_pathlon, 0);
   s.stop();
 });

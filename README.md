@@ -66,7 +66,8 @@ To update later: `/plugin update pathlon@pathlon`, then restart.
 | **`/pathlon:route`** | Recommends what to do next and which agent to use. |
 | **`/pathlon:transition`** | Writes the phase handoff, closes the phase, and starts the next one. |
 | **`/pathlon:synthesize-research`, `frame-problem`, `generate-concepts`, `design-qa`** | Shortcuts for the most common deliverables. |
-| **End a session, or hit context compaction** | Records a factual session log (files changed, what was saved) so progress survives. |
+| **End a session, or hit context compaction** | Records a factual session log (files changed, what was saved) and which Pathlon skills, agents and commands ran, so progress survives. |
+| **Ask "how is Pathlon doing?"** | Shows the usage report across your projects: what gets used, each agent's first-try pass rate, skills never used, and gap notes — where Pathlon fell short. |
 
 Unsure what to do? Ask **"where does this project stand?"**, or run `/pathlon:start` or `/pathlon:route`.
 
@@ -82,7 +83,7 @@ Everything Pathlon remembers lives in `.pathlon/` inside your project — readab
 ```
 
 - It's **committed with your project by default**, so it travels with the repo. For client work, say so when you start the project ("keep it out of git") — Pathlon then keeps `.pathlon/` out of git. This is set when the project is created; if a store was already committed, also run `git rm -r --cached .pathlon` once.
-- **Your prompts are never stored.** Session logs record files changed and what was saved to Pathlon, nothing else.
+- **Your prompts are never stored.** Session logs record files changed, what was saved to Pathlon, and counts of the Pathlon skills, agents and commands used — nothing else. Gap notes are one line Claude writes when Pathlon had no skill for the job.
 - Work without a folder of its own (strategy, early research) lives in `~/.pathlon/projects/<name>/`.
 - Format reference: [`pathlon/server/FORMAT.md`](pathlon/server/FORMAT.md).
 
@@ -196,6 +197,13 @@ To add or change a skill:
    node --test pathlon/server/*.test.mjs pathlon/hooks/*.test.mjs pathlon/tests/*.test.mjs
    claude --plugin-dir ./pathlon   # try the plugin without installing it
    ```
+
+### How Pathlon improves
+
+1. Use it on real projects. Pathlon records usage, Definition of Done results, and gap notes in each project's `.pathlon/` (local; no prompt text).
+2. Read the usage report — ask Claude "how is Pathlon doing?", or run `node pathlon/server/report.mjs`.
+3. File what it shows as an issue: **Refinement**, **New skill**, **New agent**, or **New tool** (templates in `.github/ISSUE_TEMPLATE/`).
+4. Write or update an eval case in `pathlon/evals/` that proves the change, make it, and run `claude plugin eval ./pathlon` before releasing.
 
 ## Credits
 

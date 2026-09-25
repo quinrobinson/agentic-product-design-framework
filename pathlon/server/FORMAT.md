@@ -64,18 +64,22 @@ One memory per line, oldest first. Never rewritten; new memories are appended.
 
 | Field | Values |
 |---|---|
-| `type` | `decision` · `context` · `handoff` · `brief` · `pattern` · `preference` · `session` · `agent_run` |
+| `type` | `decision` · `context` · `handoff` · `brief` · `pattern` · `preference` · `gap` · `session` · `agent_run` · `usage` |
 | `phase` | the phase it belongs to (defaults to the current phase; required for `handoff`) |
 | `agent` | which agent wrote it (`researcher`, `strategist`, …) or `null` |
 | `source` | `claude`, `designer`, or `hook` |
 | `summary` | one line, ≤200 characters (defaults to the content's first line) |
 | `content` | the full memory as markdown, ≤100,000 characters |
+| `data` | optional structured facts, on hook records only (see `agent_run` and `usage`) |
 
 - **`handoff`** also rewrites `handoffs/<phase>-<name>.md` with the latest handoff for that phase.
 - **`brief`** is an engagement brief (from ASPF-style strategy work or any upstream source).
 - **`pattern`** is a friction-log entry (dogfood, Phase 4 reviews).
+- **`gap`** is a one-line note that Pathlon fell short: design work no Pathlon skill covered, or the designer corrected Pathlon's approach. Gaps feed the usage report's list of candidate skills, agents, and refinements.
 - **`session`** is an automatic end-of-session summary (hooks, Revision 1 R3).
-- **`agent_run`** is recorded automatically each time a Pathlon specialist finishes: the agent, whether it had been sent back by its Definition of Done check, and its Done report. A run checked once and accepted has one record; a run sent back has a second record marked as a retry.
+- **`agent_run`** is recorded automatically each time a Pathlon specialist finishes: the agent, whether it had been sent back by its Definition of Done check, and its Done report. A run checked once and accepted has one record; a run sent back has a second record marked as a retry. `data`: `{ "agent_id": "…", "retry": false }`.
+- **`usage`** is recorded with each session record: which Pathlon skills, agents and commands ran. `data`: `{ "skills": { "research-synthesis": 1 }, "agents": { "researcher": 1 }, "commands": { "kickoff": 1 } }`. Counts only; no prompt text.
+- `agent_run` and `usage` are written only by the plugin's hooks; `write_memory` refuses them.
 - A line that fails to parse is skipped and counted, never fatal.
 
 ## `~/.pathlon/projects.json`

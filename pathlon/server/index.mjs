@@ -3,9 +3,10 @@
 // Protocol: newline-delimited JSON-RPC 2.0 over stdin/stdout (MCP stdio transport).
 
 import { createInterface } from "node:readline";
+import { buildReport, formatReport } from "./report.mjs";
 import * as store from "./store.mjs";
 
-const SERVER = { name: "pathlon", version: "0.2.0" };
+const SERVER = { name: "pathlon", version: "0.6.0" };
 const PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
 
 // ── Tool helpers ─────────────────────────────────────────────────────────────
@@ -58,7 +59,7 @@ const TOOLS = [
   {
     name: "write_memory",
     description:
-      "Save something to the project as it happens: a decision, deliverable summary (context), phase handoff, engagement brief, friction pattern, preference, or session summary. A handoff needs the phase it closes and also updates the readable handoff file.",
+      "Save something to the project as it happens: a decision, deliverable summary (context), phase handoff, engagement brief, friction pattern, preference, gap (Pathlon had no skill for the job, or the designer corrected its approach), or session summary. A handoff needs the phase it closes and also updates the readable handoff file.",
     inputSchema: {
       type: "object",
       required: ["content"],
@@ -185,6 +186,23 @@ const TOOLS = [
       if (a.file_url) store.addLink(root, { kind: "figma_file", url: a.file_url, phase: a.phase });
       const content = `Figma: ${a.action}${a.artifact_type ? ` (${a.artifact_type})` : ""}${a.file_url ? `\n\nFile: ${a.file_url}` : ""}`;
       return store.writeMemory(root, { type: "context", content, phase: a.phase, summary: `Figma: ${a.action}`.slice(0, 200), source: "claude" });
+    },
+  },
+  {
+    name: "usage_report",
+    description:
+      "How Pathlon is performing, across all projects on this machine (or one project): which skills, agents and commands get used, each agent's first-try Definition of Done pass rate, skills never used, gap notes, and what to refine or add. Use when asked how Pathlon is doing, what to improve, or what's missing.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        ...WHERE,
+        scope: { type: "string", enum: ["all", "project"], description: "all (default): every registered project. project: only the project found from path or project_id." },
+        since: { type: "string", description: "Only records on or after this date (YYYY-MM-DD)." },
+      },
+    },
+    run: (a) => {
+      const report = buildReport({ roots: a.scope === "project" ? [locate(a)] : undefined, since: a.since });
+      return { markdown: formatReport(report), ...report };
     },
   },
 ];

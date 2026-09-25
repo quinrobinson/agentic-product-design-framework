@@ -20,9 +20,11 @@ export const PHASES = {
   "06": "build-deliver",
 };
 export const PHASE_STATUSES = ["not_started", "in_progress", "complete"];
-export const MEMORY_TYPES = ["decision", "context", "handoff", "brief", "pattern", "preference", "session", "agent_run"];
-/** Types Claude may write through the MCP tools. `agent_run` is written only by the SubagentStop hook, so its measure stays clean. */
-export const WRITABLE_MEMORY_TYPES = MEMORY_TYPES.filter((t) => t !== "agent_run");
+/** Written only by the plugin's hooks, never through the MCP tools. */
+export const HOOK_ONLY_TYPES = ["agent_run", "usage"];
+export const MEMORY_TYPES = ["decision", "context", "handoff", "brief", "pattern", "preference", "gap", "session", "agent_run", "usage"];
+/** Types Claude may write through the MCP tools. The hook-only types stay clean measures. */
+export const WRITABLE_MEMORY_TYPES = MEMORY_TYPES.filter((t) => !HOOK_ONLY_TYPES.includes(t));
 export const LINK_KINDS = ["figma_file", "repo", "doc", "design_system", "artifact", "other"];
 
 const DIR = ".pathlon";
@@ -296,7 +298,7 @@ export function addLink(root, { kind, url, label, phase, producedBy, source } = 
  * Append a memory to `log.jsonl`. A `handoff` also rewrites the readable
  * `handoffs/<phase>-<name>.md`, so the latest handoff for each phase is one file.
  */
-export function writeMemory(root, { type = "context", content, summary, phase, agent, source = "claude" } = {}) {
+export function writeMemory(root, { type = "context", content, summary, phase, agent, source = "claude", data } = {}) {
   assertOneOf(type, MEMORY_TYPES, "type");
   assertText(content, "content");
   const project = loadProject(root);
@@ -314,6 +316,7 @@ export function writeMemory(root, { type = "context", content, summary, phase, a
     summary: (summary?.trim() || firstLine(content)).slice(0, 200),
     content: content.trim(),
   };
+  if (data && typeof data === "object") entry.data = data; // structured facts for reports (hook records)
   appendFileSync(join(storeDir(root), "log.jsonl"), JSON.stringify(entry) + "\n");
 
   if (type === "handoff") {
