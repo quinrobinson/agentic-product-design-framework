@@ -333,6 +333,15 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 - Narrow skill descriptions that fire on general coding, e.g. `visual-design-execution` and `prototyping`. Update `which-claude` to the Code-drives model.
 - Acceptance: the suite runs with one command and meets the targets. Results are logged as the baseline for Phase 4's weekly improvements.
 
+- **R5a done Sept 25, 2026** (plugin 0.5.0; no model needed):
+  - **Handoff skills merged:** `skill-chaining` is merged into `phase-handoff`, rewritten around saving to `.pathlon/`: a standard block; what each transition carries forward; partial, combined and skipped-phase handoffs; the retrospective; and copy and paste as the Chat fallback. The phase only changes after the designer says yes.
+  - **Over-broad descriptions narrowed:** `visual-design-execution` no longer triggers on "building any page, component, or screen across React…", and `prototyping` no longer claims UX copy, motion or design QA. Both point to the skills that own those jobs.
+  - **Routing guide updated:** `which-claude` is rewritten for Claude Code driving Pathlon. It covers what each surface gives you, Figma in both Code and Chat, and troubleshooting.
+  - **Stale references fixed:** `figma-playbook` no longer points to the retired `user-research`.
+  - **Static checks:** `pathlon/tests/lint.test.mjs` checks that skill names match their folders; that descriptions are 80–1024 characters and don't name coding frameworks (`motion` excepted); that nothing references a retired skill; that agents have a proactive description, a Definition of Done and a Done report; and that every skill an agent lists exists. Checked against planted violations.
+  - **Tests:** 34 pass across store, server, hooks, checks and lint.
+- **R5b (evals) waits on Quin:** the installed Claude Code (2.1.114) has no `claude plugin eval`, and the CLI isn't logged in for headless runs. After `claude update` and `claude /login`, write the suite in `pathlon/evals/` against the format that version documents (`claude plugin eval --help`), run it, and record the baselines. The suite should cover the first skill fired, the agent chosen, first-try Definition of Done pass rate, and silence in an unrelated repo; the one-question case excludes `start`'s intake. Also still to do: removing the duplicate claude.ai account skills (5.8), which compete with the plugin's skills in Claude Code sessions.
+
 **Then:** Phase 3 dogfood on Courtside IQ, unchanged.
 
 **Later (roadmap, not scheduled):**

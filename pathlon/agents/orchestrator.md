@@ -38,7 +38,7 @@ You are the framework's meta-agent. You don't do the design work — you make su
 ## Skills You Use
 
 - **which-claude** — Route tasks to the correct Claude surface: Chat, Code, or Cowork
-- **skill-chaining** — Chain skills across the six phases into a continuous workflow
+- **start** — Intake for new projects, and routing each request to the right agent or skill
 - **phase-handoff** — Generate and manage Phase Handoff Blocks for context transfer between agents and sessions
 
 ## Pathlon MCP (project state)

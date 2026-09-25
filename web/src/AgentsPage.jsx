@@ -196,7 +196,7 @@ const AGENTS = [
     occasionalSurfaces: [],
     description: "Orients new projects, routes work to the right specialist agent, keeps phase handoffs in Pathlon, and tracks what's been decided vs. what's still open. Invoke at the start of a project, when switching phases, or when you're not sure which agent to use.\n\nBefore routing any work, runs a Phase Gap Analysis — comparing what Pathlon has recorded against the current phase's Definition of Done. Surfaces missing artifacts and their assumption and dependency risks before proceeding.\n\nIn Claude Code, the Orchestrator runs in autonomous mode — spawning specialist agents without manual routing. Run /pathlon:kickoff to trigger autonomous phase execution. Project state comes from Pathlon MCP.",
     howToUse: "Start here on any new project. In Claude Code, it spawns specialist agents and manages the handoff block as a living file. In Claude Chat, paste the activation prompt and describe where you are in the project — it will tell you which agent to invoke next and on which surface.",
-    skills: ["which-claude", "skill-chaining", "phase-handoff"],
+    skills: ["start", "which-claude", "phase-handoff"],
     primaryGoal: "Drive every design phase to a complete, handoff-ready output — resolving blockers, spawning the right agents, and knowing when a phase is genuinely done.",
     definitionOfDone: [
       "The phase's primary artifact exists and is recorded in Pathlon",
@@ -208,9 +208,9 @@ const AGENTS = [
     mcpTools: ["get_project_context", "get_memories", "recommend_starting_point", "detect_patterns", "set_phase", "write_memory", "link_artifact"],
     activationPrompt: "You are the Orchestrator agent from the Agentic Product Design Framework. Your role is a senior design program manager. You orient new projects, route work to the right specialist agent, manage phase handoff blocks, and track what's been decided vs. what's still open. Ask me what project we're starting and where we are in the process.",
     mapCells: {
-      chat:   { type: "primary", note: "Kickoff orientation. Deciding which agent and surface to route to. Generating Phase Handoff Blocks for context transfer between sessions.", skills: ["which-claude", "skill-chaining", "phase-handoff"] },
+      chat:   { type: "primary", note: "Kickoff orientation. Deciding which agent and surface to route to. Generating Phase Handoff Blocks for context transfer between sessions.", skills: ["which-claude", "phase-handoff"] },
       code:   { type: "primary", note: "Spawns subagents. Reads project state from disk. Routes tasks to the right specialist agent. Manages the handoff block as a living project file across the full six-phase lifecycle." },
-      cowork: { type: "occasional", skills: ["skill-chaining", "phase-handoff"], note: "Coordinate multi-agent workflows in a shared session. Review phase progress alongside a specialist agent. Hand off context between phases in real time." },
+      cowork: { type: "occasional", skills: ["phase-handoff"], note: "Coordinate multi-agent workflows in a shared session. Review phase progress alongside a specialist agent. Hand off context between phases in real time." },
     },
     commands: [
       { name: "/pathlon:kickoff", desc: "Read project state from Pathlon and kick off the current phase", inputs: [] },
@@ -702,7 +702,6 @@ const SKILL_PHASES = [
       { name: "Motion",                     desc: "Decide whether something should move, then spec or build it on any platform — with recipes for common components.",         leverage: "high" },
       { name: "Figma Playbook",             desc: "Execute design work directly in Figma using the Figma MCP — frames, components, variables, and annotations.",         leverage: "high" },
       { name: "Phase Handoff",              desc: "Generate and use Phase Handoff Blocks to chain the six design phases into one continuous workflow.",                   leverage: "high" },
-      { name: "Skill Chaining",             desc: "Connect design phases so outputs become inputs — structured handoff across all six phases.",                          leverage: "high" },
       { name: "Which Claude",               desc: "Route every design task to the right Claude surface — Chat, Cowork, or Code — based on task type and requirements.", leverage: "high" },
     ],
   },

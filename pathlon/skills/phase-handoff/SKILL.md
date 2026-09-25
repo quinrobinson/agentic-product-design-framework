@@ -2,213 +2,98 @@
 name: phase-handoff
 phase: all
 description: >
-  Generate and use Phase Handoff Blocks to chain the six design phases into one continuous
-  AI-assisted workflow. Use this skill when closing a phase and preparing to start the next,
-  when a designer needs to re-brief Claude mid-project, when picking up a project after a break,
-  or when onboarding a new collaborator onto an in-progress project. Also triggers when a user
-  says "we're moving to the next phase," "start Define," "continue from where we left off," or
-  pastes a handoff block as their first message. This skill solves context loss between
-  conversations — the #1 failure mode in AI-assisted design workflows.
-claude_surface: chat
+  Close a design phase with a Phase Handoff Block saved to the project, so the next phase and every
+  later session start with full context. Use when a phase is finishing ("we're done with Define",
+  "move to Ideate"), when saving progress mid-phase, when combining handoffs from parallel work,
+  when writing the end-of-project retrospective, or when working in Claude Chat without project
+  memory and the context has to be carried by hand.
+claude_surface: chat-or-code
 ai_leverage: high
 ---
 
-# Phase Handoff — Skill Chaining System
+# Phase Handoff
 
-Turn six separate AI conversations into one continuous design thread. Each phase closes
-by generating a structured summary that becomes the opening context for the next phase.
+A handoff is how one phase hands its signal to the next: what was done, what was decided, what's still open, and what the next phase needs. In a Pathlon project it's saved to `.pathlon/` and loaded automatically when a session opens, so nobody re-briefs Claude. In Claude Chat, where there's no project memory, the same block is copied into the next conversation.
 
----
+`/pathlon:transition` runs this end to end (write the handoff, confirm the phase change, start the next phase). Use this skill directly for partial saves, combined handoffs, the retrospective, or Chat.
 
+## When to Use
 
-## Claude Surface
-
-**Use Claude Chat** (`claude.ai`) for all Phase Handoff Block generation and usage.
-
-Handoff blocks are generated and pasted within Claude Chat conversations. No terminal
-or Figma MCP is required for the handoff system itself.
-
-> The handoff block is surface-agnostic — it can be pasted into any Claude surface
-> to re-establish context at the start of a new session.
-
-## The Problem This Solves
-
-Every new Claude conversation starts blank. Without a handoff block, a designer finishing
-User Research has to mentally re-brief Claude when starting Problem Framing — recalling
-participants, themes, pain points, constraints, and decisions from memory. Context gets lost.
-Nuance gets dropped. The AI reverts to generic advice.
-
-**The fix:** A Phase Handoff Block is a structured summary Claude generates at the close of
-each phase. The designer pastes it as the first message of the next conversation. Claude
-picks up with full project context — the same thread, continued.
+- A phase is ending, or the designer wants to move to the next one
+- A long session should save its progress before stopping (partial handoff)
+- Several pieces of work in one phase need one combined handoff
+- The project is shipping (retrospective)
+- Working in Chat, or onboarding someone who doesn't have the project folder
 
 ---
 
-## The Full Chain
+## 1. Write the block
+
+Use this structure every time; the heading format lets Pathlon and people find it:
 
 ```
-01 Discover ──→ Handoff Block ──→ 02 Define
-02 Define   ──→ Handoff Block ──→ 03 Ideate
-03 Ideate   ──→ Handoff Block ──→ 04 Prototype
-04 Prototype ─→ Handoff Block ──→ 05 Validate
-05 Validate ──→ Handoff Block ──→ 06 Deliver
-06 Deliver  ──→ Retrospective Block (project archive)
+## Phase Handoff Block — [Completed Phase] → [Next Phase]
+
+**Completed:** [phase] · **Next:** [phase] · **Date:** [YYYY-MM-DD]
+
+### What Was Done
+[Outputs and the decisions behind them — the signal, not a transcript]
+
+### Key Artifacts
+[Each artifact and where it lives (file path, Figma link, doc)]
+
+### Design System Status
+[System and link, or "none"; gaps raised with its owner]
+
+### Open Questions
+- [What the next phase must resolve — one per line]
+
+### Inputs for Next Phase
+[What the next phase's agent needs to start]
+
+### Recommended First Step
+[One concrete next action]
 ```
 
-Each block carries forward only what the next phase needs — not everything, just the
-signal without the noise.
+### What each transition must carry forward
 
----
+| From → To | Make sure the block includes |
+|---|---|
+| **Discover → Define** | Product, users, business goal; top themes and ranked pain points; anchoring quotes; personas; opportunity areas; what Define should frame first |
+| **Define → Ideate** | The problem statement (HMW and JTBD); journey friction and the biggest opportunity moment; prioritized requirements (must / should / out of scope); constraints; where ideation should start |
+| **Ideate → Prototype** | The selected concept, why, and the alternatives rejected; key design decisions; UI patterns chosen; the visual direction (design system in use, or the token set if one was defined); screens to build in priority order; the riskiest flows |
+| **Prototype → Validate** | Fidelity; screens and interactions built; components (new, reused, with states); hypotheses to test with success criteria; riskiest assumptions; test focus |
+| **Validate → Deliver** | Participants and completion rate; the most critical finding; issues by severity; what tested well; required changes; components ready to spec |
 
-## How to Use
+## 2. Save it
 
-### Closing a phase — generating a handoff block
+**In a Pathlon project:** save the block with `write_memory` (`memory_type: "handoff"`, `phase`: the phase being closed). Pathlon keeps it in `.pathlon/handoffs/` and shows its open questions whenever a session opens. Record the artifacts it names with `link_artifact`. Then ask the designer one yes/no before moving the phase (`set_phase` to complete the old one and start the next) — saving the handoff never changes the phase on its own.
 
-At the end of any phase session, say:
+**In Chat or without Pathlon:** give the designer the block to copy, and tell them to paste it as the first message of the next conversation (with the next phase's skill).
 
-> *"Generate the Phase Handoff Block for this session."*
+Review before saving — the block is the next phase's starting point:
+- Is the single most important finding or decision captured?
+- Are constraints specific (real platform, timeline, business limits)?
+- Is the next step concrete?
 
-Claude will fill in the structured template from that skill's **Phase Handoff Block** section,
-using everything discussed in the conversation as context.
+## Partial, combined, and final handoffs
 
-**Review the block before moving on:**
-- Does it capture the most important finding or decision?
-- Are the constraints accurate?
-- Is the "what to focus on next" direction right?
+- **Partial:** mid-phase, save the block with `[PARTIAL]` in the heading and say what's done and what isn't. A later full handoff for the phase replaces it as the latest.
+- **Combined:** when parallel work closes one phase (e.g. research synthesis plus competitive analysis), write one block with a short section per source and a one-to-two sentence synthesis — not separate blocks.
+- **Skipped phases:** if the project jumps a phase, the handoff says what's known and flags what's assumed because that phase didn't happen.
+- **Retrospective:** when the project ships, save a final handoff for phase 06 covering the insight that drove the work, the problem statement, the concept chosen and why, the key test finding, major decisions, what was left out, and what to pick up in v2.
 
-Edit anything that's off. This block is the single source of truth for the next phase.
+## Picking a project back up
 
-### Opening the next phase — using a handoff block
-
-Start a new conversation, attach the next phase's skill file, and paste the handoff block
-as your **first message** — before any other context or questions.
-
-Claude will:
-1. Acknowledge the incoming context
-2. Confirm which phase is starting
-3. Ask one clarifying question if anything is unclear
-4. Begin the phase work with full context already loaded
-
-### Mid-project re-entry
-
-If you're picking up a project after a break, or a new collaborator is joining, paste
-**all accumulated handoff blocks** as the opening message:
-
-```
-[Discover → Define handoff block]
-[Define → Ideate handoff block]
-[Ideate → Prototype handoff block]
-
-We're now in Prototype phase. Here's where we left off: [brief status update].
-```
-
-Claude will reconstruct the full project context from the chain.
-
----
-
-## What Each Handoff Block Contains
-
-Every block follows the same structure: **what came before → what was decided → what comes next**.
-
-| Block | From → To | Key Contents |
-|-------|-----------|--------------|
-| User Research | Discover → Define | Themes, pain points, unmet needs, key quote, assumptions to validate |
-| Competitive Analysis | Discover → Define | Conventions, gaps, differentiation opportunity, positioning signal |
-| Problem Framing | Define → Ideate | Validated problem statement, constraints, journey friction points, provocation |
-| Concept Generation | Ideate → Prototype | Selected concept, rejected alternatives, visual direction, screens to build |
-| Visual Design | Ideate → Prototype | Full token set (colors, type, spacing, shape, motion), style rules |
-| Prototyping | Prototype → Validate | Prototype link, hypotheses to test, riskiest assumptions, draft tasks |
-| Accessibility Audit | Prototype/Validate → Deliver | Critical issues, confirmed passing, engineer requirements |
-| Usability Testing | Validate → Deliver | What worked, issues to fix, validated assumptions, metrics baseline |
-| Design Delivery | Deliver → Archive/v2 | Full chain summary, design decisions, debt flagged, v2 backlog |
-
----
-
-## Combining Multiple Blocks
-
-When two skills run in the same phase (e.g., User Research + Competitive Analysis both in Discover),
-combine their handoff blocks into one opening message for Define:
-
-```
-
-## Combined Handoff: Discover → Define
-
-### From: User Research
-[paste user research handoff block content]
-
-### From: Competitive Analysis
-[paste competitive analysis handoff block content]
-
-### Synthesis
-[1–2 sentences combining the most important signal from both]
-```
-
-Similarly, Concept Generation + Visual Design both hand off to Prototype — combine them
-so the prototype has both the interaction concept and the visual system.
-
----
-
-## Generating a Handoff Block Mid-Phase
-
-You don't have to wait until the end of a session. Generate a handoff block any time you
-want to save state:
-
-> *"Generate a partial handoff block — we've completed research synthesis but haven't done
-> journey mapping yet."*
-
-Claude will generate a block marked `[PARTIAL]` so you know it's not the full phase output.
-
----
-
-## The Retrospective Block (Project Archive)
-
-The Design Delivery skill generates a final **Retrospective Block** — not a handoff to
-another phase, but a permanent record of the full project:
-
-- The discovery insight that drove everything
-- The problem statement
-- The concept chosen and why
-- The key test finding that shaped delivery
-- Design decisions and their rationale
-- What was left out and why
-- What to pick up in v2
-
-Store this alongside the Figma file and repo. When the project comes back for v2, paste
-it as the opening message. Claude picks up with complete institutional memory.
-
----
-
-## Quick Reference — Handoff Prompts
-
-Copy these into your workflow:
-
-**Close a phase:**
-> "We've finished [phase name]. Generate the Phase Handoff Block for this session."
-
-**Open the next phase:**
-> "Starting [next phase name]. Here's the handoff from [previous phase]: [paste block]"
-
-**Re-enter after a break:**
-> "Picking up [project name]. Here are the handoffs so far: [paste all blocks]. We're in [current phase]."
-
-**Onboard a collaborator:**
-> "New designer joining. Here's the project context: [paste all blocks]. They're taking over [phase]."
-
-**Partial save:**
-> "Generate a partial handoff block — we've done [X] but not yet [Y]."
-
-**Combine blocks:**
-> "Combine the User Research and Competitive Analysis handoffs into one opening context for Define."
+**In a Pathlon project**, nothing to paste: the latest handoff and its open questions load when the session opens; ask "where does this project stand?" for more. **Without Pathlon**, paste the handoffs so far as the first message and say which phase you're in.
 
 ---
 
 ## Quality Checklist
 
-Before moving to the next phase, verify the handoff block:
-
-- [ ] The single most important finding or decision is captured
-- [ ] Constraints are specific (not generic — actual platform, timeline, business constraints)
-- [ ] The "what to focus on next" direction is actionable, not vague
-- [ ] No critical context was dropped that the next phase will need
-- [ ] Block is dated and project-named (makes re-entry easier)
-- [ ] If combining multiple blocks, the synthesis sentence is accurate
+- [ ] The block follows the heading and section structure above
+- [ ] The most important finding or decision is captured, with evidence
+- [ ] Open questions are listed one per line
+- [ ] Every artifact named has a location (and is linked in Pathlon)
+- [ ] Saved with `write_memory` (handoff) — or handed to the designer to paste, in Chat
+- [ ] The phase changed only after the designer said yes

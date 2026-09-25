@@ -20,34 +20,7 @@ or write one in Step 2 and show it for the designer to keep until Pathlon is bac
 Collect what's missing: what was completed in this phase (key outputs, decisions, artifacts).
 Ask only for what Pathlon and the conversation don't already tell you.
 
-Generate the block in this format. The heading is exact:
-
----
-## Phase Handoff Block — [Current Phase] → [Next Phase]
-
-**Completed:** [current phase]
-**Next:** [next phase in the sequence]
-
-### What Was Done
-[Summary of outputs and decisions from this phase]
-
-### Key Artifacts
-[Artifacts produced, with where each lives]
-
-### Design System Status
-**Status:** [established / external / none / unknown]
-**Token collections:** [Reference, System, Component — or N/A]
-**Key tokens in use:** [Primary/surface/accent colors and type scale, or N/A]
-
-### Open Questions
-[Questions the next phase needs to resolve]
-
-### Inputs for Next Phase
-[Specific inputs the next agent needs to begin work]
-
-### Recommended First Command
-[The /command the next agent should run first]
----
+Write the block using the **phase-handoff** skill's structure and its "what each transition must carry forward" table (the heading `## Phase Handoff Block — [Completed] → [Next]` is exact, and open questions go under `### Open Questions`, one per line).
 
 Save it to Pathlon: `write_memory` with `memory_type: "handoff"` and the current phase.
 

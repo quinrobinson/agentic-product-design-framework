@@ -2,13 +2,11 @@
 name: prototyping
 phase: 04 — Prototype
 description: >
-  Build functional prototypes, write UX copy, and validate interaction quality across web and
-  native mobile. Use this skill when creating working prototypes in React/HTML, generating
-  complete UI copy for screens, specifying micro-interactions and component behavior, auditing
-  touch target sizes, verifying animation timing, or checking mobile gesture safety. Also triggers
-  for design QA, responsive design specs, translating wireframes into testable prototypes, or
-  when any question arises about how a component should move, respond, or behave. Always use
-  alongside visual-design-execution for visual system rules and accessibility-audit for a11y checks.
+  Plan and build a testable prototype of a design concept — choosing fidelity, the flows and states
+  to include, and the interaction details (touch targets, gestures, responsive behavior) — so it can
+  be put in front of users. Use in the Prototype phase when turning a selected concept, flows, or
+  wireframes into something clickable or coded for testing. For interface wording use
+  ux-copy-writing, for motion use motion, and for checking a build against the design use design-qa.
 claude_surface: chat-or-code
 ai_leverage: high
 ---

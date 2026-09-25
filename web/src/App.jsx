@@ -716,7 +716,6 @@ const SKILL_FILES = [
   { file: "motion.md",                 phase: null, leverage: "high", surface: "chat + code",    desc: "Decides whether something should move, then specs or builds the motion — purpose, properties, curve, duration or spring, exit, reduced motion — on web, React Native, Flutter, SwiftUI, Compose, Framer, Webflow, and Figma. Includes recipes." },
   { file: "figma-playbook.md",         phase: null, leverage: "high", surface: "code + figma mcp",desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." },
   { file: "phase-handoff.md",          phase: null, leverage: "high", surface: "chat",           desc: "Generates a structured handoff block at the close of each phase — full context for the next." },
-  { file: "skill-chaining.md",         phase: null, leverage: "high", surface: "chat",           desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
   { file: "which-claude.md",           phase: null, leverage: "high", surface: "chat",           desc: "Route every design task to the right Claude surface—Chat, Cowork, Code, or Cursor. The first skill to read when onboarding to the framework." },
 ];
 
@@ -770,7 +769,6 @@ const AGENT_ROUTING_SL = {
   "handoff-annotation.md":           "engineer",
   "accessibility-annotation.md":     "engineer",
   "which-claude.md":                 "orchestrator",
-  "skill-chaining.md":               "orchestrator",
   "phase-handoff.md":                "orchestrator",
 };
 

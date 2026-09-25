@@ -19,7 +19,7 @@ You work the way you normally would ("synthesize these interview notes", "let's 
      │                    │                     │
    BRAIN               MEMORY                 HANDS
    Pathlon plugin      .pathlon/ in your      Figma MCP and your
-   42 skills           project folder,        other tools
+   41 skills           project folder,        other tools
    6 agents            managed by a local
    7 commands          Pathlon server
 ```
@@ -102,7 +102,7 @@ Chat has the skills but not agents, commands, or project memory — `.pathlon/` 
 
 ### Skills — `pathlon/skills/<name>/SKILL.md`
 
-42 skills. Every phase skill opens with the business outcome it moves, the design KPI it improves, and the product risk it reduces.
+41 skills. Every phase skill opens with the business outcome it moves, the design KPI it improves, and the product risk it reduces.
 
 | Phase | Skills |
 |---|---|
@@ -112,7 +112,7 @@ Chat has the skills but not agents, commands, or project memory — `.pathlon/` 
 | 04 — Prototype | `prototyping`, `accessibility-audit`, `user-flow-mapping`, `ux-copy-writing`, `prototype-scoping`, `heuristic-review`, `test-script-drafting` |
 | 05 — Validate | `usability-testing`, `usability-findings-synthesis`, `insight-report`, `recruitment-screener`, `stakeholder-presentation`, `iteration-brief` |
 | 06 — Deliver | `design-delivery`, `component-specs`, `design-qa`, `handoff-annotation`, `accessibility-annotation`, `design-decision-record` |
-| Cross-phase | `start`, `design-system`, `motion`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
+| Cross-phase | `start`, `design-system`, `motion`, `figma-playbook`, `phase-handoff`, `which-claude` |
 
 Three cross-phase skills worth knowing:
 - **`start`** — Pathlon's front door (`/pathlon:start`): a three-question intake for a new project, and routing each request to the right agent or skill.
@@ -193,7 +193,7 @@ To add or change a skill:
 4. Check your work:
    ```bash
    claude plugin validate ./pathlon
-   node --test pathlon/server/store.test.mjs pathlon/server/server.test.mjs pathlon/hooks/context.test.mjs
+   node --test pathlon/server/*.test.mjs pathlon/hooks/*.test.mjs pathlon/tests/*.test.mjs
    claude --plugin-dir ./pathlon   # try the plugin without installing it
    ```
 

@@ -2,168 +2,51 @@
 name: which-claude
 phase: all
 description: >
-  Route every design task to the right Claude surface — Chat, Cowork, or Code. Use this
-  skill before starting any session if you're unsure which surface to open. Triggers include any
-  question about where to run a workflow, whether to use the browser or terminal, how to
-  connect Figma, or when a task isn't working as expected. This is the first skill to read
-  when onboarding to the framework.
+  Decide where to run Pathlon work — Claude Code (CLI or the Code tab in Claude Desktop), Claude
+  Chat on web or mobile, or Cowork — and what each gives you: project memory, agents, commands,
+  Figma, local files. Use when unsure which surface to open, when setting up Pathlon, when
+  connecting Figma, or when something isn't working (tools missing, project not remembered).
 ai_leverage: high
 ---
 
-# Which Claude? — Surface Routing Guide
+# Which Claude?
 
-Before uploading a skill file or starting a session, open the right Claude. Using the wrong
-surface is the #1 reason workflows stall — not skill gaps, not prompting mistakes.
+**Short answer: do design work in Claude Code** — the CLI, or the Code tab in Claude Desktop. That's where Pathlon's project memory, agents, commands, and automatic context live. Use Chat for quick thinking on the go. Cowork is for work where Claude drives apps and your screen; Pathlon hasn't been tested there, so check what it supports before relying on it for project work.
 
----
+## What each surface gives you
 
-## The Three Surfaces
-
-### Claude Chat — `claude.ai`
-**What it is:** A browser-based or mobile conversation interface. No setup required.
-
-**Best for:**
-- All skill-file-based workflows (research synthesis, problem framing, concept generation, etc.)
-- Uploading transcripts, CSVs, PDFs, or images for analysis
-- Generating content, copy, documentation, and design briefs
-- Talking through design decisions and getting structured recommendations
-- Running the AI Brief Generator, Brand Style Builder, and Design System Audit tools on the live site
-- Phase Handoff Blocks — generating and pasting between sessions
-- **Figma Make prompts** — after completing concept generation or storyboarding in a session, ask Claude to synthesize a Figma Make prompt from the session context. Claude already has your concept cards, persona, and scenario — just ask by concept name. Copy the output and paste directly into Figma Make. No setup required.
-
-**Not for:**
-- Operating Figma directly (use Claude Code + Figma MCP)
-- Running terminal commands or Git operations
-- Accessing your local file system
-
-**How to start:** Go to [claude.ai](https://claude.ai) → New conversation → Upload your skill file → Begin.
-
----
-
-### Claude Cowork — Desktop App
-**What it is:** A downloadable desktop application that can observe and control your screen,
-browser, and apps — it sees what you see and can click, type, and navigate on your behalf.
-
-**Best for:**
-- Automating repetitive browser tasks (filling forms, organizing tabs, navigating complex UIs)
-- Screen-aware workflows where Claude needs to observe your current state
-- Tasks that require switching between multiple open applications
-- Reviewing live prototypes or staging environments with Claude watching alongside
-
-**Not for:**
-- Deep file system operations or Git commands (use Claude Code)
-- Figma MCP integration (use Claude Code)
-- Pure text analysis and generation (Claude Chat is faster and simpler)
-
-**How to start:** Download the Claude desktop app → Open it alongside your browser or app
-→ Give screen access permission when prompted → Describe what you want Claude to help automate.
-
----
-
-### Claude Code — Terminal
-**What it is:** A command-line AI agent that runs inside your terminal. Has direct access to
-your local file system, can execute code, manage Git, and connect to MCP servers like Figma.
-
-**Best for:**
-- **Figma MCP workflows** — this is the only surface that supports direct Figma integration
-- Editing, committing, and pushing files to GitHub
-- Running build scripts, linters, or test suites
-- Generating and writing code files to disk (components, tokens, configs, prototype code)
-- Working with design tokens — exporting, transforming, syncing CSS/JSON files
-- Building prototype and production code from component specs
-- Translating design tokens to CSS custom properties or React props
-- Any workflow in the `figma-playbook.md` skill
-
-**Not for:**
-- Conversational design thinking (use Claude Chat)
-- Tasks that don't involve your local file system or a terminal
-
-**How to start:** Install Claude Code via `npm install -g @anthropic-ai/claude-code` →
-Open your terminal in your project directory → Run `claude` → You're in a session.
-
----
-
-## Quick Decision Table
-
-| Task | Surface |
-|------|---------|
-| Synthesize interview transcripts | Claude Chat |
-| Write a HMW problem statement | Claude Chat |
-| Generate concept directions | Claude Chat |
-| Build an accessibility audit | Claude Chat |
-| Write component specs for handoff | Claude Chat |
-| Use the AI Brief Generator (live site) | Claude Chat |
-| Use the Design Process System (live site) | Claude Chat |
-| Generate a Phase Handoff Block | Claude Chat |
-| Generate a Figma Make prompt from a session | Claude Chat |
-| Create frames and boards directly in Figma | Claude Code + Figma MCP |
-| Scaffold components in Figma | Claude Code + Figma MCP |
-| Sync design tokens to CSS/JSON files | Claude Code |
-| Push skill files or artifacts to GitHub | Claude Code |
-| Automate a browser-based task | Claude Cowork |
-| Review a live prototype with Claude watching | Claude Cowork |
-| Navigate a complex web UI with AI assistance | Claude Cowork |
-| Build a component from a spec | Claude Code |
-| Translate tokens to CSS/React | Claude Code |
-| Generate all component states | Claude Code |
-
----
-
-## Figma Integration — Which Surface?
-
-This is the most common point of confusion. Here's the clear rule:
-
-| What you want | Surface | Why |
+| | Claude Code (CLI or Desktop Code tab) | Claude Chat (web, mobile, desktop chat) |
 |---|---|---|
-| **Claude to think about Figma** — naming conventions, structure, component strategy | Claude Chat | No MCP needed; pure reasoning |
-| **Claude to generate a Figma Make prompt** — synthesize session context into a ready-to-paste Make prompt | Claude Chat | Claude already has the context from the session; no MCP needed |
-| **Claude to work inside Figma** — create frames, build components, update tokens | Claude Code + Figma MCP | Figma MCP only connects via Claude Code |
-| **Claude to navigate Figma in the browser** — click around, read content | Claude Cowork | Screen awareness; but no deep Figma API access |
+| Pathlon skills | ✅ all, via the plugin | ✅ after uploading the skill zips |
+| Agents and `/pathlon:*` commands | ✅ | — |
+| Project memory (`.pathlon/`) | ✅ loads automatically | — (optional sync is on the roadmap) |
+| Your local files and repos | ✅ | Only what you upload |
+| Figma | ✅ Figma MCP — read and write files | ✅ Figma connector |
+| Best for | Everything in a project: research through build | Thinking, drafting, reviewing away from your desk |
 
-> **Rule of thumb:** If you want Claude to *create or modify* Figma content, use Claude Code.
-> If you want Claude to *think or advise* about Figma content, use Claude Chat.
+## Quick decisions
 
----
+| You want to… | Use |
+|---|---|
+| Work on a project so Claude remembers it next time | Claude Code |
+| Run a phase, use an agent, or close a phase with a handoff | Claude Code |
+| Build or change frames and components in Figma | Claude Code (Figma MCP), or Chat with the Figma connector |
+| Synthesize notes or draft copy away from your desk | Chat (paste the result into the project later, or save it from Claude Code) |
+| Have Claude click through a staging site or a desktop app | Cowork |
 
-## Surface × Phase Matrix
+## Setup
 
-| Phase | Primary Surface | Secondary |
-|-------|----------------|-----------|
-| 01 — Discover | Claude Chat | Claude Code (pulling research files from local disk) |
-| 02 — Define | Claude Chat | Claude Code (exporting journey maps to Figma) |
-| 03 — Ideate | Claude Chat | Claude Code (building concept wireframes in Figma) |
-| 04 — Prototype | Claude Chat + Claude Code | Claude Code (Figma MCP, Git) |
-| 05 — Validate | Claude Chat | Claude Cowork (screen-aware QA on staging) |
-| 06 — Deliver | Claude Chat + Claude Code | Claude Code (building and hardening component code) |
+- **Claude Code:** install Claude Code and Node.js 18+, then `/plugin marketplace add quinrobinson/agentic-product-design-framework` and `/plugin install pathlon@pathlon`. Restart. Open your project's folder.
+- **Figma:** connect the Figma MCP in Claude Code (or the Figma connector in Chat).
+- **Chat:** build the skill zips from the repo (`npm --prefix web run chat-skills`) and upload them under Settings → Capabilities → Skills.
 
----
-
-## Setup Requirements by Surface
-
-### Claude Chat
-- A claude.ai account (Free, Pro, or Team)
-- No installation required
-- Skill files uploaded per conversation
-
-### Claude Cowork
-- Claude desktop app downloaded and installed
-- Screen recording permission granted
-- Works best on macOS and Windows
-
-### Claude Code
-- Node.js installed (`node --version` to verify)
-- Claude Code installed: `npm install -g @anthropic-ai/claude-code`
-- For Figma MCP: Figma desktop app (not browser) + MCP configured
-- Verify: `claude --version` and `claude mcp list`
-
----
-
-## If Something Isn't Working
+## If something isn't working
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Claude can't "see" my Figma file | Using Claude Chat, not Claude Code | Switch to terminal, run `claude`, connect Figma MCP |
-| Figma MCP commands aren't running | Claude Desktop chat, not Claude Code | Claude Code is `claude` in terminal — not the desktop chat window |
-| Claude can't read my local files | Using Claude Chat | Switch to Claude Code in terminal from your project directory |
-| Claude can't click things on screen | Using Claude Chat | Switch to Claude Cowork desktop app |
-| Skill file workflow feels slow | Using Claude Code for text tasks | Claude Chat is faster for reasoning and generation |
+| No `pathlon:` skills, agents, or `/pathlon:*` commands | Plugin not installed or not loaded | `/plugin install pathlon@pathlon`, then restart Claude Code or Desktop |
+| Pathlon tools missing or erroring | Node.js missing or too old | `node --version` must show 18+; install from nodejs.org, restart |
+| Claude doesn't know the project when a session opens | No Pathlon project in this folder (or you're in a different folder) | Run `/pathlon:start` here, or open the folder that has `.pathlon/` |
+| Claude asks the same questions every session | Things aren't being saved | Ask "save that to Pathlon" once; check `.pathlon/log.jsonl` |
+| Pathlon chimes in on unrelated projects | Shouldn't happen — context is silent outside a Pathlon project | Check the folder isn't inside one that has `.pathlon/` |
+| In Chat, Claude has no project context | Chat has no access to `.pathlon/` | Work in Claude Code, or paste the latest handoff |

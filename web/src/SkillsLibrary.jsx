@@ -73,7 +73,6 @@ const AGENT_ROUTING = {
   "accessibility-annotation.md":    "engineer",
   // Orchestrator
   "which-claude.md":                "orchestrator",
-  "skill-chaining.md":              "orchestrator",
   "phase-handoff.md":               "orchestrator",
 };
 
@@ -101,7 +100,6 @@ const SKILL_META = {
   "motion.md": { phase: null, leverage: "high", surface: "chat + code", desc: "Decides whether something should move, then specs or builds the motion — purpose, properties, curve, duration or spring, exit, reduced motion — on web, React Native, Flutter, SwiftUI, Compose, Framer, Webflow, and Figma. Includes recipes." },
   "figma-playbook.md": { phase: null, leverage: "high", surface: "code + figma mcp", desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file." },
   "phase-handoff.md": { phase: null, leverage: "high", surface: "chat", desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing." },
-  "skill-chaining.md": { phase: null, leverage: "high", surface: "chat", desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
   // Phase 02 additions
   "journey-mapping.md": { phase: "02", leverage: "high", surface: "chat", desc: "Visualize the end-to-end user experience with actions, thoughts, emotions, and touchpoints across each stage. Synthesize research into a shared experience narrative before ideation." },
   "persona-creation.md": { phase: "02", leverage: "high", surface: "chat", desc: "Transform research into specific, behavioral user archetypes that anchor design decisions. Create research-grounded personas before ideation to resolve stakeholder debates." },
@@ -140,7 +138,7 @@ const SKILLS = [
   { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md", "prototype-scoping.md", "user-flow-mapping.md", "test-script-drafting.md", "heuristic-review.md", "ux-copy-writing.md"] },
   { phase: "05", dir: "05-validate", files: ["usability-testing.md", "usability-findings-synthesis.md", "insight-report.md", "iteration-brief.md", "recruitment-screener.md", "stakeholder-presentation.md"] },
   { phase: "06", dir: "06-deliver", files: ["design-delivery.md", "accessibility-annotation.md", "component-specs.md", "design-decision-record.md", "design-qa.md", "handoff-annotation.md"] },
-  { phase: null, dir: "", files: ["start.md", "design-system.md", "motion.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md", "which-claude.md"] },
+  { phase: null, dir: "", files: ["start.md", "design-system.md", "motion.md", "figma-playbook.md", "phase-handoff.md", "which-claude.md"] },
 ];
 
 const PHASE_FILTERS = [
@@ -197,7 +195,6 @@ const ALL_SKILL_FILES = [
   { path: "motion.md",                              zipPath: "motion/SKILL.md" },
   { path: "figma-playbook.md",                      zipPath: "figma-playbook/SKILL.md" },
   { path: "phase-handoff.md",                       zipPath: "phase-handoff/SKILL.md" },
-  { path: "skill-chaining.md",                            zipPath: "skill-chaining/SKILL.md" },
   { path: "which-claude.md",                               zipPath: "which-claude/SKILL.md" },
 ];
 

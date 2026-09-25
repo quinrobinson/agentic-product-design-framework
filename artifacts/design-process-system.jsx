@@ -1062,11 +1062,11 @@ Based on my answers, respond with:
             )}
           </div>
 
-          {/* Skill Chaining */}
+          {/* Phase Handoff */}
           <div style={{ marginTop: 16, background: "#fff", borderRadius: 16, padding: 32, border: "1px solid #eee", borderTop: "3px solid #6366F1" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
               <div>
-                <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 2, color: "#6366F1", marginBottom: 8 }}>Skill Chaining — Phase Handoff System</div>
+                <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: 2, color: "#6366F1", marginBottom: 8 }}>Phase Handoff</div>
                 <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#111", marginBottom: 6 }}>One continuous thread, not six separate conversations</div>
                 <p style={{ fontSize: 13, color: "#888", margin: 0, lineHeight: 1.5, maxWidth: 520 }}>
                   Each phase closes with a handoff block Claude generates from the session. Paste it as the first message of the next phase — Claude picks up with full context.

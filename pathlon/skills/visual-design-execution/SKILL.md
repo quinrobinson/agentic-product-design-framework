@@ -2,14 +2,12 @@
 name: visual-design-execution
 phase: 03 — Ideate / 04 — Prototype
 description: >
-  Select visual styles, build color systems, pair typography, define spacing scales, and produce
-  production-quality UI across web and mobile. Use this skill whenever the user asks to choose a
-  visual direction, create a design system from scratch, apply a color palette, pick font pairings,
-  set up dark/light mode, define animation timing, specify icon conventions, or make any decision
-  about how a product looks, feels, or moves. Also triggers when a UI looks "not professional
-  enough," when visual consistency needs fixing, or when building any page, component, or screen
-  across React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, or HTML/CSS. Always use
-  alongside concept-generation and design-system for full ideation-to-delivery coverage.
+  Choose and specify a product's visual direction when there is no design system to work from:
+  style, color and semantic tokens, type pairing and scale, spacing, shape and elevation, icons, and
+  light/dark mode — written as a spec the team can build in Figma or code. Use when a design
+  project needs a visual direction, a color or type system, or a fix for visual inconsistency. If
+  the team already has a design system, use design-system instead; for animation and transitions,
+  use motion.
 claude_surface: chat
 ai_leverage: high
 ---
