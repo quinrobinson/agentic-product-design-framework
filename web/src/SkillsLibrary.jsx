@@ -58,6 +58,7 @@ const AGENT_ROUTING = {
   "ux-copy-writing.md":             "designer",
   // Systems Designer
   "design-system.md":               "systems",
+  "motion.md":                      "designer",
   "figma-playbook.md":              "systems",
   "component-specs.md":             "systems",
   // Design Engineer
@@ -95,6 +96,7 @@ const SKILL_META = {
   "usability-testing.md": { phase: "05", leverage: "high", surface: "chat", desc: "Plans moderated and unmoderated tests, writes non-leading task scenarios, and synthesizes raw session notes into a severity-ranked findings report with actionable recommendations." },
   "design-delivery.md": { phase: "06", leverage: "high", surface: "chat + code", desc: "Produces component specs, platform-specific handoff packages for iOS/Android/Web, design decision records, and release notes — everything a developer needs to build it right." },
   "design-system.md": { phase: null, leverage: "high", surface: "chat + code", desc: "Works from your existing design system in Figma or Claude Design — maps screens to it, checks work against it, and reports gaps to its owner." },
+  "motion.md": { phase: null, leverage: "high", surface: "chat + code", desc: "Decides whether something should move, then specs or builds the motion — purpose, properties, curve, duration or spring, exit, reduced motion — on web, React Native, Flutter, SwiftUI, Compose, Framer, Webflow, and Figma. Includes recipes." },
   "figma-playbook.md": { phase: null, leverage: "high", surface: "code + figma mcp", desc: "Gives Claude step-by-step Figma MCP execution patterns for every phase — research boards, journey maps, wireframes, components, spec annotations, and decision records in your file." },
   "phase-handoff.md": { phase: null, leverage: "high", surface: "chat", desc: "Generates a structured handoff block at the close of each phase that you paste into the next conversation — so Claude carries full project context across all six phases without re-briefing." },
   "skill-chaining.md": { phase: null, leverage: "high", surface: "chat", desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
@@ -136,7 +138,7 @@ const SKILLS = [
   { phase: "04", dir: "04-prototype", files: ["prototyping.md", "accessibility-audit.md", "prototype-scoping.md", "user-flow-mapping.md", "test-script-drafting.md", "heuristic-review.md", "ux-copy-writing.md"] },
   { phase: "05", dir: "05-validate", files: ["usability-testing.md", "usability-findings-synthesis.md", "insight-report.md", "iteration-brief.md", "recruitment-screener.md", "stakeholder-presentation.md"] },
   { phase: "06", dir: "06-deliver", files: ["design-delivery.md", "accessibility-annotation.md", "component-specs.md", "design-decision-record.md", "design-qa.md", "handoff-annotation.md"] },
-  { phase: null, dir: "", files: ["design-system.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md", "which-claude.md"] },
+  { phase: null, dir: "", files: ["design-system.md", "motion.md", "figma-playbook.md", "phase-handoff.md", "skill-chaining.md", "which-claude.md"] },
 ];
 
 const PHASE_FILTERS = [
@@ -189,6 +191,7 @@ const ALL_SKILL_FILES = [
   { path: "06-deliver/design-qa.md",                       zipPath: "design-qa/SKILL.md" },
   { path: "06-deliver/handoff-annotation.md",              zipPath: "handoff-annotation/SKILL.md" },
   { path: "design-system.md",                              zipPath: "design-system/SKILL.md" },
+  { path: "motion.md",                              zipPath: "motion/SKILL.md" },
   { path: "figma-playbook.md",                      zipPath: "figma-playbook/SKILL.md" },
   { path: "phase-handoff.md",                       zipPath: "phase-handoff/SKILL.md" },
   { path: "skill-chaining.md",                            zipPath: "skill-chaining/SKILL.md" },

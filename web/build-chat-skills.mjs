@@ -1,12 +1,12 @@
-// Builds one upload-ready zip per skill for Claude Chat (claude.ai → Settings → Capabilities → Skills),
+// Builds one upload-ready zip per skill (the whole skill folder) for Claude Chat (claude.ai → Settings → Capabilities → Skills),
 // generated from the canonical skills in pathlon/skills/. Never edit Chat skills by hand; rerun this.
 //
-//   npm --prefix web run chat-skills   →   build/chat-skills/<name>.zip  (each contains <name>/SKILL.md)
+//   npm --prefix web run chat-skills   →   build/chat-skills/<name>.zip  (each contains <name>/SKILL.md plus any supporting files)
 //
 // Chat accepts only name, description, license, allowed-tools, metadata, and compatibility in frontmatter,
 // so repo-only fields (phase, ai_leverage, claude_surface, ...) are moved under metadata in the zip copy.
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import yaml from "js-yaml";
 
@@ -51,7 +51,8 @@ rmSync(OUT, { recursive: true, force: true });
 rmSync(STAGE, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 for (const { name, content } of skills) {
-  mkdirSync(`${STAGE}/${name}`, { recursive: true });
+  // Copy the whole skill folder (recipes, references, attribution), then write the Chat-ready SKILL.md
+  cpSync(`${SKILLS}/${name}`, `${STAGE}/${name}`, { recursive: true });
   writeFileSync(`${STAGE}/${name}/SKILL.md`, content);
   execFileSync("zip", ["-qrX", `${OUT}/${name}.zip`, name], { cwd: STAGE });
 }

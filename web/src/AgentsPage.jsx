@@ -698,6 +698,7 @@ const SKILL_PHASES = [
     phase: "Cross-phase",
     skills: [
       { name: "Design System",             desc: "Work from your existing design system in Figma or Claude Design — map screens to it, check work against it, report gaps.",           leverage: "high" },
+      { name: "Motion",                     desc: "Decide whether something should move, then spec or build it on any platform — with recipes for common components.",         leverage: "high" },
       { name: "Figma Playbook",             desc: "Execute design work directly in Figma using the Figma MCP — frames, components, variables, and annotations.",         leverage: "high" },
       { name: "Phase Handoff",              desc: "Generate and use Phase Handoff Blocks to chain the six design phases into one continuous workflow.",                   leverage: "high" },
       { name: "Skill Chaining",             desc: "Connect design phases so outputs become inputs — structured handoff across all six phases.",                          leverage: "high" },

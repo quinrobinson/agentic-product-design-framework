@@ -6,7 +6,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
 
 const PLUGIN = "../pathlon";
 const PHASE_DIRS = { "01": "01-discover", "02": "02-define", "03": "03-ideate", "04": "04-prototype", "05": "05-validate", "06": "06-deliver" };
-const CROSS_PHASE = new Set(["design-system", "figma-playbook", "phase-handoff", "skill-chaining", "which-claude"]);
+const CROSS_PHASE = new Set(["design-system", "motion", "figma-playbook", "phase-handoff", "skill-chaining", "which-claude"]);
 
 rmSync("public/skills", { recursive: true, force: true });
 for (const entry of readdirSync(`${PLUGIN}/skills`, { withFileTypes: true })) {

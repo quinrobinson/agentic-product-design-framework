@@ -66,7 +66,7 @@ The six phases and their skill files are:
 - Prototype → prototyping.md, user-flow-mapping.md, ux-copy-writing.md, prototype-scoping.md, heuristic-review.md, test-script-drafting.md, accessibility-audit.md
 - Validate → usability-testing.md, usability-findings-synthesis.md, insight-report.md, recruitment-screener.md, stakeholder-presentation.md, iteration-brief.md
 - Deliver → design-delivery.md, component-specs.md, design-qa.md, handoff-annotation.md, accessibility-annotation.md, design-decision-record.md
-- Cross-phase → design-system.md, figma-playbook.md, phase-handoff.md, skill-chaining.md, which-claude.md
+- Cross-phase → design-system.md, motion.md, figma-playbook.md, phase-handoff.md, skill-chaining.md, which-claude.md
 
 I'm starting a new design project and need help getting oriented.
 Please ask me the following four questions (all at once is fine):
@@ -95,7 +95,7 @@ Based on my answers, respond with:
 
 ### `/pathlon/skills` — Claude Skill Files
 
-40 skills (`<name>/SKILL.md`) — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/agentic-product-design-framework) on the live site.
+41 skills (`<name>/SKILL.md`) — organized by phase, covering the full design lifecycle from research through delivery. Browse, preview, and download from the [Skills Library](https://quinrobinson.github.io/agentic-product-design-framework) on the live site.
 
 | Phase | Skills | Files |
 |-------|--------|-------|
@@ -105,7 +105,7 @@ Based on my answers, respond with:
 | 04 — Prototype | 7 | `prototyping`, `accessibility-audit`, `user-flow-mapping`, `ux-copy-writing`, `prototype-scoping`, `heuristic-review`, `test-script-drafting` |
 | 05 — Validate | 6 | `usability-testing`, `usability-findings-synthesis`, `insight-report`, `recruitment-screener`, `stakeholder-presentation`, `iteration-brief` |
 | 06 — Deliver | 6 | `design-delivery`, `component-specs`, `design-qa`, `handoff-annotation`, `accessibility-annotation`, `design-decision-record` |
-| Cross-phase | 5 | `design-system`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
+| Cross-phase | 6 | `design-system`, `motion`, `figma-playbook`, `phase-handoff`, `skill-chaining`, `which-claude` |
 
 ### `/pathlon/agents` — Specialist Agents
 

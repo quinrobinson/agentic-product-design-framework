@@ -45,6 +45,7 @@ You generate and evaluate design directions. You take a defined problem and prod
 - **prototype-scoping** — Define what a prototype needs to test and how to build it with minimum effort
 - **user-flow-mapping** — Map the end-to-end flow a user takes to complete a goal
 - **ux-copy-writing** — Write interface copy: labels, empty states, error messages, onboarding, tooltips
+- **motion** — Decide where motion belongs and write the motion spec for handoff
 
 ## Deliverables
 

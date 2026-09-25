@@ -69,7 +69,7 @@ Run through each area systematically when reviewing an implementation:
 - Hover, focus, active, disabled states — all present and correct
 - Loading and skeleton states
 - Error and empty states
-- Transitions and animations — timing, easing, duration
+- Transitions and animations — timing, easing, duration (check against the `motion` skill's Never ship list)
 
 **Layout and responsive behavior:**
 - Component alignment at specified breakpoints

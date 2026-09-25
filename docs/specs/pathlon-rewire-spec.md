@@ -36,7 +36,7 @@ Pathlon was designed with Figma as the front door and the Figma file as the proj
 
 - **Pathlon is an agentic product design framework.** Six phases: Discover, Define, Ideate, Prototype, Validate, Deliver.
 - **Naming family:** Pathlon (framework), Pathlon MCP (memory spine), Pathlon for Claude Code (plugin), Pathlon for Figma (companion plugin).
-- **ASPF stays a separate framework.** It connects to Pathlon only through a generic engagement brief input (see 5.4). Pathlon does not own strategy. *(Proposed change: ASPF folds into Pathlon as the AI track. See section 12.)*
+- **ASPF stays a separate framework.** It connects to Pathlon only through a generic engagement brief input (see 5.4). Pathlon does not own strategy. *(Superseded Sept 25, 2026: ASPF folds into Pathlon as the AI track. See section 12.)*
 - **Two stores only.** GitHub holds methodology. Pathlon MCP (Supabase) holds live project state. No Notion copy of framework context. *(Proposed change: state moves to local `.pathlon/` files. See section 11.)*
 
 ## 3. Current-state inventory (verified Sept 23, 2026)
@@ -322,10 +322,10 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
 
 ## 12. Revision 2: Build & Deliver, and the AI track
 
-**Status:** Proposed Sept 25, 2026.
-- **Approved by Quin:** the phase model (12.2), the three new agents (12.3), and the AI Strategist being part of Pathlon.
-- **Awaiting Quin's review:** how ASPF folds in (12.6).
-- **When it takes effect:** approval supersedes section 2's "ASPF stays a separate framework" line and section 7's first two non-goals.
+**Status:** Approved Sept 25, 2026.
+- **Approved by Quin:** the phase model (12.2), the three new agents (12.3), the AI Strategist being part of Pathlon, and the `motion` skill (12.4, Sept 25, 2026).
+- **ASPF fold-in (12.6):** approved by Quin as written, no changes.
+- **Effect:** supersedes section 2's "ASPF stays a separate framework" line and section 7's first two non-goals.
 - **Sequencing:** runs after Revision 1's R4, because the new agents are built on its router, local state and Definition of Done checks.
 
 ### 12.1 Why
@@ -365,22 +365,35 @@ Each agent starts broad and splits only when dogfooding or the evals show a need
 
 The **Design Engineer** narrows to handoff and QA: it checks what the Frontend Developer builds against the design, and no longer builds it.
 
-### 12.4 Motion: Emil Kowalski's skills (bring your own)
+### 12.4 Motion: Pathlon's own `motion` skill
 
-- **What they are:** `emilkowalski/skill` (MIT, actively maintained, installed with `npx skills add emilkowalski/skill`). It includes `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `animation-vocabulary`, `emil-design-eng`, `animate-expo`, `mobile-native` and `write-swift`.
-- **How Pathlon uses them:** the Frontend Developer routes motion work to them when they're installed. We don't copy them into Pathlon; they update often and a copy would drift.
-- **What Pathlon adds is where motion fits in the process:**
-  - `find-animation-opportunities` during Prototype
-  - a motion spec in the handoff
-  - `review-animations` during QA
-- **Gap:** no Flutter coverage, so Courtside IQ motion needs its own guidance. Revisit during dogfood.
+**Decided Sept 25, 2026:** Pathlon has its own cross-phase `motion` skill (`pathlon/skills/motion/`: `SKILL.md`, `RECIPES.md`, `ATTRIBUTION.md`). It's adapted from Emil Kowalski's MIT-licensed `animate` skill and recipes, credited in `ATTRIBUTION.md`.
+
+What we kept from Emil's approach:
+- a gate first: should this move at all, by how often people see it, and for what purpose?
+- a fixed decision order
+- real curve, duration and spring values
+- hard rules and a "never ship" self-check
+
+What we changed or added:
+- **Design-system tokens first.** Missing motion tokens are proposed to the system's owner.
+- **Two outputs:** a motion spec for Prototype and handoff, and an implementation for Build.
+- **Every platform:** web, React Native, Flutter, SwiftUI, Jetpack Compose, Framer, Webflow and Figma. This covers the Flutter gap for Courtside IQ.
+- **A short motion vocabulary.**
+- **A data and stat updates recipe**, for dashboards.
+- **Emil-specific parts removed:** his persona, his library picks, and links to his other skills.
+
+How the pieces are used:
+- **Review:** Emil's review and audit skills are replaced by the skill's "never ship" checklist, which `design-qa` uses.
+- **Who uses it:** the Designer in Prototype (spec), the Frontend Developer in Build (implementation), and the Design Engineer in QA.
+- **Delivered ahead of B3,** because it's content, not infrastructure.
 
 ### 12.5 Backend and data: route to existing skills
 
 - **Existing skills:** strong ones already exist, e.g. the Supabase agent skills, the engineering plugin's architecture and system-design skills, and the Claude API skill. The Backend & Data Architect routes to whichever is installed.
 - **What Pathlon adds:** one skill, `data-for-ui`: screens → entities → API contract → UI states. It's the design-side view those skills don't cover.
 
-### 12.6 Folding ASPF into Pathlon (proposed; needs Quin's review)
+### 12.6 Folding ASPF into Pathlon (approved)
 
 ASPF (`quinrobinson/ai-strategy-practice-framework`) already covers AI initiatives before, during and after. It has 22 skills, 7 role agents plus the Predictor, 9 commands, its own MCP and `.aspf/context.json`. Its `/handoff` already feeds APDF. Folding it in means one framework and one project state, so the bridge disappears.
 
@@ -429,7 +442,7 @@ Each step ends with the spec-reviewer.
 |---|---|---|
 | **B1** | Restructure 06 into the Build & Deliver stages; write `build-planning` and `launch-handover`; add UAT to design-qa | 06 skills cover handoff → launch; evals route build-planning and launch prompts correctly |
 | **B2** | AI track: migrate and dedupe ASPF skills; AI Strategist agent; Predictor check | An AI-feature prompt ("turn game stats into player insights") routes to the AI Strategist, runs the right AI-track skills, and flags relevant failure modes without being asked |
-| **B3** | Frontend Developer; motion routing to Emil's skills; design-system-aware build | "Build this screen from the design" produces code using system tokens and components, with motion reviewed |
+| **B3** | Frontend Developer using the `motion` skill (already written; see 12.4); design-system-aware build | "Build this screen from the design" produces code using system tokens and components, with motion reviewed |
 | **B4** | Backend & Data Architect; `data-for-ui`; routing to installed backend skills | A screen set produces entities, API contract and UI states that pass the agent's Definition of Done |
 | **B5** | Extend the R5 evals to the new agents and the AI track | Targets from 11.5 met for the new agents |
 

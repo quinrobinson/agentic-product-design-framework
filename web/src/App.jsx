@@ -712,6 +712,7 @@ const SKILL_FILES = [
   { file: "accessibility-annotation.md",phase: "06", leverage: "high", surface: "chat",           desc: "Generate ARIA roles, keyboard navigation, focus management, and screen reader behavior specs for WCAG 2.1 AA compliant developer handoff." },
   { file: "design-delivery.md",        phase: "06", leverage: "high", surface: "chat + code",    desc: "Produces component specs, platform handoff packages, design decision records, and release notes." },
   { file: "design-system.md",          phase: null, leverage: "high", surface: "chat + code",    desc: "Works from your existing design system in Figma or Claude Design — maps screens to it, checks work against it, and reports gaps to its owner." },
+  { file: "motion.md",                 phase: null, leverage: "high", surface: "chat + code",    desc: "Decides whether something should move, then specs or builds the motion — purpose, properties, curve, duration or spring, exit, reduced motion — on web, React Native, Flutter, SwiftUI, Compose, Framer, Webflow, and Figma. Includes recipes." },
   { file: "figma-playbook.md",         phase: null, leverage: "high", surface: "code + figma mcp",desc: "Step-by-step Figma MCP execution patterns for every phase — research boards through spec annotations." },
   { file: "phase-handoff.md",          phase: null, leverage: "high", surface: "chat",           desc: "Generates a structured handoff block at the close of each phase — full context for the next." },
   { file: "skill-chaining.md",         phase: null, leverage: "high", surface: "chat",           desc: "Chains all six phases into one continuous AI-assisted workflow using handoff blocks — turning separate Claude conversations into a single thread from research through delivery." },
@@ -755,6 +756,7 @@ const AGENT_ROUTING_SL = {
   "user-flow-mapping.md":            "designer",
   "ux-copy-writing.md":              "designer",
   "design-system.md":                "systems",
+  "motion.md":                       "designer",
   "figma-playbook.md":               "systems",
   "component-specs.md":              "systems",
   "prototyping.md":                  "engineer",
@@ -2469,7 +2471,7 @@ My goal is to produce a prioritized issue list and design brief for a redesign. 
       { key: "02", note: "Synthesis, affinity mapping, insight framing, opportunity identification" },
     ],
     deliverables: ["Research plan", "Discussion guide or survey", "Recruitment screener", "Synthesis board", "Insights report", "Opportunity areas"],
-    skills: ["user-research.md", "problem-framing.md", "figma-playbook.md"],
+    skills: ["research-planning.md", "problem-framing.md", "figma-playbook.md"],
     time: "2–4 weeks",
     prompt: `I need to run a [generative/evaluative] research study for [PRODUCT/FEATURE AREA]. Help me plan end-to-end:
 - Research questions I'm trying to answer: [LIST]

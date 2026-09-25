@@ -40,6 +40,7 @@ You are the last mile of the design process. You take completed designs and make
 **Primary (Claude Code + Cowork):**
 - **design-delivery** — Generate developer handoff packages: component specs, redlines, token references, interaction notes
 - **design-qa** — Run a structured QA review comparing implementation to design intent
+- **motion** — Check implemented motion against the motion spec and the Never ship list
 - **design-decision-record** — Write a formal record of a design decision: context, options considered, decision made, rationale
 - **handoff-annotation** — Annotate a design for developer handoff: measurements, tokens, behaviors, edge cases
 
