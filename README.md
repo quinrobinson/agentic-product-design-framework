@@ -4,7 +4,7 @@
 
 You work the way you normally would ("synthesize these interview notes", "let's frame the problem", "spec the motion for this modal"). Pathlon picks up the right skill or agent, remembers where the project stands, and carries decisions and handoffs from one session to the next — so you never re-explain a project.
 
-> **Status:** in active development. Skills, agents, the plugin, and local project memory work today. Real agent orchestration and a Build & Deliver phase are in progress — see [Roadmap](#roadmap) and the governing plan in [`docs/specs/pathlon-rewire-spec.md`](docs/specs/pathlon-rewire-spec.md).
+> **Status:** early and unfinished — shared publicly while it's being shaped, not yet ready for general use. Skills, agents, the plugin, and local project memory work today. Real agent orchestration and a Build & Deliver phase are in progress — see [Roadmap](#roadmap) and the governing plan in [`docs/specs/pathlon-rewire-spec.md`](docs/specs/pathlon-rewire-spec.md).
 
 ---
 
@@ -202,4 +202,4 @@ The `motion` skill is adapted from [Emil Kowalski's animation skills](https://gi
 
 ## License
 
-MIT
+MIT — see [`LICENSE`](LICENSE).

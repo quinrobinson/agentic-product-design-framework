@@ -12,7 +12,7 @@
 Decisions and changes made Sept 23, 2026, that this spec depends on:
 
 - **Supabase schema change (5.4): approved.**
-- **Dogfood project: decided.** Courtside IQ (primary). Tournament app (secondary, if early stage). Toyota excluded: client work.
+- **Dogfood project: decided.** Courtside IQ (primary). Tournament app (secondary, if early stage). Client work excluded.
 - **Site is now local-only.** Commit `7705fbc` stopped GitHub Pages auto-deploy; the site runs locally at `http://localhost:3456/agentic-product-design-framework/` and serves skill and agent files from the local repo. Reason: keep the repo public while viewing the framework visually on Quin's Mac.
 - **Local repo path:** `~/Documents/Claude/Projects/agentic-product-design-framework`.
 - **Uncommitted planning files exist** in the repo root: `apdf-agent-evolution-plan.md`, `apdf-outcome-orientation-handoff.md`, `apdf-system-viz.html`, plus an edited `.claude/settings.json`. Before starting Phase 1, summarize each, flag anything that conflicts with or should be folded into this spec, and wait for Quin's decision. This spec is the governing plan.
@@ -419,7 +419,7 @@ ASPF (`quinrobinson/ai-strategy-practice-framework`) already covers AI initiativ
 | **Before** | problem-qualification, use-case-prioritization, data-strategy, ai-method-selection, risk-mapping, outcome-definition, readiness-audit | Discover and Define |
 | **During** | mid-project-audit, agent-design, responsible-ai, user-feedback-loops | Prototype, Validate, Build |
 | **After** | retrospective, model-monitoring, mlops-readiness | Launch & handover |
-| **Practice / org level** | maturity-model, operating-model, managed-service-model, stakeholder-alignment | A small AI-practice set for engagement-level work (the PepsiCo-type roadmaps) |
+| **Practice / org level** | maturity-model, operating-model, managed-service-model, stakeholder-alignment | A small AI-practice set for engagement-level work (e.g. company-level AI roadmaps) |
 | **Always on** | failure-mode-library | See the Predictor below |
 
 **Merge rather than add where Pathlon already has the skill:**
