@@ -310,7 +310,7 @@ Each step ends with the spec-reviewer. The stop rules in section 0 apply.
   - **Measure:** the meaningful number is the **first-try pass rate**, runs whose agent id has no retry record. "Passing after retries" is always 100%, because the second check is forced to pass. `agent_run` is written only by the hook; the `write_memory` tool refuses it.
   - **Tests:** 30 pass, including that the generated checks match the agent files and that `write_memory` refuses the hook-only type.
   - **Fallback:** if a plugin subagent can't spawn agents, `/pathlon:kickoff` and `/pathlon:transition` run the phase from the main session.
-- **Pending Quin's decision (departures from this step as written):**
+- **Departures from this step as written — accepted by Quin Sept 25, 2026 ("accept all"):**
   - **Own model per agent:** all agents use `model: inherit`, the session's model.
   - **Own tool list:** agents inherit every tool, including the Pathlon MCP tools and the Agent tool.
   - **Preloaded skills:** not used. Full skill text in every agent's context is costly, so agents load skills on demand.
